@@ -1,0 +1,14 @@
+class Solution(object):
+    def firstUniqChar(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        dic = [0 for i in range(26)]
+        for c in s:
+            dic[ord(c) - ord('a')] += 1
+        
+        for i,c in enumerate(s):
+            if dic[ord(c) - ord('a')] == 1:
+                return i
+        return -1
