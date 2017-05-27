@@ -4,6 +4,21 @@
 #         self.val = x
 #         self.next = None
 
+#better, tmp, tmp.next, node = node, tmp, node.next
+#.......reserve node, tmp, node.next in memory, then assign to left hand side(LHS) from left to right
+class Solution(object):
+    def reverseList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        node = head
+        tmp = None
+        while node != None:
+            tmp, tmp.next, node = node, tmp, node.next 
+        return tmp
+
+
 class Solution(object):
     def reverseList(self, head):
         """
