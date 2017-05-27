@@ -1,0 +1,21 @@
+class Solution(object):
+    def thirdMax(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        lst = [-sys.maxsize,-sys.maxsize,-sys.maxsize]
+        for i in range(len(nums)):
+            if nums[i] > lst[2]:
+                lst[0] = lst[1]
+                lst[1] = lst[2]
+                lst[2] = nums[i]
+            elif nums[i] > lst[1] and nums[i] < lst[2]:
+                lst[0] = lst[1]
+                lst[1] = nums[i]
+            elif nums[i] > lst[0] and nums[i] < lst[1]:
+                lst[0] = nums[i]
+        if lst[0] == -sys.maxsize:
+            return lst[2]
+        else:
+            return lst[0]
