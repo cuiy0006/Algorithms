@@ -1,0 +1,27 @@
+class Solution(object):
+    def productExceptSelf(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        res = []
+        curr = 1
+        for num in nums:
+            curr *= num
+            res.append(curr)
+        
+        curr = 1
+        for i in range(len(res)-1, -1, -1):
+            left = right = 0
+            if i == len(res) - 1:
+                right = 1
+            else:
+                right = curr
+            if i == 0:
+                left = 1
+            else:
+                left = res[i - 1]
+                
+            res[i] = left * right
+            curr = right * nums[i]
+        return res
