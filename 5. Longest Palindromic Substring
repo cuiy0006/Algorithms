@@ -1,0 +1,29 @@
+class Solution(object):
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        res = (0, 0)
+        for i in range(len(s)-1):
+            x, y = self.helper(s, i, i)
+            if y - x > res[1] - res[0]:
+                res = (x, y)
+            if s[i] == s[i+1]:
+                x, y = self.helper(s, i, i+1)
+                if y - x > res[1] - res[0]:
+                    res = (x, y)
+        return s[res[0]:res[1]+1]
+            
+        
+    def helper(self, s, idx1, idx2):
+        i = idx1
+        j = idx2
+        cnt = 0
+        while i >= 0 and j < len(s):
+            if s[i] == s[j]:
+                i -= 1
+                j += 1
+            else:
+                break
+        return (i+1, j-1)
