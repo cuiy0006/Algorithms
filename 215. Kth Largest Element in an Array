@@ -1,0 +1,31 @@
+import random
+class Solution(object):
+    def findKthLargest(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        #return sorted(nums)[-k]
+        lst = nums
+        
+        while len(lst) != 0:
+            left = []
+            right = []
+            pivot = random.randint(0, len(lst) - 1)
+            for i,num in enumerate(lst):
+                if i == pivot:
+                    continue
+                if num >= lst[pivot]:
+                    right.append(num)
+                else:
+                    left.append(num)
+            if len(right) == k - 1:
+                return lst[pivot]
+            if len(right) > k - 1:
+                lst = right
+            else:
+                lst = left
+                k -= len(right) + 1
+                    
+        return -1
