@@ -1,0 +1,18 @@
+class Solution(object):
+    def groupAnagrams(self, strs):
+        """
+        :type strs: List[str]
+        :rtype: List[List[str]]
+        """
+        dic = {}
+        for s in strs:
+            lst = [0 for i in range(26)]
+            for c in s:
+                lst[ord(c) - ord('a')] += 1
+            t = tuple(lst)
+            if t in dic:
+                dic[t].append(s)
+            else:
+                dic[t] = [s]
+                
+        return dic.values()   
