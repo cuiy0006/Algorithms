@@ -1,0 +1,38 @@
+from random import choice
+class Codec:
+    def __init__(self):
+        self.url2code = {}
+        self.code2url = {}
+        self.str = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        
+
+    def encode(self, longUrl):
+        """Encodes a URL to a shortened URL.
+        
+        :type longUrl: str
+        :rtype: str
+        """
+        if longUrl in self.url2code:
+            return self.url2code[longUrl];
+        urlstr = longUrl.split('/')[-1];
+        lst = []
+        for c in urlstr:
+            lst += choice(self.str),
+        codestr = 'http://tinyurl.com/' + ''.join(lst)
+        self.url2code[longUrl] = codestr
+        self.code2url[codestr] = longUrl
+        return codestr
+        
+
+    def decode(self, shortUrl):
+        """Decodes a shortened URL to its original URL.
+        
+        :type shortUrl: str
+        :rtype: str
+        """
+        return self.code2url[shortUrl]
+        
+
+# Your Codec object will be instantiated and called as such:
+# codec = Codec()
+# codec.decode(codec.encode(url))
