@@ -1,0 +1,23 @@
+class Solution:
+    def exclusiveTime(self, n, logs):
+        """
+        :type n: int
+        :type logs: List[str]
+        :rtype: List[int]
+        """
+        s = []
+        res = [0 for i in range(n)]
+        curr = 0
+        for log in logs:
+            infos = log.split(':')
+            if infos[1] == 'start':
+                infos.append(0)
+                s.append(infos)
+            else:
+                end_id, end_status, end_time = infos
+                start_id, start_status, start_time, internal = s.pop()
+                time_diff = int(end_time) - int(start_time) + 1 - internal
+                res[int(end_id)] += time_diff
+                if len(s) != 0:
+                    s[-1][-1] += int(end_time) - int(start_time) + 1
+        return res
