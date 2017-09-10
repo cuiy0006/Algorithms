@@ -1,0 +1,78 @@
+PREV,NEXT,KEY,VAL,FREQ = 0,1,2,3,4
+class LFUCache(object):
+
+    def __init__(self, capacity):
+        """
+        :type capacity: int
+        """
+        self.freq_dic = {}
+        self.key_map = {}
+        self.min_freq = 1
+        self.cap = capacity
+
+    def get(self, key):
+        """
+        :type key: int
+        :rtype: int
+        """
+        freq_dic, key_map, min_freq, cap = self.freq_dic, self.key_map, self.min_freq, self.cap
+        if key not in key_map:
+            return -1
+        node = key_map[key]
+        value = node[VAL]
+        node[FREQ] += 1
+        freq = node[FREQ]
+        node[NEXT][PREV], node[PREV][NEXT] = node[PREV], node[NEXT]
+        if freq_dic[min_freq] is freq_dic[min_freq][NEXT]:
+            self.min_freq += 1
+        
+        if freq not in freq_dic:
+            root = []
+            root[:] = [root, root, None, None, 1]
+            freq_dic[freq] = root
+        root = freq_dic[freq]
+        root[PREV][NEXT], root[PREV], node[NEXT], node[PREV] = node, node, root, root[PREV]
+        return value
+        
+
+    def put(self, key, value):
+        """
+        :type key: int
+        :type value: int
+        :rtype: void
+        """
+        freq_dic, key_map, min_freq, cap = self.freq_dic, self.key_map, self.min_freq, self.cap
+        if cap == 0:
+            return
+        if key in key_map:
+            key_map[key][VAL] = value
+            self.get(key)
+        else:
+            if cap == len(key_map):
+                evit_node = freq_dic[min_freq][NEXT]
+                evit_node[PREV][NEXT], evit_node[NEXT][PREV] = evit_node[NEXT], evit_node[PREV]
+                del key_map[evit_node[KEY]]
+                
+            self.min_freq = 1
+            node = [None, None, key, value, 1]
+            key_map[key] = node
+            if 1 not in freq_dic:
+                root = []
+                root[:] = [root, root, None, None, 1]
+                freq_dic[1] = root
+            root = freq_dic[1]
+            root[PREV][NEXT], root[PREV], node[PREV], node[NEXT] = node, node, root[PREV], root
+            
+            
+            #node = key_map[key]
+            #freq = node[FREQ]
+            #node[FREQ] += 1
+            #node[PREV][NEXT], node[NEXT][PREV] = node[NEXT], node[PREV]
+            #if freq + 1 not in freq_dic:
+        
+
+
+# Your LFUCache object will be instantiated and called as such:
+# obj = LFUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
