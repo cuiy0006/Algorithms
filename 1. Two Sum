@@ -5,10 +5,7 @@ class Solution(object):
         :type target: int
         :rtype: List[int]
         """
-        dic = {}
+        dic = {target-num:i for i, num in enumerate(nums)}
         for i,num in enumerate(nums):
-            dic[num] = i
-        
-        for i,num in enumerate(nums):
-            if target - num in dic and dic[target-num] != i:
-                return [i, dic[target-num]]
+            if num in dic and i != dic[num]:
+                return [i, dic[num]]
