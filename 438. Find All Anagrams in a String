@@ -6,26 +6,24 @@ class Solution(object):
         :type p: str
         :rtype: List[int]
         """
-        dic = [0 for i in range(26)]
         res = []
+        dic = [0 for i in range(26)]
         for c in p:
             dic[ord(c)-ord('a')] += 1
-        
-        left = right = 0
+        left=right=0
         cnt = len(p)
         while right < len(s):
             if dic[ord(s[right])-ord('a')] > 0:
                 cnt -= 1
             dic[ord(s[right])-ord('a')] -= 1
-            right += 1
-            if cnt == 0:
-                res.append(left)
             if right - left == len(p):
-                if dic[ord(s[left])-ord('a')]>=0:
+                if dic[ord(s[left])-ord('a')] >= 0:
                     cnt += 1
                 dic[ord(s[left])-ord('a')] += 1
                 left += 1
-
+            if cnt == 0:
+                res.append(left)
+            right += 1
         return res
         
         
