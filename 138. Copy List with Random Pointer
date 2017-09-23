@@ -12,27 +12,17 @@ class Solution(object):
         :rtype: RandomListNode
         """
         dic = {}
-        res_dic = {}
         node = head
-        res = RandomListNode(0)
-        res_node = res
-        i = 0
+        new = tmp = RandomListNode(0)
         while node != None:
-            res_node.next = RandomListNode(node.label)
-            dic[node] = i
-            res_dic[i] = res_node.next
-            res_node = res_node.next
-            i += 1
-            node = node.next
-        
+            tmp.next = dic[node] = RandomListNode(node.label)
+            tmp, node = tmp.next, node.next
         node = head
-        res_node = res.next
+        tmp = new.next
         while node != None:
             if node.random == None:
-                res_node.random = None
+                tmp.random = None
             else:
-                idx = dic[node.random]
-                res_node.random = res_dic[idx]
-            node = node.next
-            res_node = res_node.next
-        return res.next
+                tmp.random = dic[node.random]
+            tmp, node = tmp.next, node.next
+        return new.next
