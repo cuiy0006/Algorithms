@@ -1,21 +1,22 @@
+dic = {'1':'*', '2':'abc','3':'def','4':'ghi','5':'jkl','6':'mno','7':'pqrs','8':'tuv','9':'wxyz','0':' '}
 class Solution(object):
     def letterCombinations(self, digits):
         """
         :type digits: str
         :rtype: List[str]
         """
-        if digits == '':
-            return []
-        dic = {'2':'abc', '3':'def', '4':'ghi', '5':'jkl', '6':'mno', '7':'pqrs', '8':'tuv', '9':'wxyz'}
-        lst = map(lambda x:dic[x], list(digits))
-        res = []
-        self.helper(res, lst, 0, '')
-        return res
+        def helper(digit, lst):
+            new_lst = []
+            chars = dic[digit]
+            for word in lst:
+                for c in chars:
+                    new_lst.append(word + c)
+            return new_lst
         
-    def helper(self, res, lst, idx, s):
-        if idx == len(lst):
-            res.append(s)
-            return
-        curr = lst[idx]
-        for c in curr:
-            self.helper(res, lst, idx + 1, s + c)
+        if len(digits) == 0:
+            return []
+        
+        res = ['']
+        for digit in digits:
+            res = helper(digit, res)
+        return res
