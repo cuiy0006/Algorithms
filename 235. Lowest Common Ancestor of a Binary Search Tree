@@ -13,31 +13,6 @@ class Solution(object):
         :type q: TreeNode
         :rtype: TreeNode
         """
-        node =root
-        while p.val > node.val and q.val > node.val or p.val < node.val and q.val < node.val:
-            if p.val > node.val and q.val > node.val:
-                node = node.right
-            else:
-                node = node.left
-        return node.val
-
-
-
-# Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
-class Solution(object):
-    def lowestCommonAncestor(self, root, p, q):
-        """
-        :type root: TreeNode
-        :type p: TreeNode
-        :type q: TreeNode
-        :rtype: TreeNode
-        """
         if root == None:
             return None
         if root.val >= min(p.val, q.val) and root.val <= max(p.val, q.val):
