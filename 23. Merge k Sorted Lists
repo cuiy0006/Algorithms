@@ -1,0 +1,35 @@
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+from collections import deque
+class Solution(object):
+    def mergeKLists(self, lists):
+        """
+        :type lists: List[ListNode]
+        :rtype: ListNode
+        """
+        if not lists:
+            return None
+        q = deque(lists)
+        while len(q) != 1:
+            first = q.popleft()
+            second = q.popleft()
+            head = ListNode(0)
+            node = head
+            while first != None and second != None:
+                if first.val < second.val:
+                    node.next = first
+                    node = node.next
+                    first = first.next
+                else:
+                    node.next = second
+                    node = node.next
+                    second = second.next
+            if first != None:
+                node.next = first
+            if second != None:
+                node.next = second
+            q.append(head.next)
+        return q.popleft()
