@@ -5,23 +5,16 @@ class Solution(object):
         :rtype: List[int]
         """
         res = []
-        curr = 1
+        tmp = 1
         for num in nums:
-            curr *= num
-            res.append(curr)
+            tmp = tmp * num
+            res.append(tmp)
         
-        curr = 1
-        for i in range(len(res)-1, -1, -1):
-            left = right = 0
-            if i == len(res) - 1:
-                right = 1
+        tmp = 1
+        for i in range(len(nums)-1, -1, -1):
+            if i != 0:
+                res[i] = tmp * res[i-1]
             else:
-                right = curr
-            if i == 0:
-                left = 1
-            else:
-                left = res[i - 1]
-                
-            res[i] = left * right
-            curr = right * nums[i]
+                res[i] = tmp
+            tmp *= nums[i]
         return res
