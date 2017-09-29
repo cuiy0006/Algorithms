@@ -11,28 +11,21 @@ class Solution(object):
         :type l2: ListNode
         :rtype: ListNode
         """
-        node1 = l1
-        node2 = l2
-        head =  ListNode(0)
-        node = head
+        node = head = ListNode(0)
         step = 0
-        while node1 != None or node2 != None:
-            add1 = 0
-            add2 = 0
-            if node1 != None:
-                add1 = node1.val
-                node1 = node1.next
-            if node2 != None:
-                add2 = node2.val
-                node2 = node2.next
-            total = add1 + add2 + step
-            if total >= 10:
-                step = 1
-                total = total - 10
-            else:
-                step = 0
-            node.next = ListNode(total)
+        while l1 is not None and l2 is not None:
+            val = l1.val + l2.val + step
+            node.next = ListNode(val % 10)
             node = node.next
+            step = val //10
+            l1, l2 = l1.next, l2.next
+        for l in [l1, l2]:
+            while l is not None:
+                val = l.val + step
+                node.next = ListNode(val % 10)
+                node = node.next
+                step = val //10
+                l = l.next
         if step == 1:
             node.next = ListNode(1)
         return head.next
