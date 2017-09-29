@@ -11,19 +11,12 @@ class Solution(object):
         :type root: TreeNode
         :rtype: bool
         """
-        inorder = []
-        s = []
-        node = root
-        while len(s) != 0 or node != None:
-            if len(s) != 0:
-                node = s.pop()
-                inorder.append(node.val)
-                node = node.right
-            while node != None:
-                s.append(node)
-                node = node.left
-        for i in range(len(inorder)-1):
-            if inorder[i] >= inorder[i + 1]:
-                return False
-        return True
+        def helper(top, bottom, node):
+            if node is None:
+                return True
+            if (node.left is None or node.val > node.left.val and node.left.val > bottom) and \
+            (node.right is None or node.val < node.right.val and node.right.val < top):
+                return helper(node.val, bottom, node.left) and helper(top, node.val, node.right)
+            return False
+        return helper(sys.maxsize, -sys.maxsize, root)
                 
