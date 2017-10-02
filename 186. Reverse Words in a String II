@@ -2,20 +2,17 @@ class Solution:
     # @param s, a list of 1 length strings, e.g., s = ['h','e','l','l','o']
     # @return nothing
     def reverseWords(self, s):
-        i = 0
-        j = 0
-        for idx,c in enumerate(s):
-            if c == ' ':
-                j = idx - 1
-                self.helper(s, i, j)
-                i = idx + 1
-            elif idx == len(s)-1:
-                j = idx
-                self.helper(s, i, j)
-        self.helper(s, 0, len(s)-1)
+        def reverse(left, right):
+            while left < right:
+                s[left], s[right] = s[right], s[left]
+                left += 1
+                right -= 1
         
-    def helper(self, s, i, j):
-        while i < j:
-            s[i], s[j] = s[j], s[i]
-            i += 1
-            j -= 1
+        j = 0
+        for i in range(len(s)):
+            if s[i] == ' ':
+                reverse(j, i-1)
+                j = i + 1
+            elif i == len(s) -1:
+                reverse(j, i)
+        reverse(0, len(s)-1)
