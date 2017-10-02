@@ -4,15 +4,13 @@ class Solution(object):
         :type nums: List[int]
         :rtype: List[List[int]]
         """
+        def helper(lst, res, index):
+            res.append(lst[:])
+            for i in range(index, len(nums)):
+                num = nums[i]
+                lst.append(num)
+                helper(lst, res, i+1)
+                lst.pop()
         res = []
-        self.helper(nums, 0, [], res)
+        helper([], res, 0)
         return res
-        
-        
-    def helper(self, nums, idx, curr, res):
-        res.append(curr[:])
-        
-        for i in range(idx, len(nums)):
-            curr.append(nums[i])
-            self.helper(nums, i + 1, curr, res)
-            curr.pop()
