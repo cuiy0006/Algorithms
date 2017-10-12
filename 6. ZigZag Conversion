@@ -1,0 +1,28 @@
+class Solution(object):
+    def convert(self, s, numRows):
+        """
+        :type s: str
+        :type numRows: int
+        :rtype: str
+        """
+        if numRows == 1:
+            return s
+        lst = []
+        i = 0
+        while i < len(s):
+            lst.append(s[i])
+            i += numRows * 2 - 2
+        
+        for j in range(1, numRows-1):
+            i = j
+            incr = (numRows - j - 1) * 2
+            while i < len(s):
+                lst.append(s[i])
+                if i + incr  < len(s):
+                    lst.append(s[i + incr])
+                i += numRows * 2 - 2
+        i = numRows - 1
+        while i < len(s):
+            lst.append(s[i])
+            i += numRows * 2 - 2
+        return ''.join(lst)
