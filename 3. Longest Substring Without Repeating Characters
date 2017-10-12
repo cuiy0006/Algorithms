@@ -4,19 +4,18 @@ class Solution(object):
         :type s: str
         :rtype: int
         """
-        hashset = set()
-        i = 0
+        dic = set()
         max_len = 0
-        curr_len = 0
-        for j, c in enumerate(s):
-            if c not in hashset:
-                hashset.add(c)
-                curr_len += 1
-                max_len = max(max_len, curr_len)
+        begin = 0
+        for i, c in enumerate(s):
+            if c not in dic:
+                dic.add(c)
+                max_len = max(max_len, len(dic))
             else:
-                while s[i] != c:
-                    hashset.remove(s[i])
-                    i += 1
-                    curr_len -= 1
-                i += 1
+                for j in range(begin, i):
+                    if s[j] != c:
+                        dic.remove(s[j])
+                    else:
+                        begin = j + 1
+                        break
         return max_len
