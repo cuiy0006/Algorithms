@@ -1,27 +1,27 @@
 from random import choice
 class Codec:
-    def __init__(self):
-        self.url2code = {}
-        self.code2url = {}
-        self.str = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        
 
+    def __init__(self):
+        self.TinyToLong = {}
+        self.LongToTiny = {}
+        self.rand_scope = '1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'
+        
     def encode(self, longUrl):
         """Encodes a URL to a shortened URL.
         
         :type longUrl: str
         :rtype: str
         """
-        if longUrl in self.url2code:
-            return self.url2code[longUrl];
-        urlstr = longUrl.split('/')[-1];
-        lst = []
-        for c in urlstr:
-            lst += choice(self.str),
-        codestr = 'http://tinyurl.com/' + ''.join(lst)
-        self.url2code[longUrl] = codestr
-        self.code2url[codestr] = longUrl
-        return codestr
+        if longUrl in self.LongToTiny:
+            return self.LongToTiny[longUrl]
+        Url_main = longUrl.split('/')[-1]
+        res = ''
+        for c in Url_main:
+            res += choice(self.rand_scope)
+        shortUrl = 'http://tinyurl.com/' + res
+        self.LongToTiny[longUrl] = shortUrl
+        self.TinyToLong[shortUrl] = longUrl
+        return shortUrl
         
 
     def decode(self, shortUrl):
@@ -30,8 +30,7 @@ class Codec:
         :type shortUrl: str
         :rtype: str
         """
-        return self.code2url[shortUrl]
-        
+        return self.TinyToLong[shortUrl]
 
 # Your Codec object will be instantiated and called as such:
 # codec = Codec()
