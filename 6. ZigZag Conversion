@@ -1,4 +1,4 @@
-class Solution(object):
+class Solution:
     def convert(self, s, numRows):
         """
         :type s: str
@@ -7,22 +7,21 @@ class Solution(object):
         """
         if numRows == 1:
             return s
-        lst = []
+        distance = (numRows - 1) * 2
+        res = ''
         i = 0
         while i < len(s):
-            lst.append(s[i])
-            i += numRows * 2 - 2
-        
+            res += s[i]
+            i += distance
         for j in range(1, numRows-1):
             i = j
-            incr = (numRows - j - 1) * 2
             while i < len(s):
-                lst.append(s[i])
-                if i + incr  < len(s):
-                    lst.append(s[i + incr])
-                i += numRows * 2 - 2
-        i = numRows - 1
+                res += s[i]
+                if i + distance - 2*j < len(s):
+                    res += s[i + distance - 2*j]
+                i += distance
+        i = numRows-1
         while i < len(s):
-            lst.append(s[i])
-            i += numRows * 2 - 2
-        return ''.join(lst)
+            res += s[i]
+            i += distance
+        return res
