@@ -1,16 +1,14 @@
-class Solution(object):
+class Solution:
     def maxProfit(self, prices):
         """
         :type prices: List[int]
         :rtype: int
         """
-        if len(prices) <= 1:
-            return 0
+        total = 0
         buy = sys.maxsize
-        profit = 0
         for i, price in enumerate(prices):
             buy = min(buy, price)
             if i == len(prices) - 1 or price > prices[i+1]:
-                profit += price - buy
+                total += price - buy
                 buy = price
-        return profit
+        return total
