@@ -1,2 +1,1 @@
-# Leetcode
-Solution to Leetcode
+My code for Algorithms problems
