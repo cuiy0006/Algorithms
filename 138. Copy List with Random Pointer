@@ -11,18 +11,19 @@ class Solution(object):
         :type head: RandomListNode
         :rtype: RandomListNode
         """
-        dic = {}
-        node = head
-        new = tmp = RandomListNode(0)
-        while node != None:
-            tmp.next = dic[node] = RandomListNode(node.label)
-            tmp, node = tmp.next, node.next
-        node = head
-        tmp = new.next
-        while node != None:
-            if node.random == None:
-                tmp.random = None
-            else:
-                tmp.random = dic[node.random]
-            tmp, node = tmp.next, node.next
+        dic = {None:None}
+        first = head
+        new = RandomListNode(0)
+        second = new
+        while first != None:
+            second.next = RandomListNode(first.label)
+            second = second.next
+            dic[first] = second
+            first = first.next
+        first = head
+        second = new.next
+        while first != None:
+            second.random = dic[first.random]
+            first = first.next
+            second = second.next
         return new.next
