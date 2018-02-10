@@ -5,29 +5,28 @@ class Solution(object):
         :type grid: List[List[str]]
         :rtype: int
         """
-        cnt = 0
-        lst = [[0 for j in range(len(grid[i]))] for i in range(len(grid))]
-        for i in range(len(grid)):
-            for j in range(len(grid[i])):
-                if grid[i][j] == '1' and lst[i][j] == 0:
-                    cnt += 1
-                    self.helper(grid, lst, cnt, i, j)
-        return cnt
-                    
-                    
-    def helper(self, grid, lst, cnt, x, y):
+        if len(grid) == 0:
+            return 0
+        direction = [[0,1], [0,-1], [1,0], [-1,0]]
         m = len(grid)
         n = len(grid[0])
-        if x < 0 or y < 0 or x >= m or y >= n:
-            return
-        if lst[x][y] != 0 or grid[x][y] != '1':
-            return
-        
-        lst[x][y] = cnt
-        self.helper(grid, lst, cnt, x + 1, y)
-        self.helper(grid, lst, cnt, x - 1, y)
-        self.helper(grid, lst, cnt, x, y + 1)
-        self.helper(grid, lst, cnt, x, y - 1)
+        visited = [[False for j in range(n)] for i in range(m)]
+        def helper(i, j):
+            if i < 0 or i >= m or j < 0 or j >= n:
+                return 0
+            if not visited[i][j] and grid[i][j] == '1':
+                visited[i][j] = True
+                for x0, y0 in direction:
+                    helper(i + x0, j + y0)
+                return 1
+            else:
+                return 0
+            
+        cnt = 0
+        for i in range(m):
+            for j in range(n):
+                cnt += helper(i, j)
+        return cnt
 
 #BFS
 
