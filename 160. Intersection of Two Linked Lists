@@ -10,20 +10,15 @@ class Solution(object):
         :type head1, head1: ListNode
         :rtype: ListNode
         """
-        node1 = headA
-        node2 = headB
-        while node1 != None and node2 != None:
-            node1 = node1.next
-            node2 = node2.next
-        node3 = headA
-        node4 = headB
-        while node1 != None:
-            node1 = node1.next
-            node3 = node3.next
-        while node2 != None:
-            node2 = node2.next
-            node4 = node4.next
-        while node3 != node4:
-            node3 = node3.next
-            node4 = node4.next
-        return node3
+        first = headA
+        second = headB
+        while first != None and second != None:
+            first, second = first.next, second.next
+        nodeA, nodeB = headA, headB
+        while first != None:
+            nodeA, first = nodeA.next, first.next
+        while second != None:
+            nodeB, second = nodeB.next, second.next
+        while nodeA != nodeB:
+            nodeA, nodeB = nodeA.next, nodeB.next
+        return nodeA
