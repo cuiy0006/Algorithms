@@ -14,36 +14,18 @@ class Solution(object):
         if root == None:
             return []
         
-        node = root
-        left = 0
-        right = 0
+        dic = {}
         q = deque([(0, root)])
         while len(q) != 0:
             depth, node = q.popleft()
-            left = min(left, depth)
-            right = max(right, depth)
-            if node.left != None:
-                q.append((depth - 1, node.left))
-            if node.right != None:
-                q.append((depth + 1, node.right))
-        
-        leftlst = [[] for i in range(-left)]
-        rightlst = [[] for i in range(right)]
-        rootlst = []
-
-        q = deque([(0, root)])
-        while len(q) != 0:
-            depth, node = q.popleft()
-            if depth == 0:
-                rootlst.append(node.val)
-            elif depth < 0:
-                leftlst[-depth - 1].append(node.val)
+            if depth in dic:
+                dic[depth].append(node.val)
             else:
-                rightlst[depth - 1].append(node.val)
+                dic[depth] = [node.val]
             
             if node.left != None:
                 q.append((depth - 1, node.left))
             if node.right != None:
                 q.append((depth + 1, node.right))
-        leftlst.reverse()
-        return leftlst + [rootlst] + rightlst
+
+        return [dic[key] for key in sorted(list(dic.keys()))]
