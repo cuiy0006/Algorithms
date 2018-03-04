@@ -4,18 +4,19 @@ class Solution(object):
         :type s: str
         :rtype: int
         """
-        dic = set()
-        max_len = 0
-        begin = 0
-        for i, c in enumerate(s):
-            if c not in dic:
-                dic.add(c)
-                max_len = max(max_len, len(dic))
-            else:
-                for j in range(begin, i):
-                    if s[j] != c:
-                        dic.remove(s[j])
-                    else:
-                        begin = j + 1
-                        break
-        return max_len
+        maxlen = 0
+        i, j = 0, 0
+        dic = {}
+        cnt = 0
+        while j < len(s):
+            if s[j] in dic and dic[s[j]] > 0:
+                cnt += 1
+            dic[s[j]] = dic.get(s[j], 0) + 1
+            maxlen = max(maxlen, j-i)
+            while cnt > 0:
+                dic[s[i]] -= 1
+                if dic[s[i]] == 1:
+                    cnt -= 1
+                i += 1
+            j += 1
+        return max(maxlen, j-i)
