@@ -1,23 +1,24 @@
-class Solution:
+class Solution(object):
     def exclusiveTime(self, n, logs):
         """
         :type n: int
         :type logs: List[str]
         :rtype: List[int]
         """
-        s = []
-        res = [0 for i in range(n)]
-        curr = 0
+        if len(logs) == 0:
+            return []
+        res = [0] * n
+        stack = []
         for log in logs:
-            infos = log.split(':')
-            if infos[1] == 'start':
-                infos.append(0)
-                s.append(infos)
+            lst = log.split(':')
+            if lst[1] == 'start':
+                lst.append(0)
+                stack.append(lst)
             else:
-                end_id, end_status, end_time = infos
-                start_id, start_status, start_time, internal = s.pop()
-                time_diff = int(end_time) - int(start_time) + 1 - internal
-                res[int(end_id)] += time_diff
-                if len(s) != 0:
-                    s[-1][-1] += int(end_time) - int(start_time) + 1
+                funcid, status, time, minus = stack.pop()
+                interval = int(lst[2]) - int(time) + 1
+                res[int(funcid)] += interval - minus
+                if len(stack) != 0:
+                    stack[-1][-1] += interval
         return res
+                    
