@@ -4,13 +4,12 @@ class Solution(object):
         :type nums: List[int]
         :rtype: List[List[int]]
         """
-        def helper(lst, res, index):
-            res.append(lst[:])
-            for i in range(index, len(nums)):
-                num = nums[i]
-                lst.append(num)
-                helper(lst, res, i+1)
-                lst.pop()
-        res = []
-        helper([], res, 0)
+        res = [[]]
+        for num in nums:
+            sub = []
+            for lst in res:
+                tmp = lst[:]
+                tmp.append(num)
+                sub.append(tmp)
+            res += sub
         return res
