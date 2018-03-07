@@ -1,24 +1,29 @@
-class Solution(object):
+class Solution:
     def search(self, nums, target):
         """
         :type nums: List[int]
         :type target: int
         :rtype: int
         """
+        if len(nums) == 0:
+            return -1
         left = 0
-        right = len(nums)
+        right = len(nums) - 1
         while left < right:
-            mid = (left + right)//2
-            if nums[mid] == target:
+            mid = (left+right)//2
+            if target == nums[mid]:
                 return mid
-            elif nums[mid] > target:
-                if nums[mid] >= nums[0] and target <= nums[-1] and nums[0] > nums[-1]:
+            if target < nums[mid]:
+                if target < nums[0] and nums[mid] >= nums[0]:
                     left = mid + 1
                 else:
                     right = mid
             else:
-                if target >= nums[0] and nums[mid] <= nums[-1] and nums[0] > nums[-1]:
+                if target >= nums[0] and nums[mid] < nums[0]:
                     right = mid
                 else:
                     left = mid + 1
+        if nums[left] == target:
+            return left
         return -1
+                
