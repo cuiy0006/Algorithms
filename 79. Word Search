@@ -1,0 +1,32 @@
+class Solution(object):
+    def exist(self, board, word):
+        """
+        :type board: List[List[str]]
+        :type word: str
+        :rtype: bool
+        """
+        directions = [(0,1), (0,-1),(1,0),(-1,0)]
+        m = len(board)
+        if m == 0:
+            return False
+        n = len(board[0])
+        visited = [[False for e in row] for row in board]
+        def helper(i, j, index):
+            if i < 0 or i > m - 1 or j < 0 or j > n - 1 or visited[i][j]:
+                return False
+            if word[index] != board[i][j]:
+                return False
+            else:
+                if index == len(word) - 1:
+                    return True
+                visited[i][j] = True
+                for direction in directions:
+                    if helper(i+direction[0], j+direction[1], index+1):
+                        return True
+                visited[i][j] = False
+                return False
+        for i in range(m):
+            for j in range(n):
+                if helper(i, j, 0):
+                    return True
+        return False
