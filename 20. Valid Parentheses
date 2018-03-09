@@ -4,17 +4,15 @@ class Solution(object):
         :type s: str
         :rtype: bool
         """
-        a = []
-        dic = {'(':')', '{':'}', '[':']'}
+        dic = {'(':')', '[':']', '{':'}'}
+        stack = []
         for c in s:
-            if c in dic:
-                a.append(c)
-            else:
-                if len(a) == 0:
+            if c not in dic:
+                if len(stack) == 0:
                     return False
-                else:
-                    if dic[a[-1]] == c:
-                        a.pop()
-                    else:
-                        return False
-        return len(a) == 0
+                left = stack.pop()
+                if dic[left] != c:
+                    return False
+            else:
+                stack.append(c)
+        return len(stack) == 0
