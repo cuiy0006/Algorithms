@@ -5,14 +5,14 @@ class Solution(object):
         :rtype: List[List[str]]
         """
         dic = {}
+        res = []
         for s in strs:
-            lst = [0 for i in range(26)]
+            arr = [0] * 26
             for c in s:
-                lst[ord(c) - ord('a')] += 1
-            t = tuple(lst)
-            if t in dic:
-                dic[t].append(s)
+                arr[ord(c) - ord('a')] += 1
+            tp = tuple(arr)
+            if tp in dic:
+                dic[tp].append(s)
             else:
-                dic[t] = [s]
-                
-        return dic.values()   
+                dic[tp] = [s]
+        return list(dic.values())
