@@ -4,19 +4,14 @@ class Solution(object):
         :type wall: List[List[int]]
         :rtype: int
         """
-        lst = []
         dic = {}
-        for line in wall:
-            curr = 0
-            for i in range(len(line) - 1):
-                curr += line[i]
-                if curr in dic:
-                    dic[curr] += 1
+        for row in wall:
+            for i in range(len(row)-1):
+                if i != 0:
+                    row[i] += row[i-1]
+                if row[i] not in dic:
+                    dic[row[i]] = 1
                 else:
-                    dic[curr] = 1
-        
-        cnt = 0
-        for val in dic.values():
-            cnt = max(cnt, val)
-            
-        return len(wall) - cnt
+                    dic[row[i]] += 1
+        height = len(wall)
+        return height - max(dic.values())
