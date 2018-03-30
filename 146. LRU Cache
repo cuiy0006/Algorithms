@@ -1,12 +1,12 @@
-PREV,NEXT,KEY,VAL = 0,1,2,3
-class LRUCache(object):
+LAST, NEXT, KEY, VAL = 0, 1, 2, 3
+class LRUCache:
 
     def __init__(self, capacity):
         """
         :type capacity: int
         """
-        self.key_map = {}
         self.cap = capacity
+        self.dic = {} #key -> node: [LAST, NEXT, KEY, VAL]
         self.root = []
         self.root[:] = [self.root, self.root, None, None]
         
@@ -16,14 +16,13 @@ class LRUCache(object):
         :type key: int
         :rtype: int
         """
-        key_map, root, cap = self.key_map, self.root, self.cap
-        if key not in key_map:
+        dic, root, cap = self.dic, self.root, self.cap
+        if key not in dic:
             return -1
-        node = key_map[key]
-        node[NEXT][PREV], node[PREV][NEXT] = node[PREV], node[NEXT]
-        root[PREV][NEXT], root[PREV], node[NEXT], node[PREV] = node, node, root, root[PREV]
+        node =dic[key]
+        node[NEXT][LAST], node[LAST][NEXT] = node[LAST], node[NEXT]
+        root[LAST][NEXT], root[LAST], node[LAST], node[NEXT] = node, node, root[LAST], root
         return node[VAL]
-        
 
     def put(self, key, value):
         """
@@ -31,22 +30,23 @@ class LRUCache(object):
         :type value: int
         :rtype: void
         """
-        key_map, root, cap = self.key_map, self.root, self.cap
+        dic, root, cap = self.dic, self.root, self.cap
         if cap == 0:
             return
-        if key in key_map:
-            key_map[key][VAL] = value
+        if key in dic:
             self.get(key)
-        else:
-            if cap == len(key_map):
-                evict_node = root[NEXT]
-                evict_node[NEXT][PREV], evict_node[PREV][NEXT] = evict_node[PREV], evict_node[NEXT]
-                del key_map[evict_node[KEY]]
-            node = [None, None, key, value]
-            #root[PREV], root[PREV][NEXT], node[NEXT], node[PREV] = node, node, root, root[PREV]
-            root[PREV][NEXT], root[PREV], node[PREV], node[NEXT] = node, node, root[PREV], root
-            key_map[key] = node
-            
+            dic[key][VAL] = value
+            return
+        if cap == len(dic):
+            evict = root[NEXT]
+            evict[NEXT][LAST], evict[LAST][NEXT] = evict[LAST], evict[NEXT]
+            del dic[evict[KEY]]
+        
+        node = [None, None, key, value]
+        root[LAST][NEXT], root[LAST], node[LAST], node[NEXT] = node, node, root[LAST], root
+        dic[key] = node
+        
+        
 
 
 # Your LRUCache object will be instantiated and called as such:
