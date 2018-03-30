@@ -1,39 +1,39 @@
-PREV,NEXT,KEY,VAL,FREQ = 0,1,2,3,4
-class LFUCache(object):
+LAST, NEXT, KEY, VAL, FREQ = 0, 1, 2, 3, 4 
+class LFUCache:
 
     def __init__(self, capacity):
         """
         :type capacity: int
         """
-        self.freq_dic = {}
-        self.key_map = {}
-        self.min_freq = 1
+        self.dic = {} #key -> [LAST, NEXT, KEY, VAL, FREQ]
+        self.freq_dic = {} #freq -> root: [LAST, NEXT, None, None, FREQ]
+        self.least_freq = 1
         self.cap = capacity
+        
 
     def get(self, key):
         """
         :type key: int
         :rtype: int
         """
-        freq_dic, key_map, min_freq, cap = self.freq_dic, self.key_map, self.min_freq, self.cap
-        if key not in key_map:
+        dic, freq_dic, cap = self.dic, self.freq_dic, self.cap
+        if key not in dic:
             return -1
-        node = key_map[key]
-        value = node[VAL]
+        node = dic[key]
+        node[NEXT][LAST], node[LAST][NEXT] = node[LAST], node[NEXT]
+        freq = node[FREQ]
+        if freq == self.least_freq and freq_dic[freq][NEXT] is freq_dic[freq]:
+            self.least_freq += 1
+        
         node[FREQ] += 1
         freq = node[FREQ]
-        node[NEXT][PREV], node[PREV][NEXT] = node[PREV], node[NEXT]
-        if freq_dic[min_freq] is freq_dic[min_freq][NEXT]:
-            self.min_freq += 1
-        
         if freq not in freq_dic:
             root = []
-            root[:] = [root, root, None, None, 1]
+            root[:] = [root, root, None, None, freq]
             freq_dic[freq] = root
         root = freq_dic[freq]
-        root[PREV][NEXT], root[PREV], node[NEXT], node[PREV] = node, node, root, root[PREV]
-        return value
-        
+        root[LAST][NEXT], root[LAST], node[NEXT], node[LAST] = node, node, root, root[LAST]
+        return node[VAL]
 
     def put(self, key, value):
         """
@@ -41,34 +41,28 @@ class LFUCache(object):
         :type value: int
         :rtype: void
         """
-        freq_dic, key_map, min_freq, cap = self.freq_dic, self.key_map, self.min_freq, self.cap
+        dic, freq_dic, cap = self.dic, self.freq_dic, self.cap
         if cap == 0:
             return
-        if key in key_map:
-            key_map[key][VAL] = value
+        if key in dic:
             self.get(key)
-        else:
-            if cap == len(key_map):
-                evit_node = freq_dic[min_freq][NEXT]
-                evit_node[PREV][NEXT], evit_node[NEXT][PREV] = evit_node[NEXT], evit_node[PREV]
-                del key_map[evit_node[KEY]]
-                
-            self.min_freq = 1
-            node = [None, None, key, value, 1]
-            key_map[key] = node
-            if 1 not in freq_dic:
-                root = []
-                root[:] = [root, root, None, None, 1]
-                freq_dic[1] = root
-            root = freq_dic[1]
-            root[PREV][NEXT], root[PREV], node[PREV], node[NEXT] = node, node, root[PREV], root
-            
-            
-            #node = key_map[key]
-            #freq = node[FREQ]
-            #node[FREQ] += 1
-            #node[PREV][NEXT], node[NEXT][PREV] = node[NEXT], node[PREV]
-            #if freq + 1 not in freq_dic:
+            dic[key][VAL] = value
+            return
+        
+        if cap == len(dic):
+            evict = freq_dic[self.least_freq][NEXT]
+            evict[NEXT][LAST], evict[LAST][NEXT] = evict[LAST], evict[NEXT]
+            del dic[evict[KEY]]
+        self.least_freq = 1
+        if 1 not in self.freq_dic:
+            root = []
+            root[:] = [root, root, None, None, 1] 
+            freq_dic[1] = root
+        
+        root = freq_dic[1]
+        node = [None, None, key, value, 1]
+        root[LAST][NEXT], root[LAST], node[NEXT], node[LAST] = node, node, root, root[LAST]
+        dic[key] = node
         
 
 
