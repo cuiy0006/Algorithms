@@ -4,10 +4,7 @@ class Trie(object):
         """
         Initialize your data structure here.
         """
-        self.dic = {}
-        self.empty = False
-        # key: char, value: [dic, isEnd]
-        
+        self.dic = {} #key -> [isEnd, {}]
 
     def insert(self, word):
         """
@@ -15,33 +12,29 @@ class Trie(object):
         :type word: str
         :rtype: void
         """
-        if word == '':
-            self.empty = True
-        curr = self.dic
-        for i,c in enumerate(word):
-            if c not in curr:
-                curr[c] = [{}, False]
+        dic = self.dic
+        for i, c in enumerate(word):
+            if c not in dic:
+                dic[c] = [False, {}]
             if i == len(word) - 1:
-                curr[c][1] = True
-            curr = curr[c][0]
-
+                dic[c][0] = True
+            dic = dic[c][1]
+            
     def search(self, word):
         """
         Returns if the word is in the trie.
         :type word: str
         :rtype: bool
         """
-        if word == '':
-            return self.empty
-        curr = self.dic
+        dic = self.dic
         for i, c in enumerate(word):
-            if c not in curr:
+            if c not in dic:
                 return False
-            if i == len(word) - 1:
-                if not curr[c][1]:
-                    return False
-            curr = curr[c][0]
+            if i == len(word) -1 and not dic[c][0]:
+                return False
+            dic = dic[c][1]
         return True
+        
 
     def startsWith(self, prefix):
         """
@@ -49,12 +42,13 @@ class Trie(object):
         :type prefix: str
         :rtype: bool
         """
-        curr = self.dic
+        dic = self.dic
         for i, c in enumerate(prefix):
-            if c not in curr:
+            if c not in dic:
                 return False
-            curr = curr[c][0]
+            dic = dic[c][1]
         return True
+        
 
 
 # Your Trie object will be instantiated and called as such:
