@@ -4,30 +4,10 @@ class Solution(object):
         :type prices: List[int]
         :rtype: int
         """
-        minval = sys.maxsize
-        maxval = 0
-        res = 0
+        maxProfit = 0
+        buy = sys.maxsize
+        
         for price in prices:
-            if price < minval:
-                minval = price
-                maxval = price
-            else:
-                maxval = max(maxval, price)
-                res = max(res, maxval - minval)
-        return res
-
-
-
-class Solution(object):
-    def maxProfit(self, prices):
-        """
-        :type prices: List[int]
-        :rtype: int
-        """
-        profit = 0
-        buy = 0
-        for sell, price in enumerate(prices):
-            profit = max(profit, price-prices[buy])
-            if price < prices[buy]:
-                buy = sell
-        return profit
+            buy = min(price, buy)
+            maxProfit = max(maxProfit, price - buy)
+        return maxProfit
