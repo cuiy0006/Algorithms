@@ -5,25 +5,20 @@ class Solution:
         :type target: int
         :rtype: int
         """
-        if len(nums) == 0:
-            return -1
-        left = 0
-        right = len(nums) - 1
-        while left < right:
-            mid = (left+right)//2
-            if target == nums[mid]:
+        i = 0
+        j = len(nums)
+        while i < j:
+            mid = (i+j) // 2
+            if nums[mid] == target:
                 return mid
-            if target < nums[mid]:
-                if target < nums[0] and nums[mid] >= nums[0]:
-                    left = mid + 1
+            elif nums[mid] > target:
+                if nums[mid] >= nums[0] and target <= nums[-1] and nums[-1] < nums[0]:
+                    i = mid + 1
                 else:
-                    right = mid
+                    j = mid
             else:
-                if target >= nums[0] and nums[mid] < nums[0]:
-                    right = mid
+                if nums[mid] <= nums[-1] and target >= nums[0] and nums[-1] < nums[0]:
+                    j = mid
                 else:
-                    left = mid + 1
-        if nums[left] == target:
-            return left
+                    i = mid + 1
         return -1
-                
