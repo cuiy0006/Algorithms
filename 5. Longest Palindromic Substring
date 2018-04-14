@@ -4,24 +4,19 @@ class Solution(object):
         :type s: str
         :rtype: str
         """
-        def helper(left, right):
-            while left >= 0 and right <= len(s)-1:
-                if s[left] == s[right]:
-                    if left == 0 or right == len(s) -1:
-                        return (left, right)
-                    else:
-                        left -= 1
-                        right += 1
-                else:
-                    return (left + 1, right -1)
+        def helper(start, end):
+            while start >=0 and end < len(s) and s[start] == s[end]:
+                start -= 1
+                end += 1
+            return (start + 1, end - 1)
         
-        start, end = 0,0
+        left = right = 0
         for i in range(len(s)):
-            left, right = helper(i, i)
-            if right - left > end - start:
-                end, start = right, left
-            if i < len(s)-1:
-                left, right = helper(i, i+1)
-                if right - left > end - start:
-                    end, start = right, left
-        return s[start:end+1]
+            start, end = helper(i, i)
+            if end - start >= right - left:
+                left, right = start, end
+            start, end = helper(i, i + 1)
+            if end - start >= right - left:
+                left, right = start, end
+        return s[left:right+1]
+                
