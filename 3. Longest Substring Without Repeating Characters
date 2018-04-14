@@ -1,22 +1,21 @@
-class Solution(object):
+class Solution:
     def lengthOfLongestSubstring(self, s):
         """
         :type s: str
         :rtype: int
         """
-        maxlen = 0
-        i, j = 0, 0
         dic = {}
-        cnt = 0
-        while j < len(s):
-            if s[j] in dic and dic[s[j]] > 0:
-                cnt += 1
-            dic[s[j]] = dic.get(s[j], 0) + 1
-            maxlen = max(maxlen, j-i)
-            while cnt > 0:
-                dic[s[i]] -= 1
-                if dic[s[i]] == 1:
-                    cnt -= 1
-                i += 1
-            j += 1
-        return max(maxlen, j-i)
+        i = 0
+        j = 0
+        max_len = 0
+        while i <len(s):
+            if s[i] in dic:
+                index = dic[s[i]]
+                while j <= index:
+                    del dic[s[j]]
+                    j += 1
+            dic[s[i]] = i
+            max_len = max(max_len, i - j + 1)
+            i += 1
+            
+        return max_len
