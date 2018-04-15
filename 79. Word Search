@@ -5,28 +5,26 @@ class Solution(object):
         :type word: str
         :rtype: bool
         """
-        directions = [(0,1), (0,-1),(1,0),(-1,0)]
         m = len(board)
-        if m == 0:
-            return False
         n = len(board[0])
-        visited = [[False for e in row] for row in board]
-        def helper(i, j, index):
-            if i < 0 or i > m - 1 or j < 0 or j > n - 1 or visited[i][j]:
+        D = [(1,0), (-1,0), (0,1), (0,-1)]
+        
+        def helper(index, i, j):
+            if index == len(word):
+                return True
+            if i < 0 or j < 0 or i >= m or j >= n:
                 return False
             if word[index] != board[i][j]:
                 return False
-            else:
-                if index == len(word) - 1:
+            board[i][j] = '#'
+            for x0, y0 in D:
+                if helper(index+1, i+x0, j+y0):
                     return True
-                visited[i][j] = True
-                for direction in directions:
-                    if helper(i+direction[0], j+direction[1], index+1):
-                        return True
-                visited[i][j] = False
-                return False
+            board[i][j] = word[index]
+            return False
+        
         for i in range(m):
             for j in range(n):
-                if helper(i, j, 0):
+                if helper(0, i, j):
                     return True
         return False
