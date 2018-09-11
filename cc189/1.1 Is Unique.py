@@ -20,11 +20,12 @@ def is_unique_2(s):
 
 
 def is_unique_3(s):
-    for i in range(len(s)):
-        for j in range(i+1, len(s)):
-            if s[i] == s[j]:
-                return False
-    return True
+    return not any(s[i] == s[j] for i in range(len(s)) for j in range(i+1, len(s)))
+    # for i in range(len(s)):
+    #     for j in range(i+1, len(s)):
+    #         if s[i] == s[j]:
+    #             return False
+    # return True
 
 
 def is_unique_4(s):
