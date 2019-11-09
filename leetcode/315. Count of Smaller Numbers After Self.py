@@ -4,7 +4,7 @@ class Node:
         self.left = None
         self.right = None
         self.less_than_cnt = 0
-        self.smaller = 0
+        self.left_cnt = 0
 
 class Solution:
     def countSmaller(self, nums: List[int]) -> List[int]:
@@ -18,7 +18,7 @@ class Solution:
             less_than_cnt = 0
             while True:
                 if num <= node.val:
-                    node.smaller += 1
+                    node.left_cnt += 1
                     if node.left == None:
                         node.left = Node(num)
                         node.left.less_than_cnt = less_than_cnt
@@ -27,7 +27,7 @@ class Solution:
                     else:
                         node = node.left
                 else:
-                    less_than_cnt += node.smaller + 1
+                    less_than_cnt += node.left_cnt + 1
                     if node.right == None:
                         node.right = Node(num)
                         node.right.less_than_cnt = less_than_cnt
@@ -40,3 +40,4 @@ class Solution:
         for i in range(len(nums)):
             res.append(dic[i].less_than_cnt)
         return res
+        
