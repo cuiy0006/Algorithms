@@ -1,20 +1,22 @@
 class Solution:
-    def numDecodings(self, s: str) -> int:
-        if len(s) == 0:
+    def numDecodings(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        if len(s) == 0 or s[0] == '0':
             return 0
-        dp = [0 for i in range(len(s)+1)]
-        dic = set([str(i) for i in range(1, 27)])
+        if len(s) == 1:
+            return 1
+        dp = [0 for i in range(len(s))]
         dp[0] = 1
-        for i in range(0, len(s)):
-            if s[i] == '0':
-                if i == 0 or s[i-1:i+1] not in dic:
-                    return 0
-                dp[i+1] = dp[i-1]
-                continue
-            dp[i+1] = dp[i]
-            if i == 0:
-                continue
-            num = s[i-1:i+1]
-            if num in dic:
-                dp[i+1] += dp[i-1]
+        if s[1] != '0':
+            dp[1] = dp[0]
+        if (s[0] == '1') or (s[0] =='2' and s[1]>='0' and s[1] <='6'):
+            dp[1] += 1
+        for i in range(2, len(s)):
+            if s[i] != '0':
+                dp[i] = dp[i-1]
+            if (s[i-1] == '1') or (s[i-1] =='2' and s[i]>='0' and s[i] <='6'):
+                dp[i] += dp[i-2]
         return dp[-1]

@@ -1,29 +1,32 @@
-class Solution:
-    def myAtoi(self, str: str) -> int:
+#1. whitespace
+#2. +/-
+#3. max int, min int
+
+
+class Solution(object):
+    def myAtoi(self, str):
+        """
+        :type str: str
+        :rtype: int
+        """
         str = str.strip()
-        if str == '':
-            return 0
-        
-        isPositive = True
-        i = 0
-        if str[i] == '-':
-            isPositive = False
-            i += 1
-        elif str[i] == '+':
-            i += 1
-        
         res = 0
-        while i < len(str):
-            if not str[i].isdigit():
-                break;
-            res = res * 10 + int(str[i])
-            i += 1
-        res = res if isPositive else -res
-        
-        pos_max = 2 ** 31 - 1
-        neg_max = -2 ** 31
-        if res > 2 ** 31 - 1:
-            return pos_max
-        if res < neg_max:
-            return neg_max
-        return res
+        pre = '+'
+        for i,c in enumerate(str):
+            if i == 0 and (c == '+' or c == '-'):
+                pre = c
+            elif ord(c) - ord('0') > 9 or ord(c) - ord('0') < 0:
+                break
+            else:
+                num = ord(c) - ord('0')
+                res = res * 10 + num
+        if pre == '+':
+            if res <= 2147483647:
+                return res
+            else:
+                return 2147483647
+        else:
+            if res <= 2147483648:
+                return -res
+            else:
+                return -2147483648

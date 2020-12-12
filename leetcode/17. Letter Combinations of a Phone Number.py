@@ -1,50 +1,43 @@
 class Solution:
-    def letterCombinations(self, digits: str) -> List[str]:
-        if digits == '':
+    def letterCombinations(self, digits):
+        """
+        :type digits: str
+        :rtype: List[str]
+        """
+        if len(digits) == 0:
             return []
-        dic = {'2':'abc',
-                '3': 'def',
-                '4': 'ghi'
-                '5': 'jkl',
-                '6': 'mno',
-                '7': 'pqrs',
-                '8': 'tuv',
-                '9': 'wxyz'}
-        res = []
-        def helper(idx, curr):
-            if idx == len(digits):
-                res.append(''.join(curr))
-                return;
-            s = dic[digits[idx]]
-            for c in s:
-                curr.append(c)
-                helper(idx + 1, curr)
-                curr.pop()
-        helper(0, [])
-        return res
-            
-            
-            
-class Solution:
-    def letterCombinations(self, digits: str) -> List[str]:
-        if digits == '':
-            return []
-        dic = {'2':'abc',
-                '3': 'def',
-                '4': 'ghi',
-                '5': 'jkl',
-                '6': 'mno',
-                '7': 'pqrs',
-                '8': 'tuv',
-                '9': 'wxyz'}
+        dic = {'2':'abc', '3':'def', '4':'ghi', '5':'jkl', '6':'mno', '7':'pqrs', '8':'tuv', '9':'wxyz'}
         res = ['']
-        
-        for digit in digits:
-            s = dic[digit]
+        for i, digit in enumerate(digits):
             tmp = []
-            for c in s:
-                for prev in res:
-                    tmp.append(prev + c)
+            for c in dic[digit]:
+                for element in res:
+                    tmp.append(element + c)
             res = tmp
         return res
-            
+
+
+
+
+dic = {'1':'*', '2':'abc','3':'def','4':'ghi','5':'jkl','6':'mno','7':'pqrs','8':'tuv','9':'wxyz','0':' '}
+class Solution(object):
+    def letterCombinations(self, digits):
+        """
+        :type digits: str
+        :rtype: List[str]
+        """
+        def helper(digit, lst):
+            new_lst = []
+            chars = dic[digit]
+            for word in lst:
+                for c in chars:
+                    new_lst.append(word + c)
+            return new_lst
+        
+        if len(digits) == 0:
+            return []
+        
+        res = ['']
+        for digit in digits:
+            res = helper(digit, res)
+        return res

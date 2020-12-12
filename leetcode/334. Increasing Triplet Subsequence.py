@@ -1,12 +1,15 @@
-import sys
 class Solution:
-    def increasingTriplet(self, nums: List[int]) -> bool:
-        arr = [sys.maxsize] * 3
+    def increasingTriplet(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: bool
+        """
+        lst = [sys.maxsize] * 2
         for num in nums:
-            if num <= arr[0]:
-                arr[0] = num
-            elif num <= arr[1]:
-                arr[1] = num
-            elif num <= arr[2]:
+            if num <= lst[0]:
+                lst[0] = num
+            elif num <= lst[1]:
+                lst[1] = num
+            else:
                 return True
         return False

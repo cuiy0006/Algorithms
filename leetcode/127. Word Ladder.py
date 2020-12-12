@@ -1,26 +1,29 @@
 from collections import deque
-
-class Solution:
-    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
-        q = deque([beginWord])
-        seen = set([beginWord])
-        wordList = set(wordList)
-        if endWord not in wordList:
+class Solution(object):
+    def ladderLength(self, beginWord, endWord, wordList):
+        """
+        :type beginWord: str
+        :type endWord: str
+        :type wordList: List[str]
+        :rtype: int
+        """
+        dic = {beginWord:1}
+        s = set(wordList)
+        
+        if endWord not in s:
             return 0
-        alpha = 'abcdefghijklmnopqrstuvwxyz'
-        level = 1
+        
+        q = deque([beginWord])
         while len(q) != 0:
-            size = len(q)
-            while size != 0:
-                word = q.popleft()
-                size -= 1
-                for i in range(len(word)):
-                    for c in alpha:
-                        new_word = word[:i] + c + word[i+1:]
-                        if new_word == endWord:
-                            return level + 1
-                        if new_word not in seen and new_word in wordList:
-                            q.append(new_word)
-                            seen.add(new_word)
-            level += 1
+            word = q.popleft()
+            for i in range(len(word)):
+                for j in range(26):
+                    c = chr(ord('a') + j)
+                    new_word = word[:i] + c + word[i+1:]
+
+                    if new_word == endWord:
+                        return dic[word] + 1
+                    if new_word in s and new_word not in dic:
+                        dic[new_word] = dic[word] + 1
+                        q.append(new_word)
         return 0

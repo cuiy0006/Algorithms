@@ -1,32 +1,33 @@
 class Solution:
-    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+    def findOrder(self, numCourses, prerequisites):
+        """
+        :type numCourses: int
+        :type prerequisites: List[List[int]]
+        :rtype: List[int]
+        """
         dic = {}
-        for first, second in prerequisites:
-            if first not in dic:
-                dic[first] = [second]
+        for course, pre in prerequisites:
+            if course not in dic:
+                dic[course] = [pre]
             else:
-                dic[first].append(second)
-                
-        seen = set()
-        p_seen = set()
+                dic[course].append(pre)
         res = []
-        def dfs(i):
-            if i in p_seen:
-                return False
-            if i in seen:
+        taken = set()
+        def helper(visited, course):
+            if course in taken:
                 return True
-            p_seen.add(i)
-            if i in dic:
-                for j in dic[i]:
-                    if not dfs(j):
+            if course in visited:
+                return False
+            visited.add(course)
+            if course in dic:
+                for pre in dic[course]:
+                    if not helper(visited, pre):
                         return False
-            p_seen.remove(i)
-            seen.add(i)
-            res.append(i)
+            taken.add(course)
+            res.append(course)
             return True
         
-        for i in range(numCourses):
-            if not dfs(i):
+        for course in range(numCourses):
+            if not helper(set(), course):
                 return []
-
         return res

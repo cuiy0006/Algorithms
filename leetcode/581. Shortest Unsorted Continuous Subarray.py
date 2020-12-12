@@ -1,16 +1,22 @@
 class Solution:
-    def findUnsortedSubarray(self, nums: List[int]) -> int:
-        sorted_nums = sorted(nums)
-        i = 0
-        j = len(nums) - 1
-        while i < len(nums):
-            if nums[i] != sorted_nums[i]:
+    def findUnsortedSubarray(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        lst = sorted(nums)
+        left = -1
+        right = -1
+        for i in range(len(nums)):
+            if nums[i] != lst[i]:
+                left = i
                 break
-            i += 1
         
-        while j >= i:
-            if nums[j] != sorted_nums[j]:
+        for i in range(len(nums) - 1, -1, -1):
+            if nums[i] != lst[i]:
+                right = i
                 break
-            j -= 1
         
-        return j - i + 1
+        if left == -1:
+            return 0
+        return right - left + 1

@@ -1,15 +1,19 @@
-class Solution:
-    def rotate(self, nums: List[int], k: int) -> None:
+class Solution(object):
+    def rotate(self, nums, k):
         """
-        Do not return anything, modify nums in-place instead.
+        :type nums: List[int]
+        :type k: int
+        :rtype: void Do not return anything, modify nums in-place instead.
         """
-        def reverse_lst(i, j):
+        if k > len(nums):
+            k = k % len(nums)
+        
+        def helper(i, j):
             while i < j:
                 nums[i], nums[j] = nums[j], nums[i]
                 i += 1
                 j -= 1
         
-        k = k % len(nums)
-        reverse_lst(len(nums) - k, len(nums) - 1)
-        reverse_lst(0, len(nums) - k - 1)
-        reverse_lst(0, len(nums) - 1)
+        helper(0, len(nums) - k - 1)
+        helper(len(nums) - k, len(nums) - 1)
+        helper(0, len(nums) - 1)

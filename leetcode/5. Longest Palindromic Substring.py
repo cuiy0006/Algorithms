@@ -1,21 +1,22 @@
-class Solution:
-    def longestPalindrome(self, s: str) -> str:
-        l = 0
-        r = 0
-        def find_edge(i, j):
-            while i >= 0 and j < len(s) and s[i] == s[j]:
-                i -= 1
-                j += 1
-            return i + 1, j - 1
+class Solution(object):
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        def helper(start, end):
+            while start >=0 and end < len(s) and s[start] == s[end]:
+                start -= 1
+                end += 1
+            return (start + 1, end - 1)
         
+        left = right = 0
         for i in range(len(s)):
-            left, right = find_edge(i, i)
-            if right - left > r - l:
-                l = left
-                r = right
-            if i != 0:
-                left, right = find_edge(i - 1, i)
-                if right - left > r - l:
-                    l = left
-                    r = right
-        return s[l: r + 1]
+            start, end = helper(i, i)
+            if end - start >= right - left:
+                left, right = start, end
+            start, end = helper(i, i + 1)
+            if end - start >= right - left:
+                left, right = start, end
+        return s[left:right+1]
+                

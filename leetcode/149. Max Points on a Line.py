@@ -1,31 +1,45 @@
-from collections import Counter
+# Definition for a point.
+# class Point:
+#     def __init__(self, a=0, b=0):
+#         self.x = a
+#         self.y = b
 
 class Solution:
-    def maxPoints(self, points: List[List[int]]) -> int:
-        points = [(point[0], point[1]) for point in points]
-        points = [(point[0], point[1], cnt) for point, cnt in Counter(points).items()]
+    def maxPoints(self, points):
+        """
+        :type points: List[Point]
+        :rtype: int
+        """
         if len(points) == 0:
             return 0
         if len(points) == 1:
-            return points[0][2]
-        
-        def getGcd(a, b):
-            if b == 0: return a
-            return getGcd(b, a%b)
-        
+            return 1
         dic = {}
-        for i in range(len(points)):
-            x0, y0, cnt0 = points[i]
-            for j in range(i+1, len(points)):
-                x1, y1, cnt1 = points[j]
-                k = '#'
-                if x1 - x0 != 0:
-                    gcd = getGcd(y1 - y0, x1 - x0)
-                    k = ((y1 - y0)//gcd, (x1 - x0)//gcd)
-                if (x0, y0, k) not in dic:
-                    dic[(x0, y0, k)] = cnt0 + cnt1
-                else:
-                    dic[(x0, y0, k)] += cnt1
+        for point in points:
+            point = (point.x, point.y)
+            if point in dic:
+                dic[point] += 1
+            else:
+                dic[point] = 1
+        lst = list(dic.keys())
+        kdic = {}
+        if len(lst) == 1:
+            return dic[lst[0]]
         
-        return max(dic.values())
-                
+        for i, first in enumerate(lst):
+            j = i + 1
+            while j < len(lst):
+                second = lst[j]
+                key = None
+                if second[0] - first[0] == 0:
+                    key = ('y', i)
+                else:
+                    k = (second[1] - first[1])/(second[0] - first[0])
+                    key = (k, i)
+                if key in kdic:
+                    kdic[key] += dic[second]
+                else:
+                    kdic[key] = dic[first] + dic[second]
+                j += 1
+        return max(kdic.values())
+                    

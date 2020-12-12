@@ -1,28 +1,31 @@
-"""
-# Definition for a Node.
-class Node:
-    def __init__(self, val, next, random):
-        self.val = val
-        self.next = next
-        self.random = random
-"""
-class Solution:
-    def copyRandomList(self, head: 'Node') -> 'Node':
+# Definition for singly-linked list with a random pointer.
+# class RandomListNode(object):
+#     def __init__(self, x):
+#         self.label = x
+#         self.next = None
+#         self.random = None
+
+class Solution(object):
+    def copyRandomList(self, head):
+        """
+        :type head: RandomListNode
+        :rtype: RandomListNode
+        """
         dic = {}
+        curr = new_head = RandomListNode(0)
         node = head
-        new_head = Node(0, None, None)
-        new_node = new_head
-        while node:
-            new_node.next = Node(node.val, None, None)
-            new_node = new_node.next
-            dic[node] = new_node
+        while node is not None:
+            curr.next = RandomListNode(node.label)
+            curr = curr.next
+            dic[node] = curr
             node = node.next
         
         node = head
-        new_node = new_head.next
-        while node:
-            new_node.random = dic[node.random] if node.random else None
-            new_node = new_node.next
+        curr = new_head.next
+        while node is not None:
+            if node.random is not None:
+                curr.random = dic[node.random]
+            curr = curr.next
             node = node.next
-        return new_head.next
             
+        return new_head.next

@@ -1,8 +1,13 @@
-class Solution:
-    def strStr(self, haystack: str, needle: str) -> int:
-        if needle == '':
-            return 0
-        for i in range(len(haystack)-len(needle)+1):
-            if needle == haystack[i:i+len(needle)]:
+class Solution(object):
+    def strStr(self, haystack, needle):
+        """
+        :type haystack: str
+        :type needle: str
+        :rtype: int
+        """
+        m = len(haystack)
+        n = len(needle)
+        for i in range(m-n+1):
+            if haystack[i:i+n] == needle:
                 return i
         return -1

@@ -5,44 +5,39 @@
 #         self.next = None
 
 class Solution:
-    def sortList(self, head: ListNode) -> ListNode:
-        if not head:
+    def sortList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if head is None:
             return None
-        left = l = None
-        right = r = None
-        m = head
+        pivot = head.val
+        left = l = ListNode(0)
+        right = r = ListNode(0)
+        mid = m = head
         node = head.next
-        while node:
-            if node.val == head.val:
-                m.next = node
-                m = node
-            elif node.val < head.val:
-                if not left:
-                    left = node
-                    l = node
-                else:
-                    l.next = node
-                    l = l.next
+        
+        while node is not None:
+            if node.val == pivot:
+                m.next, m = node, node
+            elif node.val < pivot:
+                l.next, l = node, node
             else:
-                if not right:
-                    right = node
-                    r = node
-                else:
-                    r.next = node
-                    r = r.next
+                r.next, r = node, node
             node.next, node = None, node.next
-        
-        left = self.sortList(left)
-        right = self.sortList(right)
-        
+        left = self.sortList(left.next)
+        right = self.sortList(right.next)
         m.next = right
-        if not left:
-            return head
+        l = left
+        while l is not None:
+            if l.next is None:
+                break
+            l = l.next
+        if left is None:
+            return mid
         else:
-            end = left
-            while end.next:
-                end = end.next
-            end.next = head
+            l.next = mid
+            return left
         
-        return left
-        
+            

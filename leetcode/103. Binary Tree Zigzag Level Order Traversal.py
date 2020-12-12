@@ -5,34 +5,36 @@
 #         self.left = None
 #         self.right = None
 
-from collections import deque
-
 class Solution:
-    def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
-        res = []
-        if not root:
-            return res
+    def zigzagLevelOrder(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[List[int]]
+        """
+        if root is None:
+            return []
+        left_first = True
         stack = [root]
-        from_left = True
+        res = []
         while len(stack) != 0:
-            level = []
-            tmp = []
-            while len(stack) != 0:
+            cnt = len(stack)
+            curr = []
+            new_stack = []
+            while cnt != 0:
                 node = stack.pop()
-                level.append(node.val)
-                if from_left:
-                    if node.left:
-                        tmp.append(node.left)
-                    if node.right:
-                        tmp.append(node.right)
+                curr.append(node.val)
+                if left_first:
+                    if node.left is not None:
+                        new_stack.append(node.left)
+                    if node.right is not None:
+                        new_stack.append(node.right)
                 else:
-                    if node.right:
-                        tmp.append(node.right)
-                    if node.left:
-                        tmp.append(node.left)
-            stack = tmp
-            from_left = not from_left
-            res.append(level)
+                    if node.right is not None:
+                        new_stack.append(node.right)
+                    if node.left is not None:
+                        new_stack.append(node.left)
+                cnt -= 1
+            left_first = not left_first
+            stack = new_stack
+            res.append(curr)
         return res
-        
-        
