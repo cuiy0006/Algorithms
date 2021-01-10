@@ -15,7 +15,8 @@ class Solution:
         
 class Solution:
     def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
-        people = [[one[0], one[1], one[1]] for one in people]
+        for one in people:
+            one.append(one[1])
         people.sort(key=lambda one: (one[0], -one[1]))
         
         res = []
