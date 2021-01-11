@@ -29,3 +29,43 @@ class Solution(object):
                 dic[s[i]] += 1
                 i += 1
         return s[start:end]
+
+    
+    
+from collections import deque
+
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        dic = {}
+        for c in t:
+            if c not in dic:
+                dic[c] = 1
+            else:
+                dic[c] += 1
+        
+        cnt = len(dic)
+        indexes = deque()
+        start = None
+        end = None
+        
+        for i, c in enumerate(s):
+            if c not in dic:
+                continue
+            dic[c] -= 1
+            indexes.append(i)
+            if cnt > 0 and dic[c] == 0:
+                cnt -= 1
+                if cnt == 0:
+                    start = indexes[0]
+                    end = indexes[-1]
+            while len(indexes) != 0 and dic[s[indexes[0]]] < 0:
+                dic[s[indexes[0]]] += 1
+                indexes.popleft()
+            if cnt == 0 and indexes[-1] - indexes[0] < end - start:
+                start = indexes[0]
+                end = indexes[-1]
+                
+        if start == None:
+            return ''
+        else:
+            return s[start: end + 1]
