@@ -13,12 +13,10 @@ class Solution:
                 if len(dic) <= k:
                     max_len = max(max_len, j - i + 1)
                 else:
-                    while i <= j:
+                    while len(dic) > k:
                         dic[s[i]] -= 1
                         if dic[s[i]] == 0:
                             del dic[s[i]]
-                            i += 1
-                            break
                         i += 1
         return max_len
             
