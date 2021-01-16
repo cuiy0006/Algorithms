@@ -13,7 +13,7 @@ class Solution:
             mid = (left + right) // 2
             if nums[mid] == target:
                 return True
-            if nums[left] < nums[right]:
+            if nums[left] <= nums[right]:
                 if nums[mid] > target:
                     right = mid
                 else:
