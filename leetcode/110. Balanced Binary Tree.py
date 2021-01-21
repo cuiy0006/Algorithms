@@ -5,7 +5,6 @@
 #         self.left = None
 #         self.right = None
 
-from collections import deque
 class Solution(object):
     def isBalanced(self, root):
         """
