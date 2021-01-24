@@ -93,13 +93,10 @@ class Solution:
         def helper(node):
             if node == None:
                 return
-            
-            if node.left != None:
-                node.left = jump(node.left)
-                helper(node.left)
-            if node.right != None:
-                node.right = jump(node.right)
-                helper(node.right)
+            node.left = jump(node.left)
+            helper(node.left)
+            node.right = jump(node.right)
+            helper(node.right)
                 
         root = jump(root)
         helper(root)
