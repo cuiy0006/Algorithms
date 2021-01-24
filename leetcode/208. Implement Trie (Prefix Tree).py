@@ -1,7 +1,8 @@
 class TrieNode:
-    def __init__(self):
-        self.isEnd = False
-        self.dic = {}
+    def __init__(self, val=None, is_end=False):
+        self.val = val
+        self.is_end = is_end
+        self.children = {}
 
 class Trie:
 
@@ -11,44 +12,39 @@ class Trie:
         """
         self.root = TrieNode()
 
-    def insert(self, word):
+    def insert(self, word: str) -> None:
         """
         Inserts a word into the trie.
-        :type word: str
-        :rtype: void
         """
-        node =self.root
-        for c in word:
-            if c not in node.dic:
-                node.dic[c] = TrieNode()
-            node = node.dic[c]
-        node.isEnd = True
+        node = self.root
+        for i, c in enumerate(word):
+            if c not in node.children:
+                node.children[c] = TrieNode(c)
+            node = node.children[c]
+        node.is_end = True
         
 
-    def search(self, word):
+    def search(self, word: str) -> bool:
         """
         Returns if the word is in the trie.
-        :type word: str
-        :rtype: bool
         """
         node = self.root
         for c in word:
-            if c not in node.dic:
+            if c not in node.children:
                 return False
-            node = node.dic[c]
-        return node.isEnd
+            node = node.children[c]
+        return node.is_end
+        
 
-    def startsWith(self, prefix):
+    def startsWith(self, prefix: str) -> bool:
         """
         Returns if there is any word in the trie that starts with the given prefix.
-        :type prefix: str
-        :rtype: bool
         """
         node = self.root
         for c in prefix:
-            if c not in node.dic:
+            if c not in node.children:
                 return False
-            node = node.dic[c]
+            node = node.children[c]
         return True
         
 
