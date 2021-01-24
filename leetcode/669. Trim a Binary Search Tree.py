@@ -68,3 +68,39 @@ class Solution(object):
         parent.left = root
         helper(root, parent, True)
         return parent.left
+    
+    
+    
+    
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def trimBST(self, root: TreeNode, low: int, high: int) -> TreeNode:
+        def jump(node):
+            while node != None:
+                if node.val < low:
+                    node = node.right
+                elif node.val > high:
+                    node = node.left
+                else:
+                    break
+            return node
+        
+        def helper(node):
+            if node == None:
+                return
+            
+            if node.left != None:
+                node.left = jump(node.left)
+                helper(node.left)
+            if node.right != None:
+                node.right = jump(node.right)
+                helper(node.right)
+                
+        root = jump(root)
+        helper(root)
+        return root
