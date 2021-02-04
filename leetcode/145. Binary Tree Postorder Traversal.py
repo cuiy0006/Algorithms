@@ -29,27 +29,26 @@ class Solution(object):
                     s.append(node.left)
         return res
 
-
 # Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
-class Solution(object):
-    def postorderTraversal(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[int]
-        """
-        res = []
-        def helper(node):
-            if node is None:
-                return
-            helper(node.left)
-            helper(node.right)
-            res.append(node.val)
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def postorderTraversal(self, root: TreeNode) -> List[int]:
+        if root == None:
+            return []
         
-        helper(root)
-        return res
+        res = []
+        lst = [root]
+        
+        while len(lst) != 0:
+            node = lst.pop()
+            res.append(node.val)
+            if node.left != None:
+                lst.append(node.left)
+            if node.right != None:
+                lst.append(node.right)
+            
+        return reversed(res)
