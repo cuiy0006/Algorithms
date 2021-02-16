@@ -1,23 +1,16 @@
 class Solution:
-    def combine(self, n, k):
-        """
-        :type n: int
-        :type k: int
-        :rtype: List[List[int]]
-        """
+    def combine(self, n: int, k: int) -> List[List[int]]:
         res = []
-        def helper(curr_lst, curr_num):
-            if len(curr_lst) == k:
-                res.append(curr_lst[:])
+
+        def helper(m, curr):
+            if len(curr) == k:
+                res.append(curr[:])
                 return
             
-            if curr_num > n:
-                return
-            
-            for num in range(curr_num, n-(k - len(curr_lst))+2):
-                curr_lst.append(num)
-                helper(curr_lst, num + 1)
-                curr_lst.pop()
-        
-        helper([], 1)
+            for i in range(m, n+1):
+                curr.append(i)
+                helper(i+1, curr)
+                curr.pop()
+                
+        helper(1, [])
         return res
