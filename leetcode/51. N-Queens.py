@@ -1,33 +1,32 @@
 class Solution:
-    def solveNQueens(self, n):
-        """
-        :type n: int
-        :rtype: List[List[str]]
-        """
-        rows = [-1] * n  # rows[i] is col for row i
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        cols = [True for _ in range(n)]
+        ldiag = [True for _ in range(2 * n - 1)]
+        rdiag = [True for _ in range(2 * n - 1)]
         res = []
-
-        def helper(row):
-            if row == n:
-                lst = []
-                for i in range(n):
-                    selected_col = rows[i]
-                    tmp = ['Q' if j == selected_col else '.' for j in range(n)]
-                    lst.append(''.join(tmp))
-                res.append(lst)
+        curr = [['.' for _ in range(n)] for _ in range(n)]
+        
+        def helper(x, y):
+            if not cols[y] or not ldiag[n-1+x-y] or not rdiag[x+y]:
                 return
-
-            for j in range(n):
-                is_available = True
-                for i in range(row):
-                    used_col = rows[i]
-                    if used_col == j or abs(used_col - j) == abs(i - row):
-                        is_available = False
-                        break
-
-                if is_available:
-                    rows[row] = j
-                    helper(row + 1)
-
-        helper(0)
+            
+            cols[y] = ldiag[n-1+x-y] = rdiag[x+y] = False
+            curr[x][y] = 'Q'
+            
+            if x == n - 1:
+                tmp = [''.join(lst) for lst in curr]
+                res.append(tmp)
+                cols[y] = ldiag[n-1+x-y] = rdiag[x+y] = True
+                curr[x][y] = '.'
+                return
+            
+            for i in range(n):
+                helper(x + 1, i)
+                
+            cols[y] = ldiag[n-1+x-y] = rdiag[x+y] = True
+            curr[x][y] = '.'
+            
+        for i in range(n):
+            helper(0, i)
+            
         return res
