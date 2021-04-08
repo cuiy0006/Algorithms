@@ -19,30 +19,22 @@ class Solution(object):
         
   
   
-from heapq import heappush
-from heapq import heappop
+from heapq import heappush, heappop
 
-class Solution(object):
-    def topKFrequent(self, nums, k):
-        """
-        :type nums: List[int]
-        :type k: int
-        :rtype: List[int]
-        """
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
         dic = {}
         for num in nums:
             if num not in dic:
                 dic[num] = 0
             dic[num] += 1
-        
-        lst = []
+            
+        freqs = []
         for num, freq in dic.items():
-            heappush(lst, (freq, num))
-            if len(lst) > k:
-                heappop(lst)
-        
-        res = []
-        while len(lst) != 0:
-            res.append(heappop(lst)[1])
-        res.reverse()
-        return res
+            if len(freqs) == k:
+                if freqs[0][0] < freq:
+                    heappop(freqs)
+                    heappush(freqs, (freq, num))
+            else:
+                heappush(freqs, (freq, num))
+        return [num for _, num in freqs]
