@@ -1,22 +1,24 @@
 class Solution:
-    def sortColors(self, nums):
+    def sortColors(self, nums: List[int]) -> None:
         """
-        :type nums: List[int]
-        :rtype: void Do not return anything, modify nums in-place instead.
+        Do not return anything, modify nums in-place instead.
         """
-        i = 0
-        j = len(nums) - 1
-        while i < j:
-            while i < j and nums[j] == 2:
-                j -= 1
-            while i < j and nums[i] != 2:
-                i += 1
-            nums[i], nums[j] = nums[j], nums[i]
+        left = 0
+        right = len(nums) - 1
+        while left < right:
+            while left < right and nums[left] == 0:
+                left += 1
+            while left < right and nums[right] != 0:
+                right -= 1
+            
+            nums[left], nums[right] = nums[right], nums[left]
         
-        i = 0
-        while i < j:
-            while i < j and nums[j] == 1:
-                j -= 1
-            while i < j and nums[i] == 0:
-                i += 1
-            nums[i], nums[j] = nums[j], nums[i]
+        right = len(nums) - 1
+        while left < right:
+            while left < right and nums[left] == 1:
+                left += 1
+            while left < right and nums[right] == 2:
+                right -= 1
+                
+            nums[left], nums[right] = nums[right], nums[left]
+            
