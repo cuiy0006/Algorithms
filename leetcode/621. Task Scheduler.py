@@ -37,26 +37,16 @@ class Solution:
 
 
 
-
-
-from collections import deque
 class Solution:
-    def leastInterval(self, tasks, n):
-        """
-        :type tasks: List[str]
-        :type n: int
-        :rtype: int
-        """
+    def leastInterval(self, tasks: List[str], n: int) -> int:
         dic = {}
         for task in tasks:
             if task not in dic:
-                dic[task] = [task, 1]
-            else:
-                dic[task][1] += 1
+                dic[task] = 0
+            dic[task] += 1
         
-        lst = list(dic.values())
-        lst.sort(key=lambda x:x[1])
-        i = len(lst) - 1
-        while i >= 0 and lst[i][1] == lst[-1][1]:
-            i-=1
-        return max((lst[-1][1]-1)*(n+1) + len(lst)-1-i, len(tasks))
+        freqs = list(dic.values())
+        max_freq = max(freqs)
+        num_max_freq = freqs.count(max_freq)
+        
+        return max(len(tasks), (n + 1) * (max_freq - 1) + num_max_freq
