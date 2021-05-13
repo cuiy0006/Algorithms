@@ -1,34 +1,35 @@
 class Solution:
-    def accountsMerge(self, accounts):
-        """
-        :type accounts: List[List[str]]
-        :rtype: List[List[str]]
-        """
-        emailToName = {}
-        parent ={}
-        parentToSet = {}
-        def findParent(email):
-            while email != parent[email]:
-                email = parent[email]
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        parents = {}
+        
+        def find_parent(email):
+            while email in parents and email != parents[email]:
+                email = parents[email]
             return email
+        
+        email_to_name = {}
+        
         for account in accounts:
-            emailToName[account[1]] = account[0]
+            if account[1] not in email_to_name:
+                email_to_name[account[1]] = account[0]
             for i in range(1, len(account)):
-                parent[account[i]] = account[i]
+                parents[account[i]] = account[1]
+            
         for account in accounts:
-            p = findParent(account[1])
+            p = find_parent(account[1])
             for i in range(2, len(account)):
-                parent[findParent(account[i])] = p
-        for account in accounts:
-            p = findParent(account[1])
-            if p not in parentToSet:
-                parentToSet[p] = set()
-            for i in range(1, len(account)):
-                parentToSet[p].add(account[i])
-        res = []
-        for p in parentToSet:
-            account = [emailToName[p]]
-            account += sorted(list(parentToSet[p]))
-            res.append(account)
-        return res
-                
+                parents[find_parent(account[i])] = p
+        
+        parent_to_emails = {}
+        for child in parents.keys():
+            p = find_parent(child)
+            if p not in parent_to_emails:
+                parent_to_emails[p] = []
+            parent_to_emails[p].append(child)
+        
+        for p in parent_to_emails.keys():
+            parent_to_emails[p].sort()
+            parent_to_emails[p] = [email_to_name[p]] + parent_to_emails[p]
+            
+        return list(parent_to_emails.values())
+            
