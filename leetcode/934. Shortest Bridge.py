@@ -28,7 +28,7 @@ class Solution:
                 continue
             break
             
-        distances = [[None for i in range(len(grid[0]))] for j in range(len(grid))]
+        visited = [[False for i in range(len(grid[0]))] for j in range(len(grid))]
         dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]]
         
         while len(q) != 0:
@@ -40,8 +40,8 @@ class Solution:
             if grid[x][y] == 1:
                 return curr - 1
             
-            if distances[x][y] is None:
-                distances[x][y] = curr
+            if not visited[x][y]:
+                visited[x][y] = True
             else:
                 continue
             
