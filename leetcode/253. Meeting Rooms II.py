@@ -1,26 +1,25 @@
-# Definition for an interval.
-# class Interval:
-#     def __init__(self, s=0, e=0):
-#         self.start = s
-#         self.end = e
-
 from heapq import heappush, heappop
 
 class Solution:
-    def minMeetingRooms(self, intervals):
-        """
-        :type intervals: List[Interval]
-        :rtype: int
-        """
-        curr = []
-        intervals.sort(key = lambda x:(x.start, x.end))
+    def minMeetingRooms(self, intervals: List[List[int]]) -> int:
+        intervals.sort(key=lambda interval: interval[0])
+        
+        h = []
+        max_overlap = 0
+        
         for interval in intervals:
-            start = interval.start
-            end = interval.end
-            if len(curr) == 0:
-                heappush(curr, end)
+            start = interval[0]
+            end = interval[1]
+            
+            if len(h) == 0:
+                heappush(h, end)
             else:
-                if start >= curr[0]:
-                    heappop(curr)
-                heappush(curr, end)
-        return len(curr)
+                while len(h) != 0 and start >= h[0]:
+                    heappop(h)
+                heappush(h, end)
+            
+            max_overlap = max(max_overlap, len(h))
+        
+        return max_overlap
+            
+        
