@@ -1,9 +1,10 @@
-class Solution(object):
-    def reverseWords(self, s):
-        """
-        :type s: str
-        :rtype: str
-        """
+class Solution:
+    def reverseWords(self, s: str) -> str:
         lst = s.split(' ')
-        lst = [word for word in lst if word != '']
-        return ' '.join(lst[::-1])
+        res = []
+        for i in range(len(lst) - 1, -1, -1):
+            if lst[i] != '':
+                res.append(lst[i])
+        
+        return ' '.join(res)
+        
