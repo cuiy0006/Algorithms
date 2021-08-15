@@ -1,47 +1,39 @@
-from heapq import heappush
-from heapq import heappop
+from heapq import heappush, heappop
 
-class item:
-    def __init__(self, word, cnt):
+class Node:
+    def __init__(self, freq, word):
+        self.freq = freq
         self.word = word
-        self.cnt = cnt
     
-    def __eq__(self, item):
-        if self.word == item.word and self.cnt == item.cnt:
+    def __lt__(self, other):
+        if self.freq > other.freq:
+            return False
+        elif self.freq < other.freq:
             return True
         else:
-            return False
-        
-    def __lt__(self, item):
-        if self.cnt < item.cnt or (self.cnt == item.cnt and self.word > item.word):
-            return True
-        else:
-            return False
+            return self.word > other.word
 
-class Solution(object):
-    def topKFrequent(self, words, k):
-        """
-        :type words: List[str]
-        :type k: int
-        :rtype: List[str]
-        """
-        h = [] # item
-        dic = {} # word -> freq
+class Solution:
+    def topKFrequent(self, words: List[str], k: int) -> List[str]:
+        heap = []
+        word_to_freq = {}
         for word in words:
-            if word not in dic:
-                dic[word] = 0
-            dic[word] += 1
-            
-        for word, freq in dic.items():
-            i = item(word, freq)
-            heappush(h, i)
-            if len(h) > k:
-                heappop(h)
+            if word not in word_to_freq:
+                word_to_freq[word] = 0
+            word_to_freq[word] += 1
+        
+        for word, freq in word_to_freq.items():
+            heappush(heap, Node(freq, word))
+            if len(heap) > k:
+                heappop(heap)
+        
         res = []
-        while len(h) != 0:
-            res.append(heappop(h).word)
+        while len(heap) != 0:
+            res.append(heappop(heap))
+            
         res.reverse()
-        return res
+        
+        return [node.word for node in res]
         
         
         
