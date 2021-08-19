@@ -25,21 +25,21 @@ class Solution(object):
     
     
 class Solution:
-def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-    words = set(wordDict)
-    dp = [False] * (len(s) + 1)
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        words = set(wordDict)
+        dp = [False] * (len(s) + 1)
 
-    dp[0] = True
+        dp[0] = True
 
-    for i in range(len(dp)):
-        reached = dp[i]
-        if not reached:
-            continue
-
-        for word in words:
-            if i + len(word) > len(s):
+        for i in range(len(dp)):
+            reached = dp[i]
+            if not reached:
                 continue
-            if s[i: i + len(word)] == word:
-                dp[i + len(word)] = True
 
-    return dp[-1]
+            for word in words:
+                if i + len(word) > len(s):
+                    continue
+                if s[i: i + len(word)] == word:
+                    dp[i + len(word)] = True
+
+        return dp[-1]
