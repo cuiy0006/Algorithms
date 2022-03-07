@@ -20,3 +20,24 @@ impl Solution {
         return cmp::max(dp[size-1], dp[size-2]);
     }
 }
+
+
+
+use std::cmp;
+
+impl Solution {
+    pub fn rob(nums: Vec<i32>) -> i32 {
+        let size = nums.len();  
+        let mut dp = vec![vec![0, 0]; size];
+        
+        dp[0][0] = 0;
+        dp[0][1] = nums[0];
+        
+        for i in (1..size) {
+            dp[i][0] = cmp::max(dp[i-1][0], dp[i-1][1]);
+            dp[i][1] = nums[i] + dp[i-1][0];
+        }
+        
+        return cmp::max(dp[size-1][0], dp[size-1][1]);
+    }
+}
