@@ -8,25 +8,17 @@ class Solution:
     def findLeaves(self, root: Optional[TreeNode]) -> List[List[int]]:
         dic = {}
         
-        def postorder(node):
+        def go_depth(node):
             if node is None:
                 return 0
             
-            left = postorder(node.left)
-            right = postorder(node.right)
-            
-            depth = max(left, right) + 1
+            depth = max(go_depth(node.right), go_depth(node.left)) + 1
             if depth not in dic:
                 dic[depth] = []
             dic[depth].append(node.val)
-            
+        
             return depth
         
-        postorder(root)
+        depth = go_depth(root)
         
-        i = 1
-        res = []
-        while i in dic:
-            res.append(dic[i])
-            i += 1
-        return res
+        return [dic[i] for i in range(1, depth+1)]
