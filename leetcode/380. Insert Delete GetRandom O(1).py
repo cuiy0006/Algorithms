@@ -1,46 +1,36 @@
-import random
-class RandomizedSet(object):
+from random import randint
+
+class RandomizedSet:
 
     def __init__(self):
-        """
-        Initialize your data structure here.
-        """
         self.dic = {}
         self.lst = []
 
-    def insert(self, val):
-        """
-        Inserts a value to the set. Returns true if the set did not already contain the specified element.
-        :type val: int
-        :rtype: bool
-        """
+    def insert(self, val: int) -> bool:
         if val in self.dic:
             return False
-        self.dic[val] = len(self.lst)
-        self.lst.append(val)
-        return True
+        else:
+            self.dic[val] = len(self.lst)
+            self.lst.append(val)
+            return True
 
-    def remove(self, val):
-        """
-        Removes a value from the set. Returns true if the set contained the specified element.
-        :type val: int
-        :rtype: bool
-        """
+    def remove(self, val: int) -> bool:
         if val not in self.dic:
             return False
-        idx, last_idx = self.dic[val], len(self.lst)-1
-        tmp = self.lst[-1]
-        self.lst[idx], self.lst[last_idx], self.dic[tmp] = self.lst[last_idx], self.lst[idx], idx
-        self.lst.pop()
-        del self.dic[val]
-        return True
+        else:
+            idx = self.dic[val]
+            swapped_val = self.lst[-1]
+            self.dic[swapped_val] = idx
+            self.lst[idx] = swapped_val
+            
+            self.lst.pop()
+            del self.dic[val]
+            
+            return True
 
-    def getRandom(self):
-        """
-        Get a random element from the set.
-        :rtype: int
-        """
-        return self.lst[random.randint(0, len(self.lst) - 1)]
+    def getRandom(self) -> int:
+        idx = randint(0, len(self.lst) - 1)
+        return self.lst[idx]
 
 
 # Your RandomizedSet object will be instantiated and called as such:
