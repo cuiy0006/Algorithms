@@ -1,17 +1,15 @@
+import sys
+
 class Solution:
-    def maxProduct(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        maxVal = nums[0]
-        minVal = nums[0]
-        res = nums[0]
-        
-        for i in range(1, len(nums)):
-            num = nums[i]
-            maxVal, minVal = max(num, num * minVal, num * maxVal), min(num, num * minVal, num * maxVal)
-            res = max(res, maxVal)
+    def maxProduct(self, nums: List[int]) -> int:
+        res = -sys.maxsize
+        min_val = max_val = 1
+        for num in nums:
+            max_n = max_val * num
+            min_n = min_val * num
+            max_val = max(num, max_n, min_n)
+            min_val = min(num, max_n, min_n)
+            res = max(res, max_val)
         return res
 
     
