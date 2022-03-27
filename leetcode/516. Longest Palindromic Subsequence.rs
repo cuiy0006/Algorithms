@@ -30,4 +30,28 @@ impl Solution {
 }
           
           
-          
+use std::cmp;
+
+impl Solution {
+    pub fn longest_palindrome_subseq(s: String) -> i32 {
+        let s: Vec<char> = s.chars().collect();
+        let mut dp = vec![vec![0; s.len()+1]; s.len()+1];
+        
+        for len in (1..s.len()+1) {
+            let mut i = 1;
+            while i + len - 1 <= s.len() {
+                let j = i + len - 1;
+                if i == j {
+                    dp[i][j] = 1;
+                } else if s[i-1] == s[j-1] {
+                    dp[i][j] = dp[i+1][j-1] + 2;
+                } else {
+                    dp[i][j] = cmp::max(dp[i+1][j], dp[i][j-1]);
+                }
+                i += 1;
+            }
+        }
+        
+        dp[1][s.len()]
+    }
+}          
