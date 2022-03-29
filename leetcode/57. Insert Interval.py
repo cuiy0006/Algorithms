@@ -1,30 +1,25 @@
-# Definition for an interval.
-# class Interval(object):
-#     def __init__(self, s=0, e=0):
-#         self.start = s
-#         self.end = e
-
-class Solution(object):
-    def insert(self, intervals, newInterval):
-        """
-        :type intervals: List[Interval]
-        :type newInterval: Interval
-        :rtype: List[Interval]
-        """
-        start = newInterval.start
-        end = newInterval.end
+class Solution:
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
         res = []
-        for i, interval in enumerate(intervals):
-            if interval.end < start or interval.start > end:
+        inserted = False
+        for interval in intervals:
+            if inserted:
                 res.append(interval)
             else:
-                start = min(start, interval.start)
-                end = max(end, interval.end)
-        j = 0
-        while j < len(res):
-            if start > res[j].start:
-                j += 1
-            else:
-                break
-        res.insert(j, Interval(start, end))
+                if newInterval[0] < interval[0]:
+                    if newInterval[1] < interval[0]:
+                        res.append(newInterval)
+                        inserted = True
+                        res.append(interval)
+                    else:
+                        newInterval[1] = max(newInterval[1], interval[1])
+                elif newInterval[0] > interval[1]:
+                    res.append(interval)
+                else:
+                    newInterval[1] = max(newInterval[1], interval[1])
+                    newInterval[0] = min(newInterval[0], interval[0])
+        
+        if not inserted:
+            res.append(newInterval)
+        
         return res
