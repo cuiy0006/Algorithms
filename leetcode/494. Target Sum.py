@@ -18,3 +18,22 @@ class Solution(object):
                     tmp[j - num] += dp[j]
             dp = tmp
         return dp[total + S]
+
+    
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        
+        @cache
+        def helper(idx, total):
+            if idx == len(nums):
+                if total == target:
+                    return 1
+                else:
+                    return 0
+            
+            plus = helper(idx+1, total + nums[idx])
+            minus = helper(idx+1, total - nums[idx])
+            
+            return plus + minus
+            
+        return helper(0, 0)
