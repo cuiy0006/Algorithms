@@ -33,41 +33,46 @@ class Solution:
 
 
     
-    
-from collections import deque
-
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
         dic = {}
         for c in t:
             if c not in dic:
-                dic[c] = 1
-            else:
-                dic[c] += 1
+                dic[c] = 0
+            dic[c] += 1
         
-        cnt = len(dic)
-        indexes = deque()
-        start = None
-        end = None
+        i = 0
+        j = 0
+        cnt = 0
+        res_i = None
+        res_j = None
         
-        for i, c in enumerate(s):
-            if c not in dic:
-                continue
-            dic[c] -= 1
-            indexes.append(i)
-            if cnt > 0 and dic[c] == 0:
-                cnt -= 1
-                if cnt == 0:
-                    start = indexes[0]
-                    end = indexes[-1]
-            while len(indexes) != 0 and dic[s[indexes[0]]] < 0:
-                dic[s[indexes[0]]] += 1
-                indexes.popleft()
-            if cnt == 0 and indexes[-1] - indexes[0] < end - start:
-                start = indexes[0]
-                end = indexes[-1]
-                
-        if start == None:
-            return ''
-        else:
-            return s[start: end + 1]
+        while j < len(s):
+            c = s[j]
+            if c in dic:
+                dic[c] -= 1
+                if dic[c] == 0:
+                    cnt += 1
+                if cnt == len(dic):
+                    if res_i is None and res_j is None:
+                        res_i = i
+                        res_j = j
+                    
+                    while i <= j:
+                        if j - i < res_j - res_i:
+                            res_i = i
+                            res_j = j
+                        
+                        c = s[i]
+                        if c in dic:
+                            dic[c] += 1
+                            if dic[c] > 0:
+                                cnt -= 1
+                                i += 1
+                                break
+                        i += 1
+            j += 1
+        
+        if res_i is None or res_j is None:
+            return ""
+        return s[res_i:res_j+1]
