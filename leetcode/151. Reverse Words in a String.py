@@ -8,3 +8,14 @@ class Solution:
         
         return ' '.join(res)
         
+        
+        
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        s = s.strip()
+        
+        words = s.split(' ')
+        words = list(filter(lambda word: word != '', words))
+        words.reverse()
+        
+        return ' '.join(words)
