@@ -1,68 +1,69 @@
-LAST, NEXT, KEY, VAL, FREQ = 0, 1, 2, 3, 4 
+class Node:
+    def __init__(self, key, value, freq, l=None, n=None):
+        self.key = key
+        self.val = value
+        self.last = l
+        self.next = n
+        self.freq = freq
+        
+
 class LFUCache:
 
-    def __init__(self, capacity):
-        """
-        :type capacity: int
-        """
-        self.dic = {} #key -> [LAST, NEXT, KEY, VAL, FREQ]
-        self.freq_dic = {} #freq -> root: [LAST, NEXT, None, None, FREQ]
-        self.least_freq = 1
-        self.cap = capacity
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.freq_to_root = {} # 
+        self.key_to_node = {}
+        self.min_freq = 1
         
 
-    def get(self, key):
-        """
-        :type key: int
-        :rtype: int
-        """
-        dic, freq_dic, cap = self.dic, self.freq_dic, self.cap
-        if key not in dic:
+    def get(self, key: int) -> int:
+        if key not in self.key_to_node:
             return -1
-        node = dic[key]
-        node[NEXT][LAST], node[LAST][NEXT] = node[LAST], node[NEXT]
-        freq = node[FREQ]
-        if freq == self.least_freq and freq_dic[freq][NEXT] is freq_dic[freq]:
-            self.least_freq += 1
         
-        node[FREQ] += 1
-        freq = node[FREQ]
-        if freq not in freq_dic:
-            root = []
-            root[:] = [root, root, None, None, freq]
-            freq_dic[freq] = root
-        root = freq_dic[freq]
-        root[LAST][NEXT], root[LAST], node[NEXT], node[LAST] = node, node, root, root[LAST]
-        return node[VAL]
+        node = self.key_to_node[key]
+        if self.min_freq == node.freq and node.next == node.last:
+            self.min_freq += 1
+        
+        node.last.next, node.next.last = node.next, node.last
+        node.freq += 1
+        freq = node.freq
+        
+        if freq not in self.freq_to_root:
+            root = Node(None, None, None)
+            root.next, root.last = root, root
+            self.freq_to_root[freq] = root
+        
+        root = self.freq_to_root[freq]
+        root.next.last, root.next, node.last, node.next = node, node, root, root.next
+        return node.val
+        
 
-    def put(self, key, value):
-        """
-        :type key: int
-        :type value: int
-        :rtype: void
-        """
-        dic, freq_dic, cap = self.dic, self.freq_dic, self.cap
-        if cap == 0:
+    def put(self, key: int, value: int) -> None:
+        if self.capacity == 0:
             return
-        if key in dic:
+        if key in self.key_to_node:
+            node = self.key_to_node[key]
+            node.val = value
             self.get(key)
-            dic[key][VAL] = value
-            return
-        
-        if cap == len(dic):
-            evict = freq_dic[self.least_freq][NEXT]
-            evict[NEXT][LAST], evict[LAST][NEXT] = evict[LAST], evict[NEXT]
-            del dic[evict[KEY]]
-        self.least_freq = 1
-        if 1 not in self.freq_dic:
-            root = []
-            root[:] = [root, root, None, None, 1] 
-            freq_dic[1] = root
-        
-        root = freq_dic[1]
-        node = [None, None, key, value, 1]
-        root[LAST][NEXT], root[LAST], node[NEXT], node[LAST] = node, node, root, root[LAST]
-        dic[key] = node
+        else:
+            if len(self.key_to_node) == self.capacity:
+                root = self.freq_to_root[self.min_freq]
+                old = root.last
+                root.last, old.last.next = old.last, root
+                del self.key_to_node[old.key]
+            
+            self.min_freq = 1
+            if 1 not in self.freq_to_root:
+                root = Node(None, None, None)
+                root.next, root.last = root, root
+                self.freq_to_root[1] = root
+
+            root = self.freq_to_root[1]
+            new = Node(key, value, 1)
+            root.next.last, root.next, new.next, new.last = new, new, root.next, root
+            self.key_to_node[key] = new
+            
+                
         
 
 
