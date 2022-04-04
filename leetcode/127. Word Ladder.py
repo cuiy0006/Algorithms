@@ -29,7 +29,39 @@ class Solution(object):
         return 0
 
     
-    
+from collections import deque
+
+class Solution:
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        word_set = set(wordList)
+        word_to_depth = {}
+        
+        q = deque([beginWord])
+        
+        depth = 1
+        while len(q) != 0:
+            size = len(q)
+            while size != 0:
+                size -= 1
+                word = q.popleft()
+                if word == endWord:
+                    return depth
+                
+                if word in word_to_depth:
+                    continue
+                
+                word_to_depth[word] = depth
+                
+                for i in range(len(word)):
+                    for j in range(26):
+                        c = chr(ord('a') + j)
+                        new_word = word[:i] + c + word[i+1:]
+                        if new_word in word_set:
+                            q.append(new_word)
+                            word_set.remove(new_word)
+            depth += 1
+        return 0
+
     
     
 from collections import deque
