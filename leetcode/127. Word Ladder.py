@@ -34,7 +34,7 @@ from collections import deque
 class Solution:
     def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
         word_set = set(wordList)
-        word_to_depth = {}
+        seen = set()
         
         q = deque([beginWord])
         
@@ -47,10 +47,10 @@ class Solution:
                 if word == endWord:
                     return depth
                 
-                if word in word_to_depth:
+                if word in seen:
                     continue
                 
-                word_to_depth[word] = depth
+                seen.add(word)
                 
                 for i in range(len(word)):
                     for j in range(26):
@@ -61,6 +61,7 @@ class Solution:
                             word_set.remove(new_word)
             depth += 1
         return 0
+
 
     
     
