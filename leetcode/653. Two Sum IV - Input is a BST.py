@@ -1,6 +1,3 @@
-
-
-
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
@@ -26,32 +23,27 @@ class Solution:
 
 
 
-
-
-
-
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    def findTarget(self, root, k):
-        """
-        :type root: TreeNode
-        :type k: int
-        :rtype: bool
-        """
-        def inorder(lst, node):
-            if node == None:
-                return
-            inorder(lst, node.left)
-            lst.append(node.val)
-            inorder(lst, node.right)
-        lst = []
-        inorder(lst, root)
-        left = 0
-        right = len(lst) - 1
-        while left < right:
-            if lst[left] + lst[right] == k:
+    def findTarget(self, root: Optional[TreeNode], k: int) -> bool:
+        wanted = set()
+        
+        def iterate(node):
+            if node is None:
+                return False
+            
+            if node.val in wanted:
                 return True
-            elif lst[left] + lst[right] < k:
-                left += 1
-            else:
-                right -=1
-        return False
+            
+            wanted.add(k - node.val)
+            if iterate(node.left) or iterate(node.right):
+                return True
+            return False
+        
+        return iterate(root)
+            
