@@ -1,35 +1,22 @@
 class Solution:
     def isAlienSorted(self, words: List[str], order: str) -> bool:
-        if len(words) <= 1:
-            return True
-        
-        seq_dic = {}
+        dic = {}
         for i, c in enumerate(order):
-            seq_dic[c] = i
+            dic[c] = i
+        
+        for i in range(1, len(words)):
+            word1 = words[i-1]
+            word2 = words[i]
             
-        def is_valid(w1, w2):
-            i = 0
+            min_len = min(len(word1), len(word2))
             
-            while i < len(w1) and i < len(w2):
-                if seq_dic[w1[i]] < seq_dic[w2[i]]:
-                    return True
-                elif seq_dic[w1[i]] > seq_dic[w2[i]]:
+            for j in range(min_len):
+                if dic[word1[j]] > dic[word2[j]]:
                     return False
-                i += 1
-            
-            if len(w1) > len(w2):
-                return False
-            else:
-                return True
-        
-        curr = words[0]
-        i = 1
-        while i < len(words):
-            target = words[i]
-            valid = is_valid(curr, target)
-            if not valid:
-                return False
-            curr = target
-            i += 1
+                elif dic[word1[j]] < dic[word2[j]]:
+                    break
+                
+                if j == min_len - 1 and len(word1) > len(word2):
+                    return False
+
         return True
-        
