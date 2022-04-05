@@ -1,34 +1,29 @@
 class Solution:
     def findReplaceString(self, s: str, indices: List[int], sources: List[str], targets: List[str]) -> str:
-        def is_subseq(s, i, sub):
-            j = 0
-            while j < len(sub) and i < len(s):
-                if sub[j] != s[i]:
-                    return False
-                i += 1
-                j += 1
-            return j == len(sub)
+        if len(indices) == 0:
+            return s
         
-        combo = list(zip(indices, sources, targets))
-        combo.sort()
-        indices = [tp[0] for tp in combo]
-        sources = [tp[1] for tp in combo]
-        targets = [tp[2] for tp in combo]
+        zipped = list(zip(indices, sources, targets))
+        zipped.sort(key=lambda tp: tp[0])
         
-        res = ''
-        if indices[0] != 0:
-            res += s[:indices[0]]
+        res = s[:zipped[0][0]]
         
-        for i, idx in enumerate(indices):
-            if i == len(indices) - 1:
-                j = len(s)
+        for i in range(len(indices)):
+            idx = zipped[i][0]
+            source = zipped[i][1]
+            target = zipped[i][2]
+            
+            s_l = len(source)
+            
+            if s[idx:idx+s_l] == source:
+                res += target
+                if i == len(zipped) - 1:
+                    res += s[idx+s_l:]
+                else:
+                    res += s[idx+s_l:zipped[i+1][0]]
             else:
-                j = indices[i + 1]
-                
-            if is_subseq(s, idx, sources[i]):
-                res += targets[i] + s[idx+len(sources[i]): j]
-            else:
-                res += s[idx: j]
-                
+                if i == len(zipped) - 1:
+                    res += s[idx:]
+                else:
+                    res += s[idx:zipped[i+1][0]]
         return res
-                    
