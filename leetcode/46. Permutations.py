@@ -2,17 +2,17 @@ class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
         res = []
         
-        def helper(k, curr):
-            if len(curr) == len(nums):
+        def get_permute(idx, curr):
+            if idx == len(nums):
                 res.append(curr[:])
                 return
             
-            for i in range(k, len(nums)):
-                nums[i], nums[k] = nums[k], nums[i]
-                curr.append(nums[k])
-                helper(k+1, curr)
+            for i in range(idx, len(nums)):
+                curr.append(nums[i])
+                nums[i], nums[idx] = nums[idx], nums[i]
+                get_permute(idx+1, curr)
+                nums[i], nums[idx] = nums[idx], nums[i]
                 curr.pop()
-                nums[k], nums[i] = nums[i], nums[k]
-        
-        helper(0, [])
+            
+        get_permute(0, [])
         return res
