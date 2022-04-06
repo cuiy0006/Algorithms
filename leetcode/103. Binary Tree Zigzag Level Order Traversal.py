@@ -1,40 +1,42 @@
 # Definition for a binary tree node.
 # class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+from collections import deque
 
 class Solution:
-    def zigzagLevelOrder(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[List[int]]
-        """
+    def zigzagLevelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
         if root is None:
-            return []
-        left_first = True
-        stack = [root]
+            return None
+        
+        l_to_r = False
+        q = deque([root])
         res = []
-        while len(stack) != 0:
-            cnt = len(stack)
-            curr = []
-            new_stack = []
-            while cnt != 0:
-                node = stack.pop()
-                curr.append(node.val)
-                if left_first:
-                    if node.left is not None:
-                        new_stack.append(node.left)
+        
+        while len(q) != 0:
+            size = len(q)
+            node_lst = []
+            res_lst = []
+            
+            while size != 0:
+                node = q.popleft()
+                res_lst.append(node.val)
+                if l_to_r:
                     if node.right is not None:
-                        new_stack.append(node.right)
+                        node_lst.append(node.right)
+                    if node.left is not None:
+                        node_lst.append(node.left)
                 else:
-                    if node.right is not None:
-                        new_stack.append(node.right)
                     if node.left is not None:
-                        new_stack.append(node.left)
-                cnt -= 1
-            left_first = not left_first
-            stack = new_stack
-            res.append(curr)
+                        node_lst.append(node.left)
+                    if node.right is not None:
+                        node_lst.append(node.right)
+                size -= 1
+            
+            l_to_r = not l_to_r
+            res.append(res_lst)
+            while len(node_lst) != 0:
+                q.append(node_lst.pop())
         return res
