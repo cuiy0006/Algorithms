@@ -5,21 +5,21 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def isSymmetric(self, root: TreeNode) -> bool:
-        def helper(left, right):
-            if left == None and right == None:
-                return True
-            elif right == None or left == None:
-                return False
-            
-            if left.val != right.val:
-                return False
-            
-            return helper(left.left, right.right) and helper(left.right, right.left)
-        
-        if root == None:
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        if root is None:
             return True
-        return helper(root.left, root.right)
+        
+        def is_sym(node1, node2):
+            if node1 is None and node2 is None:
+                return True
+            elif node1 is not None and node2 is not None:
+                if node1.val != node2.val:
+                    return False
+                return is_sym(node1.left, node2.right) and is_sym(node1.right, node2.left)
+            else:
+                return False
+        
+        return is_sym(root.left, root.right)
 
     
     
