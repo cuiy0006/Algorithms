@@ -1,14 +1,27 @@
 class Solution:
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
-        def helper(i, j):
-            if i < 0 or i > len(grid) - 1 or j < 0 or j > len(grid[0]) - 1 or grid[i][j] == 0:
+        m = len(grid)
+        n = len(grid[0])
+        
+        def get_area(x, y):
+            if x < 0 or x > m - 1 or y < 0 or y > n - 1:
                 return 0
             
-            grid[i][j] = 0
-            return 1 + helper(i - 1, j) + helper(i + 1, j) + helper(i, j - 1) + helper(i, j + 1)
+            if grid[x][y] == 0:
+                return 0
+            
+            grid[x][y] = 0
+            area = 1
+            area += get_area(x + 1, y)
+            area += get_area(x - 1, y)
+            area += get_area(x, y + 1)
+            area += get_area(x, y - 1)
+            return area
         
-        res = 0
-        for i in range(len(grid)):
-            for j in range(len(grid[0])):
-                res = max(res, helper(i, j))
-        return res
+        max_area = 0
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 1:
+                    max_area = max(max_area, get_area(i, j))
+        
+        return max_area
