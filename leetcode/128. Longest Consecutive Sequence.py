@@ -1,25 +1,26 @@
 class Solution:
-    def longestConsecutive(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        maxlen = 0
-        dic = {num:0 for num in nums}
+    def longestConsecutive(self, nums: List[int]) -> int:
+        seen = set()
+        res = 0
+        
         for num in nums:
-            tmp = num
-            while tmp in dic:
-                if dic[tmp] == 0:
-                    tmp -= 1
-                else:
-                    break
-            if tmp not in dic:
+            seen.add(num)
+            
+        for num in nums:
+            if num in seen:
                 cnt = 1
-                for i in range(tmp+1, num+1):
-                    dic[i] = cnt
+                seen.remove(num)
+                curr = num + 1
+                while curr in seen:
                     cnt += 1
-            else:
-                for i in range(tmp+1, num+1):
-                    dic[i] = dic[i-1] + 1
-            maxlen = max(maxlen, dic[num])
-        return maxlen
+                    seen.remove(curr)
+                    curr += 1
+                    
+                curr = num - 1
+                while curr in seen:
+                    cnt += 1
+                    seen.remove(curr)
+                    curr -= 1
+                res = max(res, cnt)
+        
+        return res
