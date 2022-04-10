@@ -1,3 +1,31 @@
+from collections import deque
+
+class Solution:
+    def findAllRecipes(self, recipes: List[str], ingredients: List[List[str]], supplies: List[str]) -> List[str]:
+        r_to_i = {
+            recipes[i]: set(ingredients[i]) for i in range(len(recipes)) 
+        }
+        
+        res = []
+        
+        q = deque(supplies)
+        
+        while len(q) != 0:
+            supply = q.popleft()
+            lst = list(r_to_i.items())
+            
+            for recipe, in_set in lst:
+                if supply in in_set:
+                    in_set.remove(supply)
+                    if len(in_set) == 0:
+                        res.append(recipe)
+                        del r_to_i[recipe]
+                        q.append(recipe)
+
+        return res
+
+
+
 class Solution:
     def findAllRecipes(self, recipes: List[str], ingredients: List[List[str]], supplies: List[str]) -> List[str]:
         r_to_i = {
