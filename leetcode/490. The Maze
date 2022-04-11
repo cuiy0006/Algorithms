@@ -1,0 +1,33 @@
+class Solution:
+    def hasPath(self, maze: List[List[int]], start: List[int], destination: List[int]) -> bool:
+        direction = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        m = len(maze)
+        n = len(maze[0])
+        seen = set()
+        
+        def go_next(x, y):
+            if (x, y) in seen:
+                return False
+            seen.add((x, y))
+                
+            for dx0, dy0 in direction:
+                x0 = x + dx0
+                y0 = y + dy0
+                if x0 < 0 or x0 >= m or y0 < 0 or y0 >= n or maze[x0][y0] == 1:
+                    continue
+                while x0 + dx0 >= 0 and x0 + dx0 < m and y0 + dy0 >= 0 and y0 + dy0 < n and maze[x0+dx0][y0+dy0] == 0:
+                    x0 += dx0
+                    y0 += dy0
+                
+                if [x0, y0] == destination:
+                    return True
+                
+                if go_next(x0, y0):
+                    return True
+            
+            return False
+        
+        if go_next(start[0], start[1]):
+            return True
+        
+        return False
