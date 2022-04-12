@@ -20,11 +20,10 @@ class Solution:
                 if pos == target:
                     return step
                 
-                if abs(pos - target) < target:
-                    if spd > 0:
-                        q.append((pos, -1))
-                    elif spd < 0:
-                        q.append((pos, 1))
+                if spd > 0:
+                    q.append((pos, -1))
+                elif spd < 0:
+                    q.append((pos, 1))
                 
                 if abs(pos + spd - target) < target:
                     q.append((pos + spd, 2 * spd))
