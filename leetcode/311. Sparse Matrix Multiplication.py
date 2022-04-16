@@ -1,20 +1,25 @@
 class Solution:
-    def multiply(self, A, B):
-        """
-        :type A: List[List[int]]
-        :type B: List[List[int]]
-        :rtype: List[List[int]]
-        """
-        m = len(A)
-        n = len(A[0])
-        p = len(B[0])
-        res = [[0 for i in range(p)] for j in range(m)]
-        for i in range(m):
-            for k in range(n):
-                if A[i][k] == 0:
-                    continue
-                for j in range(p):
-                    if B[k][j] == 0:
-                        continue
-                    res[i][j] += A[i][k]*B[k][j]
+    def multiply(self, mat1: List[List[int]], mat2: List[List[int]]) -> List[List[int]]:
+        row_dic = {}
+        col_dic = {}
+        
+        for i in range(len(mat1)):
+            row_dic[i] = set()
+            for j in range(len(mat1[0])):
+                if mat1[i][j] != 0:
+                    row_dic[i].add(j)
+        
+        for j in range(len(mat2[0])):
+            col_dic[j] = set()
+            for i in range(len(mat2)):
+                if mat2[i][j] != 0:
+                    col_dic[j].add(i)
+        
+        res = [[0 for _ in range(len(mat2[0]))] for _ in range(len(mat1))]
+        
+        for i in range(len(mat1)):
+            for j in range(len(mat2[0])):
+                for k in row_dic[i] & col_dic[j]:
+                    res[i][j] += mat1[i][k] * mat2[k][j]
+        
         return res
