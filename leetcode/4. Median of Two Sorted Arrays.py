@@ -1,3 +1,47 @@
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        nums1.sort()
+        nums2.sort()
+        m = len(nums1)
+        n = len(nums2)
+        
+        def helper(i1, i2, k):
+            if i1 == m:
+                return nums2[i2+k-1]
+            if i2 == n:
+                return nums1[i1+k-1]
+            
+            if k == 1:
+                return min(nums1[i1], nums2[i2])
+            
+            if m - i1 <= n - i2:
+                if i1 + k // 2 >= m:
+                    k1 = m - i1
+                else:
+                    k1 = k // 2
+                k2 = k - k1
+            else:
+                if i2 + k // 2 >= n:
+                    k2 = n - i2
+                else:
+                    k2 = k // 2
+                k1 = k - k2
+            
+            if nums1[i1 + k1 - 1] > nums2[i2 + k2 - 1]:
+                return helper(i1, i2 + k2, k - k2)
+            else:
+                return helper(i1 + k1, i2, k - k1)
+            
+        m = len(nums1)
+        n = len(nums2)
+        
+        if (m + n) % 2 == 1:
+            return helper(0, 0, (m + n) // 2 + 1)
+        else:
+            return (helper(0, 0, (m + n) // 2) + helper(0, 0, (m + n) // 2 + 1)) / 2
+
+
+
 class Solution(object):
     def findMedianSortedArrays(self, nums1, nums2):
         """
