@@ -22,18 +22,18 @@ class Solution:
         start = head
         
         while start is not None:
-            tail = start
+            end = start
             cnt = 0
             p = start
             while True:
                 cnt += 1
                 if cnt == k or p.next is None:
-                    tail = p
+                    end = p
                     break
                 p = p.next
 
-            next_start = tail.next
-            tail.next = None
+            next_start = end.next
+            end.next = None
             
             if cnt == k:
                 new_head = reverse(start)
