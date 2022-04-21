@@ -1,29 +1,32 @@
-
 class Solution:
     def numSubseq(self, nums: List[int], target: int) -> int:
         nums.sort()
-        cnt = 0
+        res = 0
+
+        dic = {0: 1}
+        for i in range(1, len(nums)):
+            dic[i] = 2 * dic[i-1]
         
         for i, num in enumerate(nums):
             if num * 2 > target:
                 break
             min_val = num
-            max_val = target - num
+            max_target = target - num
             
             l = i
             r = len(nums)
             while l < r:
                 mid = (l + r) // 2
-                if nums[mid] > max_val:
+                if nums[mid] > max_target:
                     r = mid
                 else:
                     l = mid + 1
+            
             n = r - i
-            cnt += 2 ** (n - 1)
-
-        return cnt % 1000000007
-
-
+            if n != 0:
+                res += dic[n-1]
+        
+        return res % (1000000007)
 
 
 
