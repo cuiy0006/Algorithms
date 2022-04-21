@@ -1,9 +1,8 @@
 class Solution:
     def numMatchingSubseq(self, s: str, words: List[str]) -> int:
-        dic = {}
+        dic = defaultdict(list) # start char -> rest str
+        
         for word in words:
-            if word[0] not in dic:
-                dic[word[0]] = []
             dic[word[0]].append(word[1:])
         
         res = 0
@@ -16,10 +15,7 @@ class Solution:
             for word in words:
                 if word == '':
                     res += 1
-                else:
-                    if word[0] not in dic:
-                        dic[word[0]] = []
-                    dic[word[0]].append(word[1:])
-            
-            
+                    continue
+                dic[word[0]].append(word[1:])
+        
         return res
