@@ -1,4 +1,30 @@
-
+class Solution:
+    def knightDialer(self, n: int) -> int:
+        dic = {
+            0: [4, 6],
+            1: [6, 8],
+            2: [7, 9],
+            3: [4, 8],
+            4: [3, 9, 0],
+            5: [],
+            6: [1, 7, 0],
+            7: [2, 6],
+            8: [1, 3],
+            9: [2, 4]
+        }
+        
+        dp = [[0 for _ in range(10)] for _ in range(n)]
+        
+        for i in range(1, n+1):
+            for j in range(10):
+                if i == 1:
+                    dp[i-1][j] = 1
+                else:
+                    for jj in dic[j]:
+                        dp[i-1][j] += dp[i-2][jj]
+                    dp[i-1][j] = dp[i-1][j] % 1000000007
+                    
+        return sum(dp[n-1]) % 1000000007
 
 
 
