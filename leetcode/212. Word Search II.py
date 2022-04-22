@@ -1,47 +1,58 @@
-class Trie:
+class Node:
     def __init__(self):
+        self.children = [None] * 26
         self.word = None
-        self.children = {}
-        
+        self.cnt = 0
 
-class Solution(object):
-    def findWords(self, board, words):
-        """
-        :type board: List[List[str]]
-        :type words: List[str]
-        :rtype: List[str]
-        """
-        words = set(words)
-        root = Trie()
+class Solution:
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        root = Node()
+        m = len(board)
+        n = len(board[0])
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        
         for word in words:
             node = root
-            for i, c in enumerate(word):
-                if c not in node.children:
-                    node.children[c] = Trie()
-                node = node.children[c]
+            for c in word:
+                idx = ord(c)-ord('a')
+                if node.children[idx] is None:
+                    node.children[idx] = Node()
+                node = node.children[idx]
+                node.cnt += 1
             node.word = word
         
-        res = []
-        def helper(row, col, node):
-            if row < 0 or col < 0 or row >= len(board) or col >= len(board[0]):
+        res = set()
+        def find_word(i, j, node):
+            if i < 0 or i > m - 1 or j < 0 or j > n - 1:
                 return
-            if board[row][col] == '#':
+            
+            c = board[i][j]
+            if c is None:
                 return
-            c = board[row][col]
-            if c not in node.children:
+
+            idx = ord(c) - ord('a')
+            if node.children[idx] is None:
                 return
-            node = node.children[c]
+            node = node.children[idx]
+            if node.cnt == 0:
+                return
+            
             if node.word is not None:
-                res.append(node.word)
+                res.add(node.word)
+                tmp = root
+                for c in node.word:
+                    idx = ord(c)-ord('a')
+                    tmp = tmp.children[idx]
+                    tmp.cnt -= 1
                 node.word = None
             
-            board[row][col] = '#'
-            helper(row + 1, col, node)
-            helper(row - 1, col, node)
-            helper(row, col + 1, node)
-            helper(row, col - 1, node)
-            board[row][col] = c
-        for i in range(len(board)):
-            for j in range(len(board[0])):
-                helper(i, j, root)
-        return res          
+            board[i][j] = None
+            for x0, y0 in directions:
+                find_word(i+x0, j+y0, node)
+            board[i][j] = c
+            
+        for i in range(m):
+            for j in range(n):
+                find_word(i, j, root)
+
+        return list(res)
