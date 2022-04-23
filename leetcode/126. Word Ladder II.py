@@ -1,57 +1,52 @@
 from collections import deque
-class Solution(object):
-    def findLadders(self, beginWord, endWord, wordList):
-        """
-        :type beginWord: str
-        :type endWord: str
-        :type wordList: List[str]
-        :rtype: List[List[str]]
-        """
+
+class Solution:
+    def findLadders(self, beginWord: str, endWord: str, wordList: List[str]) -> List[List[str]]:
+        word_set = set(wordList)
         
-        def helper(start, end, dic, tmp, res):
-            if start not in dic:
-                return
-            for word in dic[start]:
-                tmp.append(word)
-                if word == end:
-                    res.append(tmp[::-1])
-                helper(word, end, dic, tmp, res)
-                tmp.pop()
-                
+        word_to_depth = {beginWord: 0}
+        word_to_parent = defaultdict(set)
         
-        dic = {}
-        ladder = {word:sys.maxsize for word in wordList}
-        ladder[beginWord] = 0
         q = deque([beginWord])
-        minimum = sys.maxsize
+        
+        depth = 1
+        done = False
         
         while len(q) != 0:
-            word = q.popleft()
-            step = ladder[word] + 1
-            if step > minimum:
-                continue
+            size = len(q)
+            if done:
+                break
             
-            for i, c in enumerate(word):
-                for j in range(26):
-                    newc = chr(ord('a') + j)
-                    if newc == c:
-                        continue
-                    newWord = word[:i] + newc + word[i+1:]
-                    if newWord in ladder:
-                        if step > ladder[newWord]:
-                            continue
-                        elif step < ladder[newWord]:
-                            ladder[newWord] = step
-                            q.append(newWord)
-                        
-                        if newWord in dic:
-                            dic[newWord].append(word)
-                        else:
-                            dic[newWord] = [word]
-                        
-                        if newWord == endWord:
-                            minimum = step
-                            
+            for _ in range(size):
+                word = q.popleft()
+                for i in range(len(word)):
+                    for j in range(26):
+                        c = chr(ord('a')+j)
+                        new_word = word[:i] + c + word[i+1:]
+                        if new_word in word_set:
+                            if new_word not in word_to_depth or depth <= word_to_depth[new_word]:
+                                word_to_depth[new_word] = depth
+                                word_to_parent[new_word].add(word)
+                                q.append(new_word)
+                                if new_word == endWord:
+                                    done = True
+            depth += 1
+            
         res = []
-        helper(endWord, beginWord, dic, [endWord], res)
+        def dfs(word, curr):
+            if word == beginWord:
+                lst = curr[:]
+                lst.append(word)
+                res.append(lst[::-1])
+                return
+
+            curr.append(word)
+            parents = word_to_parent[word]
+            for parent in parents:
+                dfs(parent, curr)
+            curr.pop()
+            
+            
+        dfs(endWord, [])
+        
         return res
