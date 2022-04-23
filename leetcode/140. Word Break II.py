@@ -1,32 +1,39 @@
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
-        dic = {}
-        dp = [0 for i in range(len(s) + 1)]
-        dp[0] = 1
-        wordDict = set(wordDict)
-        for i in range(len(s)+1):
-            for j in range(i):
-                if dp[j] == 1 and s[j:i] in wordDict:
-                    dp[i] = 1
-                    if i in dic:
-                        dic[i].append(s[j:i])
-                    else:
-                        dic[i] = [s[j:i]]
-                        
+        dp = [False for _ in range(len(s)+1)]
+        dp[0] = True
+        
+        word_set = set(wordDict)
+        
+        maxlen = max([len(word) for word in word_set])
+        
+        idx_to_words = defaultdict(list)
+        
+        i = 0
+        while i < len(s):
+            if not dp[i]:
+                i += 1
+                continue
+            j = i
+            while j < min(len(s), i+maxlen):
+                word = s[i:j+1]
+                if word in word_set:
+                    dp[j+1] = True
+                    idx_to_words[j+1].append(word)
+                j += 1
+            i += 1
+
         res = []
-        if dp[-1] == 0:
-            return res
         
-        def helper(idx, tmp):
+        def get_words(idx, curr):
             if idx == 0:
-                res.append(tmp)
+                res.append(curr)
                 return
-            
-            for word in dic[idx]:
-                l = len(word)
-                if tmp != '':
-                    word += ' ' + tmp
-                helper(idx - l, word)
-        
-        helper(len(s), '')
+
+            for word in idx_to_words[idx]:
+                new_s = word if curr == '' else word + ' ' + curr
+                get_words(idx-len(word), new_s)
+                
+        get_words(len(s), '')
         return res
+        
