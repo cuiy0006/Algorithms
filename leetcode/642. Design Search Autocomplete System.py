@@ -1,3 +1,97 @@
+from heapq import heappush, heappop
+
+class Node:
+    def __init__(self):
+        self.children = [None] * 27
+        self.cnt = 0
+
+class Sentence:
+    def __init__(self, cnt: int, s: str):
+        self.s = s
+        self.cnt = cnt
+    
+    def __lt__(self, other):
+        if self.cnt < other.cnt:
+            return True
+        elif self.cnt > other.cnt:
+            return False
+        else:
+            return self.s > other.s
+
+class AutocompleteSystem:
+
+    def __init__(self, sentences: List[str], times: List[int]):
+        self.root = Node()
+        self.curr = self.root
+        self.prefix = ''
+
+        for i in range(len(sentences)):
+            word = sentences[i]
+            cnt = times[i]
+            self._add(word, cnt)
+
+    def _add(self, word, cnt):
+        node = self.root
+        for c in word:
+            idx = 26 if c == ' ' else ord(c) - ord('a')
+            if node.children[idx] is None:
+                node.children[idx] = Node()
+            node = node.children[idx]
+        node.cnt += cnt
+        
+    def input(self, c: str) -> List[str]:
+        if c == '#':
+            self._add(self.prefix, 1)
+            self.curr = self.root
+            self.prefix = ''
+            return []
+        
+        self.prefix += c
+        idx = 26 if c == ' ' else ord(c) - ord('a')
+        if self.curr is None or self.curr.children[idx] is None:
+            self.curr = None
+            return []
+
+        self.curr = self.curr.children[idx]
+        
+        h = []
+        def get_sentences(node, word):
+            if node is None:
+                return
+            if node.cnt != 0:
+                heappush(h, Sentence(node.cnt, self.prefix+word))
+                if len(h) == 4:
+                    heappop(h)
+
+            for i, child in enumerate(node.children):
+                c = ' ' if i == 26 else chr(ord('a')+i)
+                get_sentences(child, word+c)
+        
+        get_sentences(self.curr, '')
+        
+        res = []
+        while len(h) != 0:
+            res.append(heappop(h).s)
+        res.reverse()
+        return res
+        
+        
+
+# Your AutocompleteSystem object will be instantiated and called as such:
+# obj = AutocompleteSystem(sentences, times)
+# param_1 = obj.input(c)
+
+
+
+
+
+
+
+
+
+
+
+
 from heapq import heappush
 from heapq import heappop
 class item:
