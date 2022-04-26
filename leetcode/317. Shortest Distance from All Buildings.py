@@ -1,43 +1,48 @@
 from collections import deque
-class Solution(object):
-    def shortestDistance(self, grid):
-        """
-        :type grid: List[List[int]]
-        :rtype: int
-        """
-        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-        m = len(grid)
-        n = len(grid[0])
-        distances = [[0 for i in range(n)] for j in range(m)]
-        visited = [[0 for i in range(n)] for j in range(m)]
-        building = 0
+import sys
+
+class Solution:
+    def shortestDistance(self, grid: List[List[int]]) -> int:
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        locations = [[0 for _ in range(len(grid[0]))] for _ in range(len(grid))]
         
-        for i in range(m):
-            for j in range(n):
-                if grid[i][j] == 1:
-                    q = deque([(i, j)])
-                    height = 1
-                    building += 1
-                    while len(q) != 0:
-                        cnt = len(q)
-                        while cnt > 0:
-                            x0, y0 = q.popleft()
-                            for d in directions:
-                                x = x0 + d[0]
-                                y = y0 + d[1]
-                                if x < 0 or y < 0 or x >= m or y >= n:
-                                    continue
-                                if grid[x][y] != 0 or visited[x][y] != building-1:
-                                    continue
-                                distances[x][y] += height
-                                visited[x][y] += 1
-                                q.append((x, y))
-                            cnt -= 1
-                        height += 1
+        cnt = 0
+        
+        for x in range(len(grid)):
+            for y in range(len(grid[0])):
+                if grid[x][y] == 1:
+                    q = deque()
+                    for d in directions:
+                        q.append((x+d[0], y+d[1]))
                     
-        min_distance = sys.maxsize
-        for i in range(m):
-            for j in range(n):
-                if grid[i][j] == 0 and visited[i][j] == building:
-                    min_distance = min(min_distance, distances[i][j])
-        return min_distance if min_distance != sys.maxsize else -1
+                    distance = 1
+                    while len(q) != 0:
+                        size = len(q)
+                        for _ in range(size):
+                            x0, y0 = q.popleft()
+                            if x0 < 0 or x0 > len(grid)-1 or y0 < 0 or y0 > len(grid[0])-1:
+                                continue
+                            if grid[x0][y0] != cnt:
+                                continue
+                            grid[x0][y0] -= 1
+                            
+                            for d in directions:
+                                q.append((x0+d[0], y0+d[1]))
+
+                            locations[x0][y0] += distance
+                            
+                        distance += 1
+                    cnt -= 1
+
+        res = sys.maxsize
+        for i in range(len(locations)):
+            for j in range(len(locations[0])):
+                if grid[i][j] == cnt:
+                    res = min(res, locations[i][j])
+        
+        
+        if res == sys.maxsize:
+            return -1
+        else:
+            return res
+                
