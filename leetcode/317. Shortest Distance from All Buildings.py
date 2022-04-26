@@ -12,22 +12,21 @@ class Solution:
             for y in range(len(grid[0])):
                 if grid[x][y] == 1:
                     q = deque()
-                    for d in directions:
-                        q.append((x+d[0], y+d[1]))
+                    q.append((x, y))
                     
-                    distance = 1
+                    distance = 0
                     while len(q) != 0:
                         size = len(q)
                         for _ in range(size):
                             x0, y0 = q.popleft()
-                            if x0 < 0 or x0 > len(grid)-1 or y0 < 0 or y0 > len(grid[0])-1:
-                                continue
-                            if grid[x0][y0] != cnt:
-                                continue
-                            grid[x0][y0] -= 1
-                            
                             for d in directions:
-                                q.append((x0+d[0], y0+d[1]))
+                                x1, y1 = x0+d[0], y0+d[1]
+                                if x1 < 0 or x1 > len(grid)-1 or y1 < 0 or y1 > len(grid[0])-1:
+                                    continue
+                                if grid[x1][y1] != cnt:
+                                    continue
+                                grid[x1][y1] -= 1
+                                q.append((x1, y1))
 
                             locations[x0][y0] += distance
                             
@@ -39,7 +38,6 @@ class Solution:
             for j in range(len(locations[0])):
                 if grid[i][j] == cnt:
                     res = min(res, locations[i][j])
-        
         
         if res == sys.maxsize:
             return -1
