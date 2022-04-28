@@ -3,13 +3,16 @@ class Solution:
         stack = []
         res = 0
         heights.append(-1)
+        
         for i, height in enumerate(heights):
-            while len(stack) != 0:
-                j = stack[-1]
-                if height >= heights[j]:
-                    break
-                stack.pop()
-                prev_idx = stack[-1] if len(stack) != 0 else -1 
-                res = max(res, (i - prev_idx -1) * heights[j])
+            while len(stack) != 0 and height < heights[stack[-1]]:
+                idx = stack.pop()
+                if len(stack) == 0:
+                    res = max(res, i * heights[idx])
+                else:
+                    res = max(res, (i-stack[-1]-1) * heights[idx])
+            
             stack.append(i)
+        
         return res
+            
