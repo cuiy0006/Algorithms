@@ -2,43 +2,47 @@ from collections import deque
 
 class Solution:
     def alienOrder(self, words: List[str]) -> str:
-        if len(words) == 0:
-            return ''
-        in_dic = {c: 0 for word in words for c in word}
-        out_dic = {}
+        in_dic = defaultdict(int)
+        dic = defaultdict(set)
         
-        curr = words[0]
-        for i in range(1, len(words)):
-            target = words[i]
-            j = 0
-            while j < min(len(curr), len(target)):
-                if curr[j] != target[j]:
-                    if curr[j] not in out_dic:
-                        out_dic[curr[j]] = set()
-                    if target[j] not in out_dic[curr[j]]:
-                        out_dic[curr[j]].add(target[j])
-                        in_dic[target[j]] += 1
-                    break
-                j += 1
+        for word in words:
+            for c in word:
+                in_dic[c] = 0
+        
+        for i in range(len(words)-1):
+            word1 = words[i]
+            word2 = words[i+1]
             
-            if j == min(len(curr), len(target)) and len(target) < len(curr):
+            if len(word1) > len(word2) and word1.startswith(word2):
                 return ''
-            curr = target
             
-        res = ''
+            for i in range(min(len(word1), len(word2))):
+                if word1[i] == word2[i]:
+                    continue
+                    
+                if word1[i] not in dic[word2[i]]:
+                    dic[word2[i]].add(word1[i])
+                    in_dic[word1[i]] += 1
+                break
+            
+        q = deque()
+        for c, degree in in_dic.items():
+            if degree == 0:
+                q.append(c)
         
-        q = deque([c for c in in_dic if in_dic[c] == 0])
+        res = []
         while len(q) != 0:
             c = q.popleft()
-            res += c
-            if c not in out_dic:
-                continue
-            for d in out_dic[c]:
-                in_dic[d] -= 1
-                if in_dic[d] == 0:
-                    q.append(d)
-                    
+            res.append(c)
+            for c0 in dic[c]:
+                in_dic[c0] -= 1
+                if in_dic[c0] == 0:
+                    q.append(c0)
+        
         if len(res) != len(in_dic):
             return ''
         
-        return res
+        res.reverse()
+        return ''.join(res)
+        
+        
