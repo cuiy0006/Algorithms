@@ -1,26 +1,17 @@
 class Solution:
-    def simplifyPath(self, path):
-        """
-        :type path: str
-        :rtype: str
-        """
-        stack = []
-        curr = ''
-        for i, c in enumerate(path):
-            if c == '/':
-                if curr != '':
-                    if curr == '..':
-                        if len(stack) > 0:
-                            stack.pop()
-                    elif curr != '.':
-                        stack.append(curr)
-                    curr = ''
+    def simplifyPath(self, path: str) -> str:
+        lst = path.split('/')
+        
+        res = []
+        for p in lst:
+            if p == '':
+                continue
+            elif p == '.':
+                continue
+            elif p == '..':
+                if len(res) != 0:
+                    res.pop()
             else:
-                curr += c
-        if curr != '':
-            if curr == '..':
-                if len(stack) > 0:
-                    stack.pop()
-            elif curr != '.':
-                stack.append(curr)
-        return '/' + '/'.join(stack)
+                res.append(p)
+        
+        return '/' + '/'.join(res)
