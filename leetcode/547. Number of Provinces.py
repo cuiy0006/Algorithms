@@ -1,21 +1,23 @@
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
-        s = set()
+        n = len(isConnected)
+        seen = [False] * n
         
-        def helper(k):
-            if k in s:
-                return 0
+        def helper(city):
+            if seen[city]:
+                return
             
-            s.add(k)
+            seen[city] = True
             
-            for i in range(len(isConnected)):
-                if isConnected[k][i] == 1:
-                    helper(i)
-            
-            return 1
+            for other, connected in enumerate(isConnected[city]):
+                if connected:
+                    helper(other)
         
-        cnt = 0
-        for i in range(len(isConnected)):
-           cnt += helper(i)
+        res = 0
+        for city in range(n):
+            if seen[city]:
+                continue
+            res += 1
+            helper(city)
         
-        return cnt
+        return res
