@@ -50,22 +50,22 @@ class Solution:
     def maxPoints(self, points: List[List[int]]) -> int:
         if len(points) == 1:
             return 1
+        kp_to_cnt = {} # (k, x, y) => cnt
         res = 0
         
         for i in range(len(points)):
             [x1, y1] = points[i]
-            kp_to_cnt = {}
             for j in range(i+1, len(points)):
                 [x2, y2] = points[j]
-                
-                if x1 == x2:
+                if x1 - x2 == 0:
                     k = 'inf'
                 else:
-                    k = (y1 - y2) / (x1 - x2)
-                if (k, i) not in kp_to_cnt:
-                    kp_to_cnt[(k, i)] = 1
-                kp_to_cnt[(k, i)] += 1
-                res = max(res, kp_to_cnt[(k, i)])
+                    k = (y1-y2)/(x1-x2)
+            
+                if (k, x1, y1) not in kp_to_cnt:
+                    kp_to_cnt[(k, x1, y1)] = 1
+                kp_to_cnt[(k, x1, y1)] += 1
+                res = max(res, kp_to_cnt[(k, x1, y1)])
         
         return res
-                    
+            
