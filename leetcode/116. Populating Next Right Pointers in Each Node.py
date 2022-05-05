@@ -1,28 +1,31 @@
-# Definition for binary tree with next pointer.
-# class TreeLinkNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-#         self.next = None
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val: int = 0, left: 'Node' = None, right: 'Node' = None, next: 'Node' = None):
+        self.val = val
+        self.left = left
+        self.right = right
+        self.next = next
+"""
+
 from collections import deque
+
 class Solution:
-    # @param root, a tree link node
-    # @return nothing
-    def connect(self, root):
-        if root == None:
-            return
+    def connect(self, root: 'Optional[Node]') -> 'Optional[Node]':
+        if root is None:
+            return None
+        
         q = deque([root])
         while len(q) != 0:
-            cnt = len(q)
-            while cnt != 0:
+            size = len(q)
+            p = Node()
+            for _ in range(size):
                 node = q.popleft()
-                cnt -= 1
-                if cnt == 0:
-                    node.next = None
-                else:
-                    node.next = q[0]
-                if node.left != None:
+                p.next = node
+                p = node
+                if node.left is not None:
                     q.append(node.left)
-                if node.right != None:
+                if node.right is not None:
                     q.append(node.right)
+        
+        return root
