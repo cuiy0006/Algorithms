@@ -1,53 +1,35 @@
 class Solution:
     def calculate(self, s: str) -> int:
         def evaluate(s):
-            curr = ''
             stack = []
             i = 0
+            s = '+' + s
             while i < len(s):
-                c = s[i]
-                if c.isdigit():
-                    curr += c
-                    i += 1
-                elif c == '+' or c == '-':
-                    if curr != '':
-                        stack.append(int(curr))
-                    curr = ''
+                if s[i] == '+' or s[i] == '-':
                     j = i + 1
                     if s[j] == '+' or s[j] == '-':
                         j += 1
-                    while j < len(s):
-                        if s[j].isdigit():
-                            j += 1
-                        else:
-                            break
-                    curr = s[i+1:j]
-                    if s[i] == '+':
-                        curr = str(int(curr))
-                    else:
-                        curr = str(-int(curr))
+                    while j < len(s) and s[j].isdigit():
+                        j += 1
+                    num = int(s[i+1:j])
+                    if s[i] == '-':
+                        num = -num
+                    stack.append(num)
                     i = j
-                else:
+                elif s[i] == '*' or s[i] == '/':
                     j = i + 1
                     if s[j] == '+' or s[j] == '-':
                         j += 1
-                    while j < len(s):
-                        if s[j].isdigit():
-                            j += 1
-                        else:
-                            break
-                    second = int(s[i+1:j])
-                    num = int(curr)
-                    if c == '*':
-                        curr = str(num * second)
+                    while j < len(s) and s[j].isdigit():
+                        j += 1
+                    num = int(s[i+1:j])
+                    if s[i] == '*':
+                        stack[-1] *= num
                     else:
-                        curr = str(int(num / second))
+                        stack[-1] = int(stack[-1] / num)
                     i = j
-
-            if curr != '':
-                stack.append(int(curr))
-
-            return sum(stack)
+            return str(sum(stack))
+                
         
         stack = []
         curr = ''
@@ -56,13 +38,8 @@ class Solution:
                 stack.append(curr)
                 curr = ''
             elif c == ')':
-                second = str(evaluate(curr))
-                curr = stack.pop() + second
+                curr = stack.pop() + evaluate(curr)
             else:
                 curr += c
-        
-        if curr != '':
-            stack.append(curr)
-            
-        
-        return evaluate(stack.pop())
+                
+        return int(evaluate(curr))
