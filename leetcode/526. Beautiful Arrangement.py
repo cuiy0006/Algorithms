@@ -1,23 +1,21 @@
 class Solution:
     def countArrangement(self, n: int) -> int:
-        nums = [i + 1 for i in range(n)]
+        perm = [i for i in range(n+1)]
         res = 0
         
-        def permute(curr, k):
-            if len(curr) == len(nums):
+        def helper(start):
+            if start == len(perm):
                 nonlocal res
                 res += 1
                 return
-            
-            for i in range(k, len(nums)):
-                if nums[i] % (k + 1) != 0 and (k + 1) % nums[i] != 0:
-                    continue
-
-                nums[i], nums[k] = nums[k], nums[i]
-                curr.append(nums[k])
-                permute(curr, k + 1)
-                curr.pop()
-                nums[i], nums[k] = nums[k], nums[i]
         
-        permute([], 0)
+            for i in range(start, len(perm)):
+                if perm[i] % start != 0 and start % perm[i] != 0:
+                    continue
+                    
+                perm[i], perm[start] = perm[start], perm[i]
+                helper(start+1)
+                perm[start], perm[i] = perm[i], perm[start]
+
+        helper(1)
         return res
