@@ -1,5 +1,44 @@
 class Solution:
     def countServers(self, grid: List[List[int]]) -> int:
+        node_to_p = {}
+        
+        m = len(grid)
+        n = len(grid[0])
+        
+        def find_ancestor(node):
+            while node in node_to_p and node_to_p[node] != node:
+                node = node_to_p[node]
+            return node
+        
+        for i in range(m):
+            servers = [(i, j) for j in range(n) if grid[i][j]==1]
+            if len(servers) != 0:
+                ancestor = find_ancestor(servers[0])
+                node_to_p[servers[0]] = ancestor
+                for k in range(1, len(servers)):
+                    node_to_p[find_ancestor(servers[k])] = ancestor
+        
+        for j in range(n):
+            servers = [(i, j) for i in range(m) if grid[i][j]==1]
+            if len(servers) != 0:
+                ancestor = find_ancestor(servers[0])
+                node_to_p[servers[0]] = ancestor
+                for k in range(1, len(servers)):
+                    node_to_p[find_ancestor(servers[k])] = ancestor
+        
+        ancestor_to_cnt = defaultdict(int)
+        for node in node_to_p:
+            ancestor = find_ancestor(node)
+            ancestor_to_cnt[ancestor] += 1
+        
+        res = sum((cnt for cnt in ancestor_to_cnt.values() if cnt != 1))
+        return res
+
+
+
+
+class Solution:
+    def countServers(self, grid: List[List[int]]) -> int:
         m = len(grid)
         n = len(grid[0])
         
