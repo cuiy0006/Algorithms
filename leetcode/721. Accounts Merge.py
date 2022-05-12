@@ -12,11 +12,9 @@ class Solution:
         for account in accounts:
             if account[1] not in email_to_name:
                 email_to_name[account[1]] = account[0]
-            for i in range(1, len(account)):
-                parents[account[i]] = account[1]
-            
-        for account in accounts:
+
             p = find_parent(account[1])
+            parents[account[1]] = p
             for i in range(2, len(account)):
                 parents[find_parent(account[i])] = p
         
@@ -32,4 +30,5 @@ class Solution:
             parent_to_emails[p] = [email_to_name[p]] + parent_to_emails[p]
             
         return list(parent_to_emails.values())
+            
             
