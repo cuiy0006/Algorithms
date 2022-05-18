@@ -58,3 +58,32 @@ class Solution:
         dfs(nestedList, 1)
         
         return sum([(max_depth - depth + 1) * val for depth, val in depths])
+    
+    
+    
+    
+    
+    
+from collections import deque
+
+class Solution:
+    def depthSumInverse(self, nestedList: List[NestedInteger]) -> int:
+        lst = []
+        q = deque(nestedList)
+        depth = 1
+        while len(q) != 0:
+            size = len(q)
+            for _ in range(size):
+                ni = q.popleft()
+                if ni.isInteger():
+                    lst.append((ni.getInteger(), depth))
+                else:
+                    q.extend(ni.getList())
+            depth += 1
+
+        max_depth = depth-1
+        return sum([num * (max_depth-depth+1) for num, depth in lst])
+    
+    
+    
+
