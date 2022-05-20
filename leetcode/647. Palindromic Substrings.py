@@ -1,16 +1,19 @@
-class Solution(object):
-    def countSubstrings(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
-        cnt = [0]
-        def helper(left, right):
-            while left >= 0 and right < len(s) and s[left] == s[right]:
-                cnt[0] += 1
-                left -= 1
-                right += 1
+class Solution:
+    def countSubstrings(self, s: str) -> int:
+        def cnt_of_palin(i,j):
+            cnt = 0
+            while i >= 0 and j < len(s):
+                if s[i] != s[j]:
+                    break
+                cnt += 1
+                i -= 1
+                j += 1
+            return cnt
+        
+        res = 0
         for i in range(len(s)):
-            helper(i, i)
-            helper(i, i + 1)
-        return cnt[0]
+            res += cnt_of_palin(i, i)
+            if i > 0:
+                res += cnt_of_palin(i-1, i)
+        
+        return res
