@@ -9,38 +9,18 @@ class Solution:
         mid_val = -b / (2 * a)
         res = []
         
-        insert_pos = 0
-        for i, num in enumerate(nums):
-            if num >= mid_val:
-                insert_pos = i
-                break
-            if i == len(nums) - 1:
-                insert_pos = len(nums)
-                break
+        i = 0
+        j = len(nums)-1
         
-        i = insert_pos - 1
-        j = insert_pos
-
-        ordered = []
-        if i == len(nums) - 1:
-            ordered = reversed(nums)
-        else:
-            while i >= 0 or j <= len(nums) - 1:
-                if i < 0:
-                    ordered.append(nums[j])
-                    j += 1
-                elif j > len(nums) - 1:
-                    ordered.append(nums[i])
-                    i -= 1
-                else:
-                    if mid_val - nums[i] < nums[j] - mid_val:
-                        ordered.append(nums[i])
-                        i -= 1
-                    else:
-                        ordered.append(nums[j])
-                        j += 1
+        while i <= j:
+            if abs(nums[i] - mid_val) > abs(nums[j] - mid_val):
+                res.append(nums[i])
+                i += 1
+            else:
+                res.append(nums[j])
+                j -= 1
         
-        res = [a * (num ** 2) + b * num + c for num in ordered]
-        if a < 0:
+        if a > 0:
             res.reverse()
-        return res
+        
+        return [a * num * num + b * num + c for num in res]
