@@ -1,16 +1,15 @@
 class Solution:
-    def climbStairs(self, n):
-        """
-        :type n: int
-        :rtype: int
-        """
-        if n == 1 or n == 2:
-            return n
-        first = 1
-        second = 2
+    def climbStairs(self, n: int) -> int:
+        if n == 1:
+            return 1
+        if n == 2:
+            return 2
+        last = 2
+        lastlast = 1
+        
         i = 3
         while i <= n:
-            if i == n:
-                return first + second
-            first, second = second, first + second
+            last, lastlast = last + lastlast, last
             i += 1
+        
+        return last
