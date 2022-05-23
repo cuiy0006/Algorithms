@@ -73,12 +73,14 @@ class Solution:
         depth = 1
         while len(q) != 0:
             size = len(q)
+            curr = [0, depth]
             for _ in range(size):
                 ni = q.popleft()
                 if ni.isInteger():
-                    lst.append((ni.getInteger(), depth))
+                    curr[0] += ni.getInteger()
                 else:
                     q.extend(ni.getList())
+            lst.append(curr)
             depth += 1
 
         max_depth = depth-1
