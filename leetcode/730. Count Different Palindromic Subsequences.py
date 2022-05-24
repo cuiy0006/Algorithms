@@ -41,9 +41,15 @@ class Solution:
                     q = prev[j][k]
                     
                     if p < q:
+                        # any inner palindrome plus bb like bXXXXb
                         dp[i][j] += dp[p+1][q-1] + 1
+                        
                     
                     if p <= j:
+                        # if inner palindrome doesn't include b then, add b
+                        # if inner palindrome include b like 
+                        #       - b, then add bb,
+                        #       - bb, then add bbb,
                         dp[i][j] += 1
                     
                     dp[i][j] %= M
