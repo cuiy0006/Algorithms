@@ -11,9 +11,14 @@ class Solution:
         time_lst.sort(key=lambda x:x[0])
         
         def find_ancestor(parents, person):
-            while person in parents and parents[person] != person:
-                person = parents[person]
-            return person
+            p = person
+            while p in parents and parents[p] != p:
+                p = parents[p]
+            anc = p    
+            p = person
+            while p in parents and parents[p] != p:
+                parents[p], p = anc, parents[p]
+            return anc
         
         for time, lst in time_lst:
             parents = {}
