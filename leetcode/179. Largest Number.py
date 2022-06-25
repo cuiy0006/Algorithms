@@ -1,16 +1,16 @@
-import functools
-
-class Num:
+class Element:
     def __init__(self, num):
-        self.s = str(num)
+        self.num = str(num)
     
     def __lt__(self, other):
-        return self.s + other.s > other.s + self.s
+        return self.num + other.num >= other.num + self.num
+
 
 class Solution:
     def largestNumber(self, nums: List[int]) -> str:
-        o_lst = [Num(num) for num in nums]
-        o_lst.sort()
-        if all([o.s == '0' for o in o_lst]):
-            return '0'
-        return ''.join([o.s for o in o_lst])
+        
+        elements = [Element(num) for num in nums]
+        elements.sort()
+        res = ''.join([element.num for element in elements])
+        
+        return str(int(res))
