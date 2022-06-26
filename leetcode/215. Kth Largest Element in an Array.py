@@ -32,10 +32,9 @@ class Solution:
                     j -= 1
                 nums[i], nums[j] = nums[j], nums[i]
 
-            if i < len(nums) and nums[i] < pivot:
+            if nums[i] < pivot:
                 i -= 1
-            if i < len(nums):
-                nums[l], nums[i] = nums[i], nums[l]
+            nums[l], nums[i] = nums[i], nums[l]
             
             if i+1 <= k:
                 quick_select(nums, i+1, r, k)
@@ -45,4 +44,3 @@ class Solution:
         quick_select(nums, 0, len(nums)-1, k)
 
         return nums[k-1]
-                
