@@ -1,47 +1,31 @@
-from collections import deque
-class MyStack(object):
+class MyStack:
 
     def __init__(self):
-        """
-        Initialize your data structure here.
-        """
-        self.q1 = deque()
-        self.q2 = deque()
+        self.q = deque()
 
-    def push(self, x):
-        """
-        Push element x onto stack.
-        :type x: int
-        :rtype: void
-        """
-        if len(self.q2) != 0:
-            self.q1.append(self.q2.popleft())
-        self.q2.append(x)
+    def push(self, x: int) -> None:
+        self.q.append(x)
 
-    def pop(self):
-        """
-        Removes the element on top of the stack and returns that element.
-        :rtype: int
-        """
-        val = self.q2.popleft()
-        while len(self.q1) > 1:
-            self.q2.append(self.q1.popleft())
-        self.q1, self.q2 = self.q2, self.q1
-        return val
+        
+    def pop(self) -> int:
+        size = len(self.q)
+        res = None
+        for _ in range(size-1):
+            self.q.append(self.q.popleft())
+        return self.q.popleft()
 
-    def top(self):
-        """
-        Get the top element.
-        :rtype: int
-        """
-        return self.q2[-1]
 
-    def empty(self):
-        """
-        Returns whether the stack is empty.
-        :rtype: bool
-        """
-        return len(self.q1) == 0 and len(self.q2) == 0
+    def top(self) -> int:
+        size = len(self.q)
+        res = None
+        for _ in range(size):
+            res = self.q[0]
+            self.q.append(self.q.popleft())
+        return res
+
+            
+    def empty(self) -> bool:
+        return len(self.q) == 0
 
 
 # Your MyStack object will be instantiated and called as such:
