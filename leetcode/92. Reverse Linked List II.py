@@ -17,22 +17,17 @@ class Solution:
             idx += 1
         
         left = p1.next
-        p2 = left
-        while idx < right:
-            p2 = p2.next
-            idx += 1
-        right = p2
-        p2 = p2.next
-
         x = left
         y = left.next
         x.next = None
         
-        while y != p2:
+        while idx < right:
             x, y.next, y = y, x, y.next
+            idx += 1
         
-        p1.next = right
-        left.next = p2
+        p1.next = x
+        left.next = y
 
         return vhead.next
+        
         
