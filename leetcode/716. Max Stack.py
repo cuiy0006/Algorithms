@@ -1,67 +1,54 @@
-class Node:
-    def __init__(self, val, idx):
-        self.val = val
-        self.idx = idx
-        self.removed = False
-        
-    def __lt__(self, other):
-        if self.val == other.val:
-            return self.idx > other.idx
-        else:
-            return self.val > other.val
+from sortedcontainers import SortedDict
 
-from heapq import heappush, heappop
+class Node:
+    def __init__(self, val=None):
+        self.val = val
+        self.next = None
+        self.last = None
+        
 
 class MaxStack:
 
     def __init__(self):
-        """
-        initialize your data structure here.
-        """
-        self.idx = 0
-        self.heap = []
-        self.stack = []
+        self.dic = SortedDict()
+        self.root = Node()
+        self.root.last, self.root.next = self.root, self.root
         
 
     def push(self, x: int) -> None:
-        node = Node(x, self.idx)
-        self.idx += 1
-        self.stack.append(node)
-        heappush(self.heap, node)
+        if x not in self.dic:
+            self.dic[x] = []
+        node = Node(x)
+        self.root.next.last, self.root.next, node.last, node.next = node, node, self.root, self.root.next
+        self.dic[x].append(node)
         
 
     def pop(self) -> int:
-        self.top()
-        node = self.stack.pop()
-        node.removed = True
+        node = self.root.next
+        node.next.last, node.last.next = node.last, node.next
+        node_lst = self.dic[node.val]
+        node_lst.pop()
+        if len(node_lst) == 0:
+            self.dic.pop(node.val)
         return node.val
-        
+    
 
     def top(self) -> int:
-        while True:
-            node = self.stack[-1]
-            if not node.removed:
-                break
-            self.stack.pop()
-                
-        return self.stack[-1].val
+        return self.root.next.val
         
 
     def peekMax(self) -> int:
-        while True:
-            node = self.heap[0]
-            if not node.removed:
-                break
-            heappop(self.heap)
-        return node.val
-        
+        return self.dic.peekitem()[0]
+
 
     def popMax(self) -> int:
-        self.peekMax()
-        node = heappop(self.heap)
-        node.removed = True
-        return node.val
-    
+        val, node_lst = self.dic.peekitem()
+        node = node_lst.pop()
+        if len(node_lst) == 0:
+            self.dic.pop(val)
+        node.next.last, node.last.next = node.last, node.next
+        return val
+
 
 # Your MaxStack object will be instantiated and called as such:
 # obj = MaxStack()
