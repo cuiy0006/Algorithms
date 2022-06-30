@@ -30,51 +30,48 @@ class Solution:
     
     
 class Solution:
-    def calculate(self, s: str) -> int:
-        def evaluate(s) -> int:
-            s0 = s
+    def calculate(self, s: str) -> str:
+        def evaluate(s) -> str:
+            origin = s
             s = ''
-            for c in s0:
+            for c in origin:
                 if c != ' ':
                     s += c
-
-            res = 0
+            
+            if s[0] != '+' and s[0] != '-':
+                s = '+' + s
+            
+            curr = 0
             i = 0
-            s = '+' + s
             while i < len(s):
-                if s[i] == ' ':
-                    i += 1
-                    continue
-                if s[i] == '+' or s[i] == '-':
-                    j = i + 1
-                    if s[j] == '+' or s[j] == '-':
-                        j += 1
-                    
-                    while j < len(s) and s[j] != '+' and s[j] != '-':
-                        j += 1
-
-                    num = int(s[i+1:j])
-                    if s[i] == '+':
-                        res += num
-                    else:
-                        res -= num
-                    i = j
+                j = i+1
+                if s[j] == '+' or s[j] == '-':
+                    j += 1
+                while j < len(s) and (s[j] != '-' and s[j] != '+'):
+                    j += 1
+                other = s[i+1:j]
+                if s[i] == '+':
+                    curr += int(other)
                 else:
-                    i += 1
-            return res
+                    curr -= int(other)
+                i = j
+                
+            return str(curr)
+            
         
         stack = []
-        i = 0
         curr = ''
-        while i < len(s):
-            if s[i] == '(':
-                stack.append(curr)
-                curr = ''
-            elif s[i] == ')':
-                num = evaluate(curr)
-                curr = stack.pop() + str(num)
+        for c in s:
+            if c == '(':
+                if curr != '':
+                    stack.append(curr)
+                    curr = ''
+            elif c == ')':
+                curr = evaluate(curr)
+                if len(stack) != 0:
+                    curr = stack.pop() + curr
             else:
-                curr += s[i]
-            i += 1
+                curr += c
         
-        return evaluate(curr)
+        curr = evaluate(curr)
+        return int(curr)
