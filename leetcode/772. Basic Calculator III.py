@@ -1,35 +1,30 @@
 class Solution:
-    def calculate(self, s: str) -> int:
+    def calculate(self, s: str) -> str:
+        ops = ('+', '-', '*', '/')
+        
         def evaluate(s):
             stack = []
+            if s[0] != '+' and s[0] != '-':
+                s = '+' + s
             i = 0
-            s = '+' + s
             while i < len(s):
-                if s[i] == '+' or s[i] == '-':
-                    j = i + 1
-                    if s[j] == '+' or s[j] == '-':
-                        j += 1
-                    while j < len(s) and s[j].isdigit():
-                        j += 1
-                    num = int(s[i+1:j])
-                    if s[i] == '-':
-                        num = -num
-                    stack.append(num)
-                    i = j
-                elif s[i] == '*' or s[i] == '/':
-                    j = i + 1
-                    if s[j] == '+' or s[j] == '-':
-                        j += 1
-                    while j < len(s) and s[j].isdigit():
-                        j += 1
-                    num = int(s[i+1:j])
-                    if s[i] == '*':
-                        stack[-1] *= num
-                    else:
-                        stack[-1] = int(stack[-1] / num)
-                    i = j
+                j = i+1
+                if s[j] == '+' or s[j] == '-':
+                    j += 1
+                while j < len(s) and s[j] not in ops:
+                    j += 1
+                curr = int(s[i+1:j])
+                if s[i] == '+':
+                    stack.append(curr)
+                elif s[i] == '-':
+                    stack.append(-curr)
+                elif s[i] == '*':
+                    stack[-1] *= curr
+                else:
+                    stack[-1] = int(stack[-1]/curr)
+                i = j
             return str(sum(stack))
-                
+            
         
         stack = []
         curr = ''
@@ -38,8 +33,10 @@ class Solution:
                 stack.append(curr)
                 curr = ''
             elif c == ')':
-                curr = stack.pop() + evaluate(curr)
+                curr = evaluate(curr)
+                if len(stack) != 0:
+                    curr = stack.pop() + curr
             else:
                 curr += c
-                
+
         return int(evaluate(curr))
