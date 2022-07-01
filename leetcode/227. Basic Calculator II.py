@@ -31,44 +31,37 @@ class Solution:
         return sum(stack)
 
     
- class Solution:
+class Solution:
     def calculate(self, s: str) -> int:
-        s0 = s
+        origin = s
         s = ''
-        for c in s0:
+        for c in origin:
             if c != ' ':
                 s += c
         
         stack = []
-        curr = ''
+        if s[0] != '+' and s[0] != '-':
+            s = '+' + s
+        
+        ops = ('+', '-', '*', '/')
+        
         i = 0
         while i < len(s):
-            c = s[i]
-            if c.isdigit():
-                curr += c
-                i += 1
-            elif c == '+' or c == '-':
-                stack.append(int(curr))
-                curr = ''
-                curr += c
-                i += 1
+            j = i + 1
+            if s[j] == '+' or s[j] == '-':
+                j += 1
+            while j < len(s) and s[j] not in ops:
+                j += 1
+            curr = int(s[i+1:j])
+            if s[i] == '+':
+                stack.append(curr)
+            elif s[i] == '-':
+                stack.append(-curr)
+            elif s[i] == '*':
+                stack[-1] *= curr
             else:
-                stack.append(int(curr))
-                curr = ''
-                j = i + 1
-                while j < len(s):
-                    if s[j].isdigit():
-                        j += 1
-                    else:
-                        break
-                second = int(s[i+1:j])
-                if c == '*':
-                    curr = stack.pop() * second
-                else:
-                    curr = int(stack.pop() / second)
-                i = j
-
-        if curr != '':
-            stack.append(int(curr))
-            
+                stack[-1] = int(stack[-1] / curr)
+            i = j
+        
         return sum(stack)
+                
