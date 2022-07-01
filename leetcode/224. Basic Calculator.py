@@ -28,8 +28,7 @@ class Solution:
     
     
     
-    
-class Solution:
+ class Solution:
     def calculate(self, s: str) -> str:
         def evaluate(s) -> str:
             origin = s
@@ -63,9 +62,8 @@ class Solution:
         curr = ''
         for c in s:
             if c == '(':
-                if curr != '':
-                    stack.append(curr)
-                    curr = ''
+                stack.append(curr)
+                curr = ''
             elif c == ')':
                 curr = evaluate(curr)
                 if len(stack) != 0:
@@ -75,3 +73,4 @@ class Solution:
         
         curr = evaluate(curr)
         return int(curr)
+                
