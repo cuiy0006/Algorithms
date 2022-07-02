@@ -24,3 +24,26 @@ class Solution:
         res += s[i:]
         return res
         
+
+class Solution:
+    def minRemoveToMakeValid(self, s: str) -> str:
+        stack = []
+        
+        for i, c in enumerate(s):
+            if c == '(':
+                stack.append(['(', i])
+            elif c == ')':
+                if len(stack) > 0 and stack[-1][0] == '(':
+                    stack.pop()
+                else:
+                    stack.append([')', i])
+        
+        idxs = set([i for [_, i] in stack])
+        
+        res = ''
+        for i in range(len(s)):
+            if i not in idxs:
+                res += s[i]
+        return res
+            
+        
