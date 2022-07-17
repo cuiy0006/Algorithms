@@ -26,23 +26,14 @@ class Solution:
 
 
 
-class Solution(object):
-    def trap(self, height):
-        """
-        :type height: List[int]
-        :rtype: int
-        """
-        l, r = 0,len(height)-1
-        total = 0
-        while l < r:
-            if height[l] <= height[r]:
-                tmp = height[l]
-                while l < r and tmp >= height[l]:
-                    total += tmp - height[l]
-                    l += 1
-            else:
-                tmp = height[r]
-                while l < r and tmp >= height[r]:
-                    total += tmp - height[r]
-                    r -= 1
-        return total
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        stack = []
+        res = 0
+        for i in range(len(height)):
+            while len(stack) != 0 and height[i] >= height[stack[-1]]:
+                idx = stack.pop()
+                if len(stack) != 0:
+                    res += (min(height[i], height[stack[-1]]) - height[idx]) * (i-stack[-1]-1)
+            stack.append(i)
+        return res
