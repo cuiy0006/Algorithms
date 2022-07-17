@@ -25,7 +25,6 @@ class Solution:
 
 
 
-
 class Solution:
     def trap(self, height: List[int]) -> int:
         stack = []
@@ -34,6 +33,8 @@ class Solution:
             while len(stack) != 0 and height[i] >= height[stack[-1]]:
                 idx = stack.pop()
                 if len(stack) != 0:
-                    res += (min(height[i], height[stack[-1]]) - height[idx]) * (i-stack[-1]-1)
+                    w = (i-stack[-1]-1)
+                    h = min(height[i], height[stack[-1]]) - height[idx]
+                    res += w * h
             stack.append(i)
         return res
