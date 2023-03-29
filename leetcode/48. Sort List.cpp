@@ -18,7 +18,7 @@ public:
             p = p->next;
         }
 
-        std::sort(v.begin(), v.end(), [](std::tuple<int, ListNode*> x, std::tuple<int, ListNode*> y) {
+        std::sort(v.begin(), v.end(), [](auto x, auto y) {
             return std::get<0>(x) < std::get<0>(y);
         });
 
