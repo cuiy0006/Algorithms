@@ -12,23 +12,19 @@ public:
                 --j;
             }
             
-            int tmp = nums[i];
-            nums[i] = nums[j];
-            nums[j] = tmp;
+            std::swap(nums[i], nums[j]);
         }
         
         j = nums.size() - 1;
         while(i < j){
-            while(i < j && nums[i] != 2){
+            while(i < j && nums[i] == 1){
                 ++i;
             }
             
             while(i < j && nums[j] != 1){
                 --j;
             }
-            int tmp = nums[i];
-            nums[i] = nums[j];
-            nums[j] = tmp;
+            std::swap(nums[i], nums[j]);
         }
     }
 };
