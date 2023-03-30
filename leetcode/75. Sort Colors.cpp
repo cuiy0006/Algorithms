@@ -2,6 +2,28 @@ class Solution {
 public:
     void sortColors(vector<int>& nums) {
         int i = 0;
+        int k = 0;
+        int j = nums.size() - 1;
+        while (k <= j) {
+            if (nums[k] == 0) {
+                std::swap(nums[i], nums[k]);
+                i++;
+                k++;
+            } else if (nums[k] == 2) {
+                std::swap(nums[j], nums[k]);
+                j--;
+            } else {
+                k++;
+            }
+        }
+    }
+};
+
+
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int i = 0;
         int j = nums.size() - 1;
         while(i < j){
             while(i < j && nums[i] == 0){
