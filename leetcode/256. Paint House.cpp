@@ -1,19 +1,21 @@
 class Solution {
 public:
     int minCost(vector<vector<int>>& costs) {
-        size_t n = costs.size();
-        vector<vector<int>> dp(n, vector<int>(3, 0));
-        
-        dp[0][0] = costs[0][0];
-        dp[0][1] = costs[0][1];
-        dp[0][2] = costs[0][2];
-        
-        for (size_t i = 1; i < n; ++i) {
-            dp[i][0] = min(dp[i-1][1], dp[i-1][2]) + costs[i][0];
-            dp[i][1] = min(dp[i-1][0], dp[i-1][2]) + costs[i][1];
-            dp[i][2] = min(dp[i-1][0], dp[i-1][1]) + costs[i][2];
+        vector<int> dp(3, 0);
+        dp[0] = costs[0][0];
+        dp[1] = costs[0][1];
+        dp[2] = costs[0][2];
+
+        for (size_t i = 1; i < costs.size(); i++) {
+            int r = dp[0];
+            int b = dp[1];
+            int g = dp[2];
+
+            dp[0] = min(b, g) + costs[i][0];
+            dp[1] = min(r, g) + costs[i][1];
+            dp[2] = min(r, b) + costs[i][2];
         }
-        
-        return *min_element(dp[n-1].begin(), dp[n-1].end());
+
+        return min({dp[0], dp[1], dp[2]});
     }
 };
