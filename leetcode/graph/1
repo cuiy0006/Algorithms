@@ -1,0 +1,14 @@
+
+
+arr = []
+linkedlist = []
+
+arr: length 3 
+arr = [None, None, None]
+arr[0] = 1
+arr = [1, None, None]
+find: val = 2 O(n)
+remove: 
+update: 
+
+
