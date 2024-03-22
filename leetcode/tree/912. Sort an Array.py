@@ -31,3 +31,34 @@ class Solution:
 
         sort(0, len(nums)-1)
         return nums
+
+
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        def sort(i, j):
+            if i >= j:
+                return
+            p = partition(i, j)
+            sort(i, p-1)
+            sort(p+1, j)
+        
+        def partition(i, j):
+            p = randint(i, j)
+            nums[p], nums[i] = nums[i], nums[p]
+            l = i+1
+            r = j
+            while l < r:
+                while l < r and nums[l] <= nums[i]:
+                    l += 1
+                while l < r and nums[r] >= nums[i]:
+                    r -= 1
+                nums[l], nums[r] = nums[r], nums[l]
+            
+            if nums[l] > nums[i]:
+                l -= 1
+            nums[l], nums[i] = nums[i], nums[l]
+            return l
+
+        sort(0, len(nums)-1)
+        return nums
+
