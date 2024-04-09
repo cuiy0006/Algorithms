@@ -1,49 +1,21 @@
 class Solution:
     def minRemoveToMakeValid(self, s: str) -> str:
-        left = []
-        delete = []
-        
-        for i, c in enumerate(s):
-            if len(left) == 0 and c == ')':
-                delete.append(i)
-            else:
-                if c == '(':
-                    left.append(i)
-                elif c == ')':
-                    left.pop()
-        
-        i = 0
-        j = 0
-        indexes = delete + left
-            
-        res = ''
-        i = 0
-        for idx in indexes:
-            res += s[i:idx]
-            i = idx+1
-        res += s[i:]
-        return res
-        
-
-class Solution:
-    def minRemoveToMakeValid(self, s: str) -> str:
         stack = []
-        
+        lst = []
         for i, c in enumerate(s):
             if c == '(':
-                stack.append(['(', i])
+                stack.append(i)
             elif c == ')':
-                if len(stack) > 0 and stack[-1][0] == '(':
-                    stack.pop()
+                if len(stack) == 0:
+                    lst.append(i)
                 else:
-                    stack.append([')', i])
-        
-        idxs = set([i for [_, i] in stack])
-        
+                    stack.pop()
+        lst += stack
         res = ''
-        for i in range(len(s)):
-            if i not in idxs:
-                res += s[i]
+        i = 0
+        for j in range(len(s)):
+            if i == len(lst) or j != lst[i]:
+                res += s[j]
+            else:
+                i += 1
         return res
-            
-        

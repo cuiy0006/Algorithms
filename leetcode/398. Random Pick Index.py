@@ -1,28 +1,14 @@
-from random import randint
-class Solution(object):
+class Solution:
 
-    def __init__(self, nums):
-        """
-        
-        :type nums: List[int]
-        :type numsSize: int
-        """
-        self.nums = nums
-        self.size = 2 ** 31
+    def __init__(self, nums: List[int]):
+        self.dic = defaultdict(list)
+        for i, num in enumerate(nums):
+            self.dic[num].append(i)
 
-    def pick(self, target):
-        """
-        :type target: int
-        :rtype: int
-        """
-        cnt = 0
-        res = -1
-        for i, num in enumerate(self.nums):
-            if num == target:
-                cnt += 1
-                if randint(1, self.size) % cnt == 0:
-                    res = i
-        return res
+    def pick(self, target: int) -> int:
+        count = len(self.dic[target])
+        i = randint(0, count-1)
+        return self.dic[target][i]
 
 
 # Your Solution object will be instantiated and called as such:
