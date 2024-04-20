@@ -44,3 +44,40 @@ class Solution:
             
             nums[idx], nums[i] = nums[i], nums[idx]
             quicksort(i + 1, len(nums) - 1, nums)
+
+
+
+
+
+
+class Solution:
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        i = len(nums)-2
+        while i >= 0:
+            if nums[i] >= nums[i+1]:
+                i -= 1
+            else:
+                break
+        
+        if i == -1:
+            nums.sort()
+            return
+        
+        j = i+1
+        while j < len(nums):
+            if nums[j] > nums[i]:
+                j += 1
+            else:
+                break
+        j -= 1
+        nums[i], nums[j] = nums[j], nums[i]
+        sorted_part = sorted(nums[i+1:])
+        i = len(sorted_part)-1
+        j = len(nums)-1
+        while i >= 0:
+            nums[j] = sorted_part[i]
+            i -= 1
+            j -= 1

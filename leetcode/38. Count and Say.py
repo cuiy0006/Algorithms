@@ -1,22 +1,17 @@
-class Solution(object):
-    def countAndSay(self, n):
-        """
-        :type n: int
-        :rtype: str
-        """
+class Solution:
+    def countAndSay(self, n: int) -> str:
         curr = '1'
-        for i in range(1, n):
-            this_c = None
-            next_val = ''
-            cnt = 0
-            for j, c in enumerate(curr):
-                if this_c != c:
-                    if this_c != None:
-                        next_val += str(cnt) + this_c 
-                    this_c = c
-                    cnt = 1
-                else:
-                    cnt += 1
-            next_val += str(cnt) + this_c
-            curr = next_val
+
+        for _ in range(1, n):
+            i = 0
+            j = 0
+            next_curr = ''
+            while i < len(curr):
+                j = i+1
+                while j < len(curr) and curr[j] == curr[j-1]:
+                    j += 1
+                next_curr += str(j-i) + curr[i]
+                i = j
+            curr = next_curr
         return curr
+        
