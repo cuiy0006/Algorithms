@@ -14,6 +14,27 @@ class Solution(object):
         return b == x
 
 
+class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        if x < 0:
+            return False
+        y = 10
+        while x // y != 0:
+            y = y * 10
+        y = y // 10
+
+        while x != 0:
+            h = x // y
+            l = x % 10
+            if h != l:
+                return False
+            x = x % y
+            x = x // 10
+            y = y // 100
+
+        return True
+
+
 
 class Solution(object):
     def isPalindrome(self, x):
