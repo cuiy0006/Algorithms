@@ -1,32 +1,38 @@
 class Solution:
     def findClosestElements(self, arr: List[int], k: int, x: int) -> List[int]:
-        lst = [(abs(num - x), num) for num in arr]
-        lst.sort(key=lambda tp: tp[0])
-        
-        res = [num for distance, num in lst[:k]]
-        return sorted(res)
-      
-      
-      
- 
+        i = 0
+        j = k-1
+        while j < len(arr):
+            if j == len(arr)-1:
+                return arr[i:]
+            if x-arr[i] <= arr[j+1]-x:
+                return arr[i:j+1]
+            i += 1
+            j += 1
+        return None
 
-from heapq import heappush, heappop
+
 
 class Solution:
     def findClosestElements(self, arr: List[int], k: int, x: int) -> List[int]:
-        heap = []
-        for num in arr:
-            distance = abs(num - x)
-            if len(heap) < k:
-                heappush(heap, (-distance, num))
+        l = 0
+        r = len(arr)
+        while l < r:
+            mid = (l+r)//2
+            if arr[mid] < x:
+                l = mid+1
             else:
-                if distance < -heap[0][0]:
-                    heappop(heap)
-                    heappush(heap, (-distance, num))
-        
-        res = []
-        while len(heap) != 0:
-            res.append(heappop(heap)[1])
-        
-        res.sort()
-        return res
+                r = mid
+        i = l-1
+        j = l
+        left_res = []
+        right_res = []
+        for _ in range(k):
+            if i < 0:
+                right_res.append(arr[j])
+                j += 1
+            elif j > len(arr)-1:
+                left_res.append(arr[i])
+                i -= 1
+            else:
+                if abs(arr[i]-x) <= abs(arr[j]-x):
