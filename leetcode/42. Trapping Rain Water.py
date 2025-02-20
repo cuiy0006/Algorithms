@@ -30,11 +30,11 @@ class Solution:
         stack = []
         res = 0
         for i in range(len(height)):
-            while len(stack) != 0 and height[i] >= height[stack[-1]]:
-                idx = stack.pop()
-                if len(stack) != 0:
-                    w = (i-stack[-1]-1)
-                    h = min(height[i], height[stack[-1]]) - height[idx]
-                    res += w * h
+            h = height[i]
+            while len(stack) != 0 and h >= height[stack[-1]]:
+                j = stack.pop()
+                if len(stack) > 0:
+                    res += (min(height[stack[-1]], h) - height[j]) * (i-stack[-1]-1)
             stack.append(i)
+        
         return res
