@@ -8,13 +8,9 @@ class Solution:
         while j < len(nums):
             while len(min_dq) != 0 and abs(nums[min_dq[0]]-nums[j]) > limit:
                 idx = min_dq.popleft()
-                while len(max_dq) != 0 and max_dq[0] <= idx:
-                    max_dq.popleft()
                 i = max(i, idx+1)
             while len(max_dq) != 0 and abs(nums[max_dq[0]]-nums[j]) > limit:
                 idx = max_dq.popleft()
-                while len(min_dq) != 0 and min_dq[0] <= idx:
-                    min_dq.popleft()
                 i = max(i, idx+1)
             res = max(res, j-i+1)
 
