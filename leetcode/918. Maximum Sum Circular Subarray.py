@@ -1,3 +1,25 @@
+class Solution:
+    def maxSubarraySumCircular(self, nums: List[int]) -> int:
+        circular = nums + nums[:-1]
+        presum = []
+        curr = 0
+        for num in circular:
+            curr += num
+            presum.append(curr)
+        res = max(nums)
+        dq = deque()
+        for i in range(len(presum)):
+            while len(dq) != 0 and i-dq[0] > len(nums):
+                dq.popleft()
+            while len(dq) != 0 and presum[i] <= presum[dq[-1]]:
+                dq.pop()
+            if len(dq) != 0:
+                res = max(res, presum[i]-presum[dq[0]])
+            dq.append(i)
+        return res
+
+
+
 from collections import deque
 import sys
 
