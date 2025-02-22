@@ -5,6 +5,27 @@ class Solution:
             presums.append(presums[-1]+num)
 
         res = sys.maxsize
+        last_smaller = deque()
+        for i, presum in enumerate(presums):
+            while len(last_smaller) != 0 and presum - presums[last_smaller[0]] >= k:
+                res = min(res, i-last_smaller.popleft())
+
+            while len(last_smaller) != 0 and presum <= presums[last_smaller[-1]]:
+                last_smaller.pop()
+            last_smaller.append(i)
+
+            
+        return res if res != sys.maxsize else -1
+
+
+
+class Solution:
+    def shortestSubarray(self, nums: List[int], k: int) -> int:
+        presums = [0]
+        for num in nums:
+            presums.append(presums[-1]+num)
+
+        res = sys.maxsize
         last_smaller = []
         for i, presum in enumerate(presums):
             while len(last_smaller) != 0 and presum <= presums[last_smaller[-1]]:
