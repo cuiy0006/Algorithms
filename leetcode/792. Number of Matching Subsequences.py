@@ -1,5 +1,28 @@
 class Solution:
     def numMatchingSubseq(self, s: str, words: List[str]) -> int:
+        dic = {}
+        for word in words:
+            if word[0] not in dic:
+                dic[word[0]] = deque()
+            dic[word[0]].append(word)
+
+        cnt = 0
+        for c in s:
+            if c not in dic:
+                continue
+            size = len(dic[c])
+            for i in range(size):
+                word = dic[c].pop()
+                if len(word) == 1:
+                    cnt += 1
+                else:
+                    if word[1] not in dic:
+                        dic[word[1]] = deque()
+                    dic[word[1]].appendleft(word[1:])
+        return cnt
+
+class Solution:
+    def numMatchingSubseq(self, s: str, words: List[str]) -> int:
         dic = defaultdict(list) # start char -> rest str
         
         for word in words:
