@@ -1,20 +1,19 @@
 class Solution:
     def permuteUnique(self, nums: List[int]) -> List[List[int]]:
         res = []
-        
-        def helper(idx, curr):
-            if idx == len(nums):
-                res.append(curr[:])
+        def helper(start):
+            if start == len(nums):
+                res.append(nums[:])
                 return
-            
-            s = set()
-            for i in range(idx, len(nums)):
-                if curr[i] in s:
+
+            seen = set()
+            for i in range(start, len(nums)):
+                if nums[i] in seen:
                     continue
-                s.add(curr[i])
-                curr[idx], curr[i] = curr[i], curr[idx]
-                helper(idx+1, curr)
-                curr[idx], curr[i] = curr[i], curr[idx]
-            
-        helper(0, nums)
+                seen.add(nums[i])
+                nums[i], nums[start] = nums[start], nums[i]
+                helper(start+1)
+                nums[i], nums[start] = nums[start], nums[i]
+        
+        helper(0)
         return res
