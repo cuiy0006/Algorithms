@@ -1,26 +1,24 @@
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
-        res = []
-        if s == '':
-            return res
-        
-        def isPalin(i, j):
-            while i < j:
-                if s[i] != s[j]:
+        def is_palindome(start, end):
+            while start < end:
+                if s[start] != s[end]:
                     return False
-                i += 1
-                j -= 1
+                start += 1
+                end -= 1
             return True
         
-        def helper(idx, tmp):
+        res = []
+        def helper(idx, curr_lst):
             if idx == len(s):
-                res.append(tmp[:])
+                res.append(curr_lst[:])
                 return
             
             for i in range(idx, len(s)):
-                if isPalin(idx, i):
-                    tmp.append(s[idx: i + 1])
-                    helper(i + 1, tmp)
-                    tmp.pop()
+                if is_palindome(idx, i):
+                    curr_lst.append(s[idx:i+1])
+                    helper(i+1, curr_lst)
+                    curr_lst.pop()
         helper(0, [])
         return res
+
