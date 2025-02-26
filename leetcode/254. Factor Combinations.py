@@ -1,39 +1,17 @@
 class Solution:
     def getFactors(self, n: int) -> List[List[int]]:
         res = []
-        
-        def helper(n, curr, start):
-            if n == 1:
-                return
-            
-            for i in range(start, int(n**0.5)+1):
-                if n % i == 0:
-                    j = n // i
-                    res.append(curr + [i, j])
-                    curr.append(i)
-                    helper(j, curr, i)
-                    curr.pop()
-        
-        helper(n, [], 2)
-        return res
+        def helper(curr_lst, rest, last_factor):
+            if rest != n:
+                curr_lst.append(rest)
+                res.append(curr_lst[:])
+                curr_lst.pop()
 
-
-class Solution:
-    def getFactors(self, n: int) -> List[List[int]]:
-        res = []
-        lst = []
+            for num in range(last_factor, int(rest**0.5)+1):
+                if rest % num == 0:
+                    curr_lst.append(num)
+                    helper(curr_lst, rest//num, num)
+                    curr_lst.pop()
         
-        def helper(n, lower):
-            curr = n
-            for i in range(lower, int(n ** 0.5) + 1):
-                if curr % i == 0:
-                    j = curr // i
-                    res.append(lst + [i, j])
-                    lst.append(i)
-                    helper(j, i)
-                    lst.pop()
-                    
-        helper(n, 2)
-        
+        helper([], n, 2)
         return res
-            
