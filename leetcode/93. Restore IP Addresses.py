@@ -1,40 +1,22 @@
 class Solution:
     def restoreIpAddresses(self, s: str) -> List[str]:
         res = []
-        
-        def is_valid(part):
-            if part == '':
-                return False
-            if len(part) > 1 and part[0] == '0':
-                return False
-            if int(part) > 255:
-                return False
-            return True
-        
-        
-        for i in range(0, 3):
-            if i > len(s) - 1:
-                break
-            part1 = s[:i+1]
-            if not is_valid(part1):
-                break
-            
-            for j in range(i+1, i+4):
-                if j > len(s) - 1:
-                    break
-                part2 = s[i+1:j+1]
-                if not is_valid(part2):
-                    break
-                
-                for m in range(j+1, j+4):
-                    if m > len(s) - 1:
-                        break
-                    part3 = s[j+1:m+1]
-                    if not is_valid(part3):
-                        break
+        def helper(idx, left, curr_lst):
+            if idx == len(s) and left == 0:
+                res.append('.'.join(curr_lst))
+                return
+            elif idx > len(s)-1 or left == 0:
+                return
 
-                    part4 = s[m+1:]
-                    if not is_valid(part4):
-                        continue
-                    res.append('.'.join([part1, part2, part3, part4]))
+            for i in range(idx, idx+3):
+                if s[idx] == '0' and i != idx:
+                    continue
+                curr = s[idx:i+1]
+                if int(curr) > 255:
+                    continue
+                curr_lst.append(curr)
+                helper(i+1, left-1, curr_lst)
+                curr_lst.pop()
+        helper(0, 4, [])
         return res
+
