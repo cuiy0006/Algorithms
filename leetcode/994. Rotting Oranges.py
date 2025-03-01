@@ -1,42 +1,36 @@
-from collections import deque
-
 class Solution:
     def orangesRotting(self, grid: List[List[int]]) -> int:
-        q = deque()
-        dirs = [(1, 0), (-1, 0), (0, 1), (0, -1)]
-        
         fresh = 0
-        for i in range(len(grid)):
-            for j in range(len(grid[0])):
-                if grid[i][j] == 2:
-                    q.append((i, j))
+        m = len(grid)
+        n = len(grid[0])
+        q = deque()
+        for i in range(m):
+            for j in range(n):
                 if grid[i][j] == 1:
                     fresh += 1
+                elif grid[i][j] == 2:
+                    q.append((i, j))
         
-        turn = 0
+        directions = ((1,0),(-1,0),(0,1),(0,-1))
+        seen = set()
+        d = 0
         while len(q) != 0:
             size = len(q)
-            while size > 0:
-                size -= 1
+            for _ in range(size):
                 x, y = q.popleft()
-                
-                for (x0, y0) in dirs:
-                    x1 = x + x0
-                    y1 = y + y0
-                    
-                    if x1 < 0 or x1 > len(grid) - 1 or y1 < 0 or y1 > len(grid[0]) - 1:
-                        continue
-                    
-                    if grid[x1][y1] != 1:
-                        continue
-                    
+                if x < 0 or x > m-1 or y < 0 or y > n-1 or grid[x][y] == 0:
+                    continue
+                if (x, y) in seen:
+                    continue
+                seen.add((x, y))
+                if grid[x][y] == 1:
                     fresh -= 1
-                    grid[x1][y1] = 2
-                    q.append((x1, y1))
-            if len(q) != 0:
-                turn += 1
+                for x0,y0 in directions:
+                    q.append((x+x0, y+y0))
+            if fresh == 0:
+                break
+            d += 1
         
-        if fresh > 0:
+        if fresh != 0:
             return -1
-        
-        return turn
+        return d
