@@ -4,7 +4,6 @@ class Solution:
             return 0
         furthest = 0
         k = 1
-        idx = 0
 
         q = deque([0])
         while len(q) != 0:
