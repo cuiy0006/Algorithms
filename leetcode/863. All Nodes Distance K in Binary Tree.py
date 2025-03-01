@@ -5,6 +5,49 @@
 #         self.left = None
 #         self.right = None
 
+class Solution:
+    def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
+        graph = defaultdict(list)
+        def helper(node, parent):
+            if node is None:
+                return
+            if parent is not None:
+                graph[node.val].append(parent.val)
+                graph[parent.val].append(node.val)
+            helper(node.left, node)
+            helper(node.right, node)
+        
+        helper(root, None)
+        q = deque([target.val])
+        seen = set()
+        res = []
+
+        while len(q) != 0:
+            size = len(q)
+            for _ in range(size):
+                node = q.popleft()
+                if node in seen:
+                    continue
+                seen.add(node)
+                if k == 0:
+                    res.append(node)
+                else:
+                    for child in graph[node]:
+                        q.append(child)
+            k -= 1
+        return res
+
+
+
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
 from collections import deque
 
 class Solution:
