@@ -1,43 +1,43 @@
 # Definition for singly-linked list.
-# class ListNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        def reverse(head):
+            if head is None:
+                return None
+            p1 = head
+            p2 = head.next
+            p3 = head.next
+            head.next = None
+            while p2 is not None:
+                p3 = p2.next
+                p2.next = p1
+                p1 = p2
+                p2 = p3
+            return p1
 
-class Solution(object):
-    def addTwoNumbers(self, l1, l2):
-        """
-        :type l1: ListNode
-        :type l2: ListNode
-        :rtype: ListNode
-        """
-        lst1 = []
-        lst2 = []
-        while l1 is not None:
-            lst1.append(l1.val)
-            l1 = l1.next
-        while l2 is not None:
-            lst2.append(l2.val)
-            l2 = l2.next
+        p1 = reverse(l1)
+        p2 = reverse(l2)
+        head = ListNode()
+        p = head
+        d = 0
+        while p1 is not None or p2 is not None:
+            val = d
+            if p1 is not None:
+                val += p1.val
+                p1 = p1.next
+            if p2 is not None:
+                val += p2.val
+                p2 = p2.next
+            d = val // 10
+            p.next = ListNode(val % 10)
+            p = p.next
         
-        lst1.reverse()
-        lst2.reverse()
-        longer, shorter = lst1, lst2
-        if len(lst1) < len(lst2):
-            longer, shorter = shorter, longer
-        i = 0
-        tmp = 0
-        while i < len(shorter):
-            longer[i], tmp = (longer[i] + shorter[i] + tmp) % 10, (longer[i] + shorter[i] + tmp) //10
-            i += 1
-        while i < len(longer):
-            longer[i], tmp = (longer[i] + tmp) % 10, (longer[i] + tmp) // 10
-            i += 1
-        if tmp != 0:
-            longer.append(1)
-        longer.reverse()
-        head = node = ListNode(0)
-        for i in range(len(longer)):
-            node.next = ListNode(longer[i])
-            node = node.next
-        return head.next
+        if d == 1:
+            p.next = ListNode(1)
+        
+        return reverse(head.next)
+
