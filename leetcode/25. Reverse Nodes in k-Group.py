@@ -5,47 +5,47 @@
 #         self.next = next
 class Solution:
     def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
-        def reverse(head):
-            if head is None or head.next is None:
-                return head
-            
-            p1 = head
-            p2 = head.next
-            p1.next = None
+        def reverse(start, end):
+            if start is None:
+                return (None, None)
+            p1 = start
+            p2 = start.next
+            p3 = start.next
+            start.next = None
             while p2 is not None:
-                p2.next, p2, p1 = p1, p2.next, p2
-            return p1
-            
+                p3 = p2.next
+                p2.next = p1
+                p1 = p2
+                p2 = p3
+            return (end, start)
         
-        root = ListNode()
-        last_tail = root
-        start = head
-        
-        while start is not None:
-            end = start
-            cnt = 0
-            p = start
-            while True:
-                cnt += 1
-                if cnt == k or p.next is None:
-                    end = p
-                    break
-                p = p.next
+        dummy = ListNode()
+        last_tail = dummy
+        next_start = head
 
-            next_start = end.next
-            end.next = None
-            
-            if cnt == k:
-                new_head = reverse(start)
+        while True:
+            p = next_start
+            if p is None:
+                break
+            n = 1
+            while p.next is not None:
+                p = p.next
+                n += 1
+                if n == k:
+                    break
+            if n != k:
+                last_tail.next = next_start
+                break
             else:
-                new_head = start
-            
-            last_tail.next = new_head
-            
-            last_tail = start
-            start = next_start
-            
-        return root.next
+                start = next_start
+                end = p
+                next_start = p.next
+                end.next = None
+                new_start, new_end = reverse(start, end)
+                last_tail.next = new_start
+                last_tail = new_end
+
+        return dummy.next
 
 
 
