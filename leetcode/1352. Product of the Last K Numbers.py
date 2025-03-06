@@ -1,30 +1,26 @@
 class ProductOfNumbers:
 
     def __init__(self):
-        self.lst = [1]
-        self.curr = 1
+        self.zero_idx = -1
+        self.premultiply = [1]
 
     def add(self, num: int) -> None:
         if num == 0:
-            i = len(self.lst)-1
-            while i >= 0:
-                if self.lst[i] == 0:
-                    break
-                self.lst[i] = 0
-                i -= 1
-            self.lst.append(0)
-            self.curr = 1
+            self.zero_idx = len(self.premultiply)
+            self.premultiply.append(1)
         else:
-            self.curr *= num
-            self.lst.append(self.curr)
-            
+            self.premultiply.append(num * self.premultiply[-1])
 
     def getProduct(self, k: int) -> int:
-        if self.lst[len(self.lst)-k] == 0:
+        r = len(self.premultiply)-1
+        l = r-k
+        if self.zero_idx > l:
             return 0
+        return self.premultiply[r] // self.premultiply[l]
         
-        num = self.lst[len(self.lst)-k-1]
-        if num == 0:
-            num = 1
-        
-        return self.curr // num
+
+
+# Your ProductOfNumbers object will be instantiated and called as such:
+# obj = ProductOfNumbers()
+# obj.add(num)
+# param_2 = obj.getProduct(k)
