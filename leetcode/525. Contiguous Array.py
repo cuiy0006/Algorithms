@@ -1,19 +1,14 @@
 class Solution:
-    def findMaxLength(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        cnt = 0
+    def findMaxLength(self, nums: List[int]) -> int:
+        ones = 0
         dic = {0:-1}
-        maxlen = 0
+        res = 0
         for i, num in enumerate(nums):
-            if num == 0:
-                cnt -= 1
+            ones += num
+            zeros = i+1-ones
+            diff = ones-zeros
+            if diff in dic:
+                res = max(res, i - dic[diff])
             else:
-                cnt += 1
-            if cnt in dic:
-                maxlen = max(maxlen, i - dic[cnt])
-            else:
-                dic[cnt] = i
-        return maxlen
+                dic[diff] = i
+        return res
