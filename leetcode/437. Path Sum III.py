@@ -1,21 +1,26 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    def pathSum(self, root: TreeNode, sum: int) -> int:
-        dic = {0: 1} # sum -> count
-        def helper(node, total):
-            if node == None:
-                return 0
-            res = 0
-            if (total + node.val - sum) in dic:
-                res += dic[total + node.val - sum] 
-            
-            total += node.val
-            if total not in dic:
-                dic[total] = 1
-            else:
-                dic[total] += 1
-                
-            res += helper(node.left, total) + helper(node.right, total)
-            dic[total] -= 1
-            return res
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:
+        dic = {0:1}
+        res = 0
+        def traverse(node, presum):
+            if node is None:
+                return
+            presum += node.val
+            if presum-targetSum in dic:
+                nonlocal res
+                res += dic[presum-targetSum]
+            if presum not in dic:
+                dic[presum] = 0
+            dic[presum] += 1
+            traverse(node.left, presum)
+            traverse(node.right, presum)
+            dic[presum] -= 1
         
-        return helper(root, 0)
+        traverse(root, 0)
+        return res
