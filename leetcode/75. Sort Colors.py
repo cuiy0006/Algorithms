@@ -3,16 +3,16 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
-        p0 = 0
-        p2 = len(nums)-1
+        l = 0
+        r = len(nums)-1
         i = 0
-        while i <= p2:
+        while i <= r:
             if nums[i] == 0:
-                nums[p0], nums[i] = nums[i], nums[p0]
-                p0 += 1
+                nums[i], nums[l] = nums[l], nums[i]
                 i += 1
+                l += 1
             elif nums[i] == 2:
-                nums[p2], nums[i] = nums[i], nums[p2]
-                p2 -= 1
+                nums[i], nums[r] = nums[r], nums[i]
+                r -= 1
             else:
                 i += 1
