@@ -1,20 +1,12 @@
 class Solution:
-    def checkSubarraySum(self, nums, k):
-        """
-        :type nums: List[int]
-        :type k: int
-        :rtype: bool
-        """
-        dic = {0: -1}
-        total = 0
+    def checkSubarraySum(self, nums: List[int], k: int) -> bool:
+        dic = {0:-1}
+        presum = 0
         for i in range(len(nums)):
-            if k != 0:
-                total = (total + nums[i]) % k
-            else:
-                total = total + nums[i]
-            if total in dic:
-                if i - dic[total] >= 2:
-                    return True
-            else:
-                dic[total] = i
+            presum += nums[i]
+            presum_mod = presum % k
+            if presum_mod in dic and i - dic[presum_mod] > 1:
+                return True
+            if presum_mod not in dic:
+                dic[presum_mod] = i
         return False
