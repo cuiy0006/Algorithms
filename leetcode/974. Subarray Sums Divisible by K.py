@@ -1,18 +1,14 @@
 class Solution:
     def subarraysDivByK(self, nums: List[int], k: int) -> int:
-        curr_sum = 0
-        dic = {0:1} # curr_sum%k -> cnt
-        cnt = 0
-        
-        for num in nums:
-            curr_sum += num
-            r = curr_sum % k
-            if r in dic:
-                cnt += dic[r]
-            else:
-                dic[r] = 0
-            dic[r] += 1
-        
-        return cnt
-                
-        
+        dic = {0:1}
+        res = 0
+        presum = 0
+        for i in range(len(nums)):
+            presum += nums[i]
+            key = presum % k
+            if key not in dic:
+                dic[key] = 0
+            res += dic[key]
+            dic[key] += 1
+        return res
+
