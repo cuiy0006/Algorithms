@@ -1,3 +1,19 @@
+class Solution:
+    def carPooling(self, trips: List[List[int]], capacity: int) -> bool:
+        lst = []
+        for [num, start, end] in trips:
+            lst.append((start, num))
+            lst.append((end, -num))
+        
+        lst.sort()
+        curr = 0
+        for stop, delta in lst:
+            curr += delta
+            if curr >  capacity:
+                return False
+        return  True
+
+
 from heapq import heappush, heappop
 
 class Solution:
