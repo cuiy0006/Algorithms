@@ -1,19 +1,14 @@
 class Solution:
-    def getModifiedArray(self, length, updates):
-        """
-        :type length: int
-        :type updates: List[List[int]]
-        :rtype: List[int]
-        """
-        res = [0] * length
-        for lst in updates:
-            start, end, inc = lst
-            res[start] += inc
-            if end + 1 < length:
-                res[end+1] -= inc
+    def getModifiedArray(self, length: int, updates: List[List[int]]) -> List[int]:
+        dic = defaultdict(int)
+        for [start, end, inc] in updates:
+            dic[start] += inc
+            dic[end+1] -= inc
         
+        res = [None] * length
         curr = 0
-        for i, _ in enumerate(res):
-            curr += res[i]
+        for i in range(length):
+            if i in dic:
+                curr += dic[i]
             res[i] = curr
         return res
