@@ -1,4 +1,3 @@
-
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):
@@ -17,21 +16,19 @@ class Solution:
             stack.append(node)
             node = node.next
         
-        p1 = None
         p2 = head
         node = None
         while p2 is not None:
             if node is not None:
                 node.next = p2
-            p3 = p2.next
-            p2.next = None
             node = stack.pop()
-            if node == p1 or node == p2:
-                break
-            p1 = p2
-            p2.next = node
             node.next = None
-            p2 = p3
+            if node == p2:
+                break
+            p2.next, p2 = node, p2.next
+            if node == p2:
+                break
+
         return head
 
         
