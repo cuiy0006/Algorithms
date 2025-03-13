@@ -3,18 +3,15 @@ class Solution:
         presums = [0]
         for num in nums:
             presums.append(presums[-1]+num)
-
+        
+        stack = deque()
         res = sys.maxsize
-        last_smaller = deque()
-        for i, presum in enumerate(presums):
-            while len(last_smaller) != 0 and presum - presums[last_smaller[0]] >= k:
-                res = min(res, i-last_smaller.popleft())
-
-            while len(last_smaller) != 0 and presum <= presums[last_smaller[-1]]:
-                last_smaller.pop()
-            last_smaller.append(i)
-
-            
+        for i in range(len(presums)):
+            while len(stack) != 0 and presums[i] <= presums[stack[-1]]:
+                stack.pop()
+            while len(stack) != 0 and presums[i] - presums[stack[0]] >= k:
+                res = min(res, i-stack.popleft())
+            stack.append(i)
         return res if res != sys.maxsize else -1
 
 
