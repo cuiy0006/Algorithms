@@ -1,26 +1,28 @@
 class Solution:
     def removeKdigits(self, num: str, k: int) -> str:
         stack = []
-        remove = set()
-        for i in range(len(num)):
-            while len(stack) != 0 and num[i] < num[stack[-1]]:
-                r = stack.pop()
-                remove.add(r)
-                if len(remove) == k:
+        i = 0
+        while i < len(num):
+            while len(stack) != 0 and num[i] < stack[-1]:
+                stack.pop()
+                k -= 1
+                if k == 0:
                     break
-            if len(remove) == k:
+            if k == 0:
                 break
-            stack.append(i)
-        res = ''
-        cnt = 0
-        for i, c in enumerate(num):
-            if cnt == len(num)-k:
+            stack.append(num[i])
+            i += 1
+        
+        s = ''.join(stack)
+        if k == 0:
+            res = s + num[i:]
+        else:
+            res = s[:-k]
+        i = 0
+        while i < len(res):
+            if res[i] == '0':
+                i += 1
+            else:
                 break
-            if i not in remove:
-                cnt += 1
-                if res == '' and c == '0':
-                    continue
-                res += c
-        if res == '':
-            return '0'
-        return res
+        res = res[i:]
+        return res if res != '' else '0'
