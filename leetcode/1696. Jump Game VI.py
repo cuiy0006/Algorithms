@@ -1,20 +1,15 @@
-from heapq import heappush, heappop
-
 class Solution:
     def maxResult(self, nums: List[int], k: int) -> int:
-        dp = [0 for _ in nums]
-        dp[0] = nums[0]
-        h = [(-nums[0], 0)]
-        
-        for i in range(1, len(nums)):
-            while True:
-                neg_num, idx = h[0]
-                if i - idx <= k:
-                    dp[i] = nums[i] - neg_num
-                    break
-                else:
-                    heappop(h)
-            
-            heappush(h, (-dp[i], i))
+        res = [-sys.maxsize] * len(nums)
+        res[0] = nums[0]
+        dq = deque()
+        for i in range(len(nums)):
+            while len(dq) != 0 and i > dq[0]+k:
+                dq.popleft()
+            if len(dq) != 0:
+                res[i] = max(res[i], res[dq[0]]+nums[i])
+            while len(dq) != 0 and res[i] >= res[dq[-1]]:
+                dq.pop()
+            dq.append(i)
+        return res[-1]
 
-        return dp[-1]
