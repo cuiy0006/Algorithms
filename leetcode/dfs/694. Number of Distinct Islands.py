@@ -1,5 +1,36 @@
 class Solution:
     def numDistinctIslands(self, grid: List[List[int]]) -> int:
+        dirs = ((1,0),(-1,0),(0,1),(0,-1))
+        m = len(grid)
+        n = len(grid[0])
+        visited = [[False for _ in range(n)] for _ in range(m)]
+        def traverse(x, y, origin_x, origin_y, curr):
+            if x < 0 or x > m-1 or y < 0 or y > n-1:
+                return
+            if grid[x][y] == 0:
+                return
+            if visited[x][y]:
+                return
+            visited[x][y] = True
+            curr.append((x-origin_x, y-origin_y))
+            for d1,d2 in dirs:
+                traverse(x+d1, y+d2, origin_x, origin_y, curr)
+        
+        s = set()
+        for x in range(m):
+            for y in range(n):
+                if grid[x][y] == 1 and not visited[x][y]:
+                    curr = []
+                    traverse(x, y, x, y, curr)
+                    h = tuple(curr)
+                    if h not in s:
+                        s.add(h)
+        return len(s)
+
+
+
+class Solution:
+    def numDistinctIslands(self, grid: List[List[int]]) -> int:
         def traverse(x, y, d, dirs):
             if x < 0 or x > len(grid)-1 or y < 0 or y > len(grid[0])-1:
                 dirs.append(d + '0')
