@@ -24,8 +24,6 @@ class Solution:
             preorder(right)
         
         preorder(root)
-        return dummy.right
-
 
 
 
