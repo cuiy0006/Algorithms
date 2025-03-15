@@ -1,27 +1,22 @@
 # Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
-class Solution(object):
-    def binaryTreePaths(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[str]
-        """
-        if root == None:
-            return []
-        res = []
-        def helper(node, lst):
-            lst.append(str(node.val))
-            if node.left == None and node.right == None:
-                res.append(lst)
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def sumNumbers(self, root: Optional[TreeNode]) -> int:
+        res = 0
+        def helper(node, val):
+            if node is None:
                 return
-            if node.left != None:
-                helper(node.left, lst[:])
-            if node.right != None:
-                helper(node.right, lst[:])
-        helper(root, [])
-        return ['->'.join(lst) for lst in res]
+            val += str(node.val)
+            if node.left is None and node.right is None:
+                nonlocal res
+                res += int(val)
+                return
+            helper(node.left, val)
+            helper(node.right, val)
+        
+        helper(root, '')
+        return res
