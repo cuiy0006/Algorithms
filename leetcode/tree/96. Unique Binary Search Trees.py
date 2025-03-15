@@ -1,5 +1,21 @@
 class Solution:
     def numTrees(self, n: int) -> int:
+        @cache
+        def traverse(l, r):
+            if l >= r:
+                return 1
+            
+            res = 0
+            for i in range(l, r+1):
+                res += traverse(l, i-1) * traverse(i+1, r)
+            return res
+        
+        return traverse(1, n)
+
+
+
+class Solution:
+    def numTrees(self, n: int) -> int:
         dp = [None for i in range(n+1)]
         dp[0] = 1
         dp[1] = 1
