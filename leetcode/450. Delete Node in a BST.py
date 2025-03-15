@@ -5,6 +5,45 @@
 #         self.left = left
 #         self.right = right
 class Solution:
+    def deleteNode(self, root: Optional[TreeNode], key: int) -> Optional[TreeNode]:
+        def delete(node, parent, key):
+            if node is None:
+                return
+            if node.val > key:
+                delete(node.left, node, key)
+            elif node.val < key:
+                delete(node.right, node, key)
+            else:
+                if node.left is None:
+                    if parent.left == node:
+                        parent.left = node.right
+                    else:
+                        parent.right = node.right
+                elif node.right is None:
+                    if parent.left == node:
+                        parent.left = node.left
+                    else:
+                        parent.right = node.left
+                else:
+                    p = node.left
+                    while p.right is not None:
+                        p = p.right
+                    delete(node.left, node, p.val)
+                    node.val = p.val
+        dummy = TreeNode()
+        dummy.left = root
+        delete(root, dummy, key)
+        return dummy.left
+
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
     def deleteNode(self, root: TreeNode, key: int) -> TreeNode:
         node = root
         parent = None
