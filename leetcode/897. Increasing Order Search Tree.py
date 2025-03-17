@@ -5,6 +5,30 @@
 #         self.left = left
 #         self.right = right
 class Solution:
+    def increasingBST(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        head = TreeNode()
+        curr = head
+        def inorder(node):
+            if node is None:
+                return
+            inorder(node.left)
+            nonlocal curr
+            curr.right = node
+            curr = node
+            curr.left = None
+            inorder(node.right)
+        inorder(root)
+        return head.right
+
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
     def increasingBST(self, root: TreeNode) -> TreeNode:
         last = None
         node = root
