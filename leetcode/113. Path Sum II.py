@@ -1,33 +1,23 @@
 # Definition for a binary tree node.
 # class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    def pathSum(self, root, sum):
-        """
-        :type root: TreeNode
-        :type sum: int
-        :rtype: List[List[int]]
-        """
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
         res = []
-        def helper(curr_lst, node, curr_val):
+        def traverse(node, curr_sum, curr_lst):
+            if node is None:
+                return
+            curr_sum += node.val
+            curr_lst.append(node.val)
             if node.left is None and node.right is None:
-                if curr_val + node.val == sum:
-                    curr_lst.append(node.val)
+                if curr_sum == targetSum:
                     res.append(curr_lst[:])
-                    curr_lst.pop()
-                    return
-            else:
-                curr_lst.append(node.val)
-                if node.left is not None:
-                    helper(curr_lst, node.left, curr_val + node.val)
-                if node.right is not None:
-                    helper(curr_lst, node.right, curr_val + node.val)
-                curr_lst.pop()
-        if root is None:
-            return []
-        helper([], root, 0)
+            traverse(node.left, curr_sum, curr_lst)
+            traverse(node.right, curr_sum, curr_lst)
+            curr_lst.pop()
+        
+        traverse(root, 0, [])
         return res
