@@ -1,35 +1,27 @@
 # Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
-from collections import deque
-class Solution(object):
-    def widthOfBinaryTree(self, root):
-        """
-        :type root: TreeNode
-        :rtype: int
-        """
-        if root == None:
-            return 0
-        maxWidth = 1
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def widthOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        res = 0
         q = deque([(0, root)])
-        
         while len(q) != 0:
-            cnt = len(q)
-            start = q[0]
-            end = q[-1]
-            width = end[0] - start[0] + 1
-            maxWidth = max(maxWidth, width)
-            
-            while cnt > 0:
-                cnt -= 1
+            size = len(q)
+            start = None
+            end = None
+            for i in range(size):
                 idx, node = q.popleft()
-                if node.left != None:
-                    q.append((idx * 2, node.left))
-                if node.right != None:
-                    q.append((idx * 2 + 1, node.right))
-            
-        return maxWidth
+                if i == 0:
+                    start = idx
+                if i == size-1:
+                    end = idx
+                if node.left is not None:
+                    q.append((idx*2, node.left))
+                if node.right is not None:
+                    q.append((idx*2+1, node.right))
+            res = max(res, end-start+1)
+        return res
+
