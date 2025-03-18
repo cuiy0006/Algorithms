@@ -6,23 +6,14 @@
 #         self.right = right
 class Solution:
     def distributeCoins(self, root: Optional[TreeNode]) -> int:
-        
-        def helper(node) -> (int, int): # (moves, requested)
+        res = 0
+        def traverse(node):
             if node is None:
-                return (0, 0)
-            
-            lmoves, lrequested = helper(node.left)
-            rmoves, rrequested = helper(node.right)
-            
-            coins = node.val
-            moves = lmoves + rmoves
-            
-            requested = 1 - coins + lrequested + rrequested
-            moves += abs(requested)
-            
-            return (moves, requested)
-        
-        moves, _ = helper(root)
-        
-        return moves
-            
+                return 0
+            left = traverse(node.left)
+            right = traverse(node.right)
+            nonlocal res
+            res += abs(left) + abs(right)
+            return left + right + node.val - 1
+        traverse(root)
+        return res
