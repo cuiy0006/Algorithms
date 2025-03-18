@@ -6,26 +6,18 @@
 #         self.right = right
 class Solution:
     def findSecondMinimumValue(self, root: Optional[TreeNode]) -> int:
-        if root is None:
-            return -1
-        min_val = root.val
-        second_min = None
-        
-        def helper(node):
+        min_val = sys.maxsize
+        second_val = sys.maxsize
+        def traverse(node):
             if node is None:
                 return
-            
-            if node.val > min_val:
-                nonlocal second_min
-                if second_min is None:
-                    second_min = node.val
-                else:
-                    second_min = min(second_min, node.val)
-            
-            else:
-                helper(node.left)
-                helper(node.right)
-        
-        helper(root)
-                
-        return -1 if second_min is None else second_min
+            nonlocal min_val
+            nonlocal second_val
+            min_val = min(min_val, node.val)
+            if node.val > min_val and node.val < second_val:
+                second_val = node.val
+            if node.val < second_val:
+                traverse(node.left)
+                traverse(node.right)
+        traverse(root)
+        return second_val if second_val != sys.maxsize else -1
