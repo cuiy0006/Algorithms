@@ -1,31 +1,30 @@
-# Definition for singly-linked list with a random pointer.
-# class RandomListNode(object):
-#     def __init__(self, x):
-#         self.label = x
-#         self.next = None
-#         self.random = None
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+"""
 
-class Solution(object):
-    def copyRandomList(self, head):
-        """
-        :type head: RandomListNode
-        :rtype: RandomListNode
-        """
-        dic = {}
-        curr = new_head = RandomListNode(0)
-        node = head
-        while node is not None:
-            curr.next = RandomListNode(node.label)
-            curr = curr.next
-            dic[node] = curr
-            node = node.next
-        
-        node = head
-        curr = new_head.next
-        while node is not None:
-            if node.random is not None:
-                curr.random = dic[node.random]
-            curr = curr.next
-            node = node.next
-            
-        return new_head.next
+class Solution:
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        orig_to_copy = {}
+        dummy = Node(0)
+        p2 = dummy
+        p1 = head
+        while p1 is not None:
+            p2.next = Node(p1.val)
+            p2 = p2.next
+            orig_to_copy[p1] = p2
+            p1 = p1.next
+
+        p1 = head
+        p2 = dummy.next
+        while p1 is not None:
+            if p1.random is not None:
+                p2.random = orig_to_copy[p1.random]
+            p1 = p1.next
+            p2 = p2.next
+        return dummy.next
+
