@@ -27,7 +27,7 @@ class SegmentTree:
         self._update(idx, val, self.root)
     
     def _update(self, idx, val, node):
-        if node.l == node.r and idx == node.l:
+        if node.l == node.r:
             node.val = val
             return
         mid = (node.l+node.r)//2
