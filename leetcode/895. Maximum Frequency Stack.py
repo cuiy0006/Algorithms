@@ -1,56 +1,40 @@
 class Node:
-    def __init__(self, val):
+    def __init__(self, val, freq):
         self.val = val
-        self.freq = 1
+        self.freq = freq
         self.next = None
-        self.last = None
-        self.seq_next = None
+        self.down = None
 
 class FreqStack:
 
     def __init__(self):
-        self.freq_to_root = {}
-        self.val_to_node = {}
-        self.max_freq = 0
+        self.head = Node(None, 0)
+        self.tail = self.head
+        self.freq_to_root = {0: self.head}
+        self.val_to_nodes = {}
 
     def push(self, val: int) -> None:
-        if val not in self.val_to_node:
-            node = self.val_to_node[val] = Node(val)
-        else:
-            old_node = self.val_to_node[val]
-            node = Node(val)
-            node.seq_next = old_node
-            self.val_to_node[val] = node
-            node.freq = old_node.freq + 1
-            
-        freq = node.freq
-        self.max_freq = max(self.max_freq, freq)
+        if val not in self.val_to_nodes:
+            self.val_to_nodes[val] = []
+        freq = len(self.val_to_nodes[val]) + 1
+        node = Node(val, freq)
+        self.val_to_nodes[val].append(node)
         if freq not in self.freq_to_root:
-            root = self.freq_to_root[freq] = Node(None)
-            root.next, root.last = root, root
-        else:
-            root = self.freq_to_root[freq]
-        root.last.next, root.last, node.last, node.next = node, node, root.last, root
-            
+            root = Node(None, freq)
+            self.freq_to_root[freq] = root
+            self.tail = root
+            root.down = self.freq_to_root[freq-1]
+        root = self.freq_to_root[freq]
+        root.next, node.next = node, root.next
+
     def pop(self) -> int:
-        root = self.freq_to_root[self.max_freq]
-        node = root.last
-        node.next.last, node.last.next = node.last, node.next
-        res = node.val
-        
-        old_node = node.seq_next
-        if old_node is None:
-            del self.val_to_node[node.val]
-        else:
-            self.val_to_node[node.val] = old_node
-        
-        while root.last == root:
-            self.max_freq -= 1
-            if self.max_freq == 0:
-                break
-            root = self.freq_to_root[self.max_freq]
-        return res
-        
+        node = self.tail.next
+        self.tail.next = node.next
+        if self.tail.next is None:
+            del self.freq_to_root[self.tail.freq]
+            self.tail = self.tail.down
+        self.val_to_nodes[node.val].pop()
+        return node.val
 
 # Your FreqStack object will be instantiated and called as such:
 # obj = FreqStack()
