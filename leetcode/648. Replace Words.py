@@ -1,35 +1,31 @@
-class Solution(object):
-    def replaceWords(self, dict, sentence):
-        """
-        :type dict: List[str]
-        :type sentence: str
-        :rtype: str
-        """
-        root = trieNode()
-        for s in dict:
-            node = root
-            for i, c in enumerate(s):
-                if node.lst[ord(c) - ord('a')] == None:
-                    node.lst[ord(c) - ord('a')] = trieNode()
-                node = node.lst[ord(c) - ord('a')]
-            node.isWord = True
+class Node:
+    def __init__(self):
+        self.children = {}
+        self.word = None
+
+class Solution:
+    def replaceWords(self, dictionary: List[str], sentence: str) -> str:
+        root = Node()
+        for word in dictionary:
+            p = root
+            for c in word:
+                if c not in p.children:
+                    p.children[c] = Node()
+                p = p.children[c]
+            p.word = word
         
         words = sentence.split(' ')
-        for i, word in enumerate(words):
-            node = root
-            for j, c in enumerate(word):
-                if node.lst[ord(c) - ord('a')] == None:
+        res = []
+        for word in words:
+            p = root
+            for c in word:
+                if c not in p.children:
                     break
-                else:
-                    node = node.lst[ord(c) - ord('a')]
-                    if node.isWord:
-                        words[i] = word[:j+1]
-                        break
-        
-        return ' '.join(words)
-        
-        
-class trieNode(object):
-    def __init__(self):
-        self.isWord = False
-        self.lst = [None for i in range(26)]
+                p = p.children[c]
+                if p.word is not None:
+                    break
+            if p.word is not None:
+                res.append(p.word)
+            else:
+                res.append(word)
+        return ' '.join(res)
