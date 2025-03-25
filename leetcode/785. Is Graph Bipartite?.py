@@ -1,3 +1,28 @@
+class Solution:
+    def isBipartite(self, graph: List[List[int]]) -> bool:
+        n = len(graph)
+
+        tags = {}
+        def helper(node, tag):
+            if node in tags:
+                return tags[node] == tag
+            tags[node] = tag
+            for child in graph[node]:
+                if not helper(child, 1-tag):
+                    return False
+            return True
+
+        for node in range(n):
+            if node in tags:
+                continue
+            if not helper(node, 1):
+                return False
+        return True
+
+
+
+
+
 from collections import deque
 
 class Solution:
