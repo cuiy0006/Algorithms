@@ -14,7 +14,6 @@ class Solution:
                 continue
             dic[(x, y)] = effort
             if (x, y) == end:
-                print(dic)
                 return effort
             for x0,y0 in dirs:
                 x1 = x+x0
