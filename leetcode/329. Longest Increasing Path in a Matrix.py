@@ -1,5 +1,33 @@
 class Solution:
     def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
+        dirs = ((1,0),(-1,0),(0,1),(0,-1))
+        m = len(matrix)
+        n = len(matrix[0])
+        path = [[-1 for _ in range(n)] for _ in range(m)]
+
+        def traverse(x, y):
+            if path[x][y] != -1:
+                return path[x][y]
+            path[x][y] = 1
+            for x0, y0 in dirs:
+                x1 = x0+x
+                y1 = y0+y
+                if x1 < 0 or x1 > m-1 or y1 < 0 or y1 > n-1:
+                    continue
+                if matrix[x1][y1] >= matrix[x][y]:
+                    continue
+                path[x][y] = max(path[x][y], traverse(x1, y1)+1)
+            return path[x][y]
+        
+        for i in range(m):
+            for j in range(n):
+                traverse(i, j)
+
+        return max([max(row) for row in path])
+
+
+class Solution:
+    def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
         m = len(matrix)
         n = len(matrix[0])
         
