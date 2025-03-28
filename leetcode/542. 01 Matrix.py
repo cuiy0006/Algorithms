@@ -1,30 +1,28 @@
-from collections import deque
-class Solution(object):
-    def updateMatrix(self, matrix):
-        """
-        :type matrix: List[List[int]]
-        :rtype: List[List[int]]
-        """
-        m = len(matrix)
-        n = len(matrix[0])
-        res = [[sys.maxsize for j in range(n)] for j in range(m)]
-        
+class Solution:
+    def updateMatrix(self, mat: List[List[int]]) -> List[List[int]]:
+        m = len(mat)
+        n = len(mat[0])
+        directions = ((0,1), (0,-1), (1,0), (-1,0))
+        res = [[sys.maxsize for j in range(n)] for i in range(m)]
+
         q = deque()
         for i in range(m):
             for j in range(n):
-                if matrix[i][j] == 0:
-                    res[i][j] = 0
+                if mat[i][j] == 0:
                     q.append((i, j))
         
-        ds = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        d = 0
         while len(q) != 0:
-            x,y = q.popleft()
-            for d in ds:
-                x0 = x + d[0]
-                y0 = y + d[1]
-                if x0 < 0 or y0 < 0 or x0 > m - 1 or y0 > n - 1 or res[x0][y0] <= res[x][y] + 1:
+            size = len(q)
+            for _ in range(size):
+                x, y = q.popleft()
+                if x < 0 or x > m-1 or y < 0 or y > n-1:
                     continue
-                res[x0][y0] = res[x][y] + 1
-                q.append((x0, y0))
+                if res[x][y] != sys.maxsize:
+                    continue
+                res[x][y] = d
+                for x0, y0 in directions:
+                    q.append((x+x0, y+y0))
+            d += 1
+
         return res
-            
