@@ -1,18 +1,20 @@
 class Solution:
     def findSubsequences(self, nums: List[int]) -> List[List[int]]:
         res = []
-        def helper(start, curr_lst):
-            if len(curr_lst) >= 2:
-                res.append(curr_lst[:])
+        def dfs(curr, idx):
+            if len(curr) >= 2:
+                res.append(curr[:])
+            if idx == len(nums):
+                return
+
             seen = set()
-            for i in range(start, len(nums)):
-                if len(curr_lst) != 0 and nums[i] < curr_lst[-1]:
-                    continue
+            for i in range(idx, len(nums)):
                 if nums[i] in seen:
                     continue
                 seen.add(nums[i])
-                curr_lst.append(nums[i])
-                helper(i+1, curr_lst)
-                curr_lst.pop()
-        helper(0, [])
+                if len(curr) == 0 or curr[-1] <= nums[i]:
+                    curr.append(nums[i])
+                    dfs(curr, i+1)
+                    curr.pop()
+        dfs([], 0)
         return res
