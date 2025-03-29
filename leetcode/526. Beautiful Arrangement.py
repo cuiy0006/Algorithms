@@ -2,7 +2,6 @@ class Solution:
     def countArrangement(self, n: int) -> int:
         def get_count(idx, curr):
             if idx == n:
-                print(curr)
                 return 1
             res = 0
             for i in range(idx, len(curr)):
