@@ -1,21 +1,16 @@
 class Solution:
     def countArrangement(self, n: int) -> int:
-        perm = [i for i in range(n+1)]
-        res = 0
+        def get_count(idx, curr):
+            if idx == n:
+                print(curr)
+                return 1
+            res = 0
+            for i in range(idx, len(curr)):
+                curr[i], curr[idx] = curr[idx], curr[i]
+                if curr[idx] % (idx+1) == 0 or (idx+1) % curr[idx] == 0:
+                   res += get_count(idx+1, curr)
+                curr[i], curr[idx] = curr[idx], curr[i]
+            return res
         
-        def helper(start):
-            if start == len(perm):
-                nonlocal res
-                res += 1
-                return
-        
-            for i in range(start, len(perm)):
-                if perm[i] % start != 0 and start % perm[i] != 0:
-                    continue
-                    
-                perm[i], perm[start] = perm[start], perm[i]
-                helper(start+1)
-                perm[start], perm[i] = perm[i], perm[start]
+        return get_count(0, [i for i in range(1, n+1)])
 
-        helper(1)
-        return res
