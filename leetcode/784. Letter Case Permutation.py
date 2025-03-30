@@ -1,4 +1,31 @@
 class Solution:
+    def letterCasePermutation(self, s: str) -> List[str]:
+        res = []
+        s = list(s)
+        def dfs(idx):
+            if idx == len(s):
+                res.append(''.join(s))
+                return
+            i = idx
+            while i < len(s):
+                if s[i].isnumeric():
+                    i += 1
+                else:
+                    break
+            if i != len(s):
+                s[i] = s[i].upper()
+                dfs(i+1)
+                s[i] = s[i].lower()
+                dfs(i+1)
+            else:
+                dfs(i)
+        
+        dfs(0)
+        return res
+
+
+
+class Solution:
     def letterCasePermutation(self, S):
         """
         :type S: str
