@@ -30,23 +30,22 @@ class Solution:
             return res
 
         res = ''
-        if num >= 1000:
-            thousand = num // 1000
-            num = num % 1000
-            res += thousand * 'M'
+        thousand = num // 1000
+        num = num % 1000
+        res += thousand * 'M'
         
-        if num >= 100:
-            hundred = num // 100
-            num = num % 100
-            res += get_digit(hundred, 'M', 'D', 'C')
+        hundred = num // 100
+        num = num % 100
+        res += get_digit(hundred, 'M', 'D', 'C')
         
-        if num >= 10:
-            ten = num // 10
-            num = num % 10
-            res += get_digit(ten, 'C', 'L', 'X')
+        ten = num // 10
+        num = num % 10
+        res += get_digit(ten, 'C', 'L', 'X')
         
         res += get_digit(num, 'X', 'V', 'I')
         return res
+
+
 
 
         
