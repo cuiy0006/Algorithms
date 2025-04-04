@@ -15,40 +15,38 @@ class Solution:
 
 
 
-class Solution(object):
-    def intToRoman(self, num):
-        """
-        :type num: int
-        :rtype: str
-        """
-        dic = {1: 'I', 5:'V', 10:'X', 50:'L', 100:'C', 500:'D', 1000:'M'}
-        def helper(digit, low, high, higher):
+class Solution:
+    def intToRoman(self, num: int) -> str:
+        def get_digit(digit, s1, s2, s3):
             res = ''
-            if digit == 0:
-                res += ''  
-            elif digit <= 3:
-                res += digit * low
-            elif digit == 4 or digit == 5:
-                res += low * (5 - digit) + high
+            if digit <= 3:
+                res += s3 * digit
+            elif digit <= 5:
+                res += s3*(5-digit) + s2
             elif digit <= 8:
-                res += high + low * (digit - 5)
+                res += s2 + s3*(digit-5)
             else:
-                res += low * (10 - digit) + higher
+                res += s3*(10-digit) + s1
             return res
-        
+
         res = ''
-        thousand = num // 1000
-        res += thousand * dic[1000]
-        num -= thousand * 1000
-        hundred = num // 100
-        res += helper(hundred, dic[100], dic[500], dic[1000])
-        num -= hundred * 100
+        if num >= 1000:
+            thousand = num // 1000
+            num = num % 1000
+            res += thousand * 'M'
         
-        ten = num // 10
-        res += helper(ten, dic[10], dic[50], dic[100])
-        num -= ten * 10
+        if num >= 100:
+            hundred = num // 100
+            num = num % 100
+            res += get_digit(hundred, 'M', 'D', 'C')
         
-        one = num
-        res += helper(one, dic[1], dic[5], dic[10])
+        if num >= 10:
+            ten = num // 10
+            num = num % 10
+            res += get_digit(ten, 'C', 'L', 'X')
+        
+        res += get_digit(num, 'X', 'V', 'I')
         return res
+
+
         
