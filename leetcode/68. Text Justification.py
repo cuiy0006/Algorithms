@@ -2,6 +2,44 @@ class Solution:
     def fullJustify(self, words: List[str], maxWidth: int) -> List[str]:
         res = []
         i = 0
+        l = len(words[0])
+        j = 1
+        while j < len(words):
+            n = j-i
+            if l+len(words[j])+n > maxWidth:
+                spaces = maxWidth - l
+                if n != 1:
+                    a = spaces % (n-1)
+                    b = spaces // (n-1)
+                    line = []
+                    for k in range(i, j):
+                        line.append(words[k])
+                        if k != j-1:
+                            if a > 0:
+                                line.append(' '*(b+1))
+                                a -= 1
+                            else:
+                                line.append(' '*b)
+                else:
+                    line = words[i] + ' '*(maxWidth-len(words[i]))
+                res.append(''.join(line))
+                l = len(words[j])
+                i = j
+            else:
+                l += len(words[j])
+            j += 1
+        line = ' '.join(words[i:j+1])
+        line += (maxWidth - len(line)) * ' '
+        res.append(line)
+        return res
+
+
+
+
+class Solution:
+    def fullJustify(self, words: List[str], maxWidth: int) -> List[str]:
+        res = []
+        i = 0
         while i < len(words):
             j = i
             l = 0
