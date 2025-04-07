@@ -1,38 +1,35 @@
 class Solution:
-    def majorityElement(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: List[int]
-        """
-        n = len(nums) // 3
-        first = None
-        fcnt = 0
-        second = None
-        scnt = 0
+    def majorityElement(self, nums: List[int]) -> List[int]:
+        c1 = None
+        c2 = None
+        cnt1 = 0
+        cnt2 = 0
+
         for num in nums:
-            if first == num:
-                fcnt += 1
-            elif second == num:
-                scnt += 1
-            elif first is None:
-                first = num
-                fcnt = 1
-            elif second is None:
-                second = num
-                scnt = 1
+            if num == c1:
+                cnt1 += 1
+            elif num == c2:
+                cnt2 += 1
+            elif cnt1 == 0:
+                c1 = num
+                cnt1 = 1
+            elif cnt2 == 0:
+                c2 = num
+                cnt2 = 1
             else:
-                if fcnt >0:
-                    fcnt -= 1
-                    if fcnt == 0:
-                        first = None
-                if scnt > 0:
-                    scnt -= 1
-                    if scnt == 0:
-                        second = None
-        lst = []
-        if nums.count(first) > n:
-            lst.append(first)
-        if nums.count(second) > n:
-            lst.append(second)
-        return lst
-                
+                cnt1 -= 1
+                cnt2 -= 1
+
+        cnt1 = 0
+        cnt2 = 0
+        for num in nums:
+            if num == c1:
+                cnt1 += 1
+            elif num == c2:
+                cnt2 += 1
+        res = []
+        if cnt1 > len(nums) / 3:
+            res.append(c1)
+        if cnt2 > len(nums) / 3:
+            res.append(c2)
+        return res
