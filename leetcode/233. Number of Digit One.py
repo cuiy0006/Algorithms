@@ -30,4 +30,29 @@ class Solution:
                 res += left_num * (10 ** len(right))
             
         return res
+
+
+
+class Solution:
+    def countDigitOne(self, n: int) -> int:
+        if n == 0:
+            return 0
+        if n == 1:
+            return 1
+        s = str(n)
+        res = 0
+        for i in range(len(s)):
+            left_s = s[:i]
+            left = 1 if s[:i] == '' else int(left_s)+1
+            right_s = s[i+1:]
+            right = 1 if right_s == '' else int(right_s)+1
             
+            if s[i] == '1':
+                res += right + (left-1)*(10**(len(s)-1-i))
+            elif s[i] == '0':
+                res += (left-1)*(10**(len(s)-1-i))
+            else:
+                res += left * (10**(len(s)-1-i))
+        
+        return res
+
