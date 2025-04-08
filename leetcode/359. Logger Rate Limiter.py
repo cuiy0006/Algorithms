@@ -1,18 +1,18 @@
 class Logger:
 
     def __init__(self):
-        self.ts_to_msg = {}
+        self.seen = set()
+        self.q = deque()
 
     def shouldPrintMessage(self, timestamp: int, message: str) -> bool:
-        if message not in self.ts_to_msg:
-            self.ts_to_msg[message] = timestamp
-            return True
-        else:
-            if self.ts_to_msg[message] + 10 > timestamp:
-                return False
-            else:
-                self.ts_to_msg[message] = timestamp
-                return True
+        while len(self.q) != 0 and self.q[0][0]+10 <= timestamp:
+            ts, msg = self.q.popleft()
+            self.seen.remove(msg)
+        if message in self.seen:
+            return False
+        self.q.append((timestamp, message))
+        self.seen.add(message)
+        return True
 
 
 # Your Logger object will be instantiated and called as such:
