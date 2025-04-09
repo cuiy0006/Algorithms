@@ -16,24 +16,13 @@ class AllOne:
         self.key_to_node = {} # Maps key (string) -> Node
 
     def _remove_node(self, node: Node):
-        """Helper to remove a node from the list."""
-        node.prev.next = node.next
-        node.next.prev = node.prev
-        # Optional: Clear pointers of removed node
-        # node.next = node.prev = None
+        node.next.prev, node.prev.next = node.prev, node.next
 
     def _insert_after(self, node: Node, new_node: Node):
-        """Helper to insert new_node right after node."""
-        new_node.prev = node
-        new_node.next = node.next
-        node.next.prev = new_node
-        node.next = new_node
+        node.next.prev, node.next, new_node.next, new_node.prev = new_node, new_node, node.next, node
 
     def inc(self, key: str) -> None:
-        """Increments the count of key by 1."""
         if key not in self.key_to_node:
-            # === New Key ===
-            # Default frequency is 1
             target_freq = 1
             # Check if a node with frequency 1 already exists (must be after root)
             if self.root.next.freq == 1:
@@ -48,7 +37,6 @@ class AllOne:
             self.key_to_node[key] = target_node
 
         else:
-            # === Existing Key ===
             current_node = self.key_to_node[key]
             current_freq = current_node.freq
             target_freq = current_freq + 1
@@ -70,13 +58,12 @@ class AllOne:
             self.key_to_node[key] = target_node
 
             # If the current node became empty, remove it
-            if not current_node.keys:
+            if len(current_node.keys) == 0:
                 self._remove_node(current_node)
 
 
     def dec(self, key: str) -> None:
-        """Decrements the count of key by 1."""
-        if key not in self.key_to_node: # Should not happen based on problem statement, but good practice
+        if key not in self.key_to_node:
              return
 
         current_node = self.key_to_node[key]
@@ -98,7 +85,6 @@ class AllOne:
                 target_node = current_node.prev
             else:
                 # Create a new node and insert it before the current node
-                # (which is equivalent to inserting after current_node.prev)
                 target_node = Node(target_freq)
                 self._insert_after(current_node.prev, target_node)
 
@@ -106,26 +92,20 @@ class AllOne:
             target_node.keys.add(key)
             self.key_to_node[key] = target_node
 
-        # If the current node became empty (and it's not the sentinel), remove it
-        if not current_node.keys and current_node != self.root:
+        # If the current node became empty, remove it
+        if not current_node.keys:
             self._remove_node(current_node)
 
 
     def getMaxKey(self) -> str:
-        """Returns one key with the maximal count."""
-        # Max frequency node is always before the root sentinel
         max_node = self.root.prev
-        if max_node == self.root: # List is empty
+        if max_node == self.root:
             return ""
-        # Return any key from the set
         return next(iter(max_node.keys))
 
 
     def getMinKey(self) -> str:
-        """Returns one key with the minimum count."""
-        # Min frequency node is always after the root sentinel
         min_node = self.root.next
-        if min_node == self.root: # List is empty
+        if min_node == self.root:
             return ""
-        # Return any key from the set
         return next(iter(min_node.keys))
