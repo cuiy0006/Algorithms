@@ -1,34 +1,24 @@
 class Solution:
-    def splitArray(self, nums, m):
-        """
-        :type nums: List[int]
-        :type m: int
-        :rtype: int
-        """
-        def canSplit(maxval):
-            cnt = 1
+    def splitArray(self, nums: List[int], k: int) -> int:
+        def can_split(target):
+            cnt = 0
             curr = 0
-            for num in nums:
-                if curr + num <= maxval:
-                    curr += num
-                else:
+            for i in range(len(nums)):
+                if curr + nums[i] > target:
+                    curr = nums[i]
                     cnt += 1
-                    if cnt > m:
+                    if cnt == k:
                         return False
-                    curr = num
+                else:
+                    curr += nums[i]
             return True
         
-        left = max(nums)
-        right = sum(nums)
-        
-        while left < right:
-            mid = (left + right) // 2
-            can = canSplit(mid)
-            if can:
-                right = mid
+        l = max(nums)
+        r = sum(nums)
+        while l < r:
+            mid = (l+r)//2
+            if can_split(mid):
+                r = mid
             else:
-                left = mid + 1
-        if not canSplit(left):
-            return left + 1
-        else:
-            return left
+                l = mid + 1
+        return l
