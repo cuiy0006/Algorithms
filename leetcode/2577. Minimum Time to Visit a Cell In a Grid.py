@@ -24,11 +24,12 @@ class Solution:
                 time = grid[x0][y0]
                 if time > c:
                     if (time-c) % 2 == 0:
-                        heappush(h, (time+1, x0, y0))
-                    else:
-                        heappush(h, (time, x0, y0))
+                        time += 1
                 else:
-                    heappush(h, (c+1, x0, y0))
+                    time = c+1
+                if time >= cost[x0][y0]:
+                    continue
+                heappush(h, (time, x0, y0))
         return -1 
 
 
