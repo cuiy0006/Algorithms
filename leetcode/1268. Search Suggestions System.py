@@ -1,3 +1,30 @@
+class Solution:
+    def suggestedProducts(self, products: List[str], searchWord: str) -> List[List[str]]:
+        products.sort()
+        res = []
+        for i in range(len(searchWord)):
+            target = searchWord[:i+1]
+            l = 0
+            r = len(products)
+            while l < r:
+                mid = (l+r)//2
+                if products[mid] < target:
+                    l = mid+1
+                else:
+                    r = mid
+            tmp = []
+            while l < len(products) and len(tmp) < 3:
+                word = products[l]
+                if len(word) < len(target) or word[:len(target)] != target:
+                    break
+                tmp.append(word)
+                l += 1
+            res.append(tmp)
+        return res
+
+
+
+
 class Node:
     def __init__(self):
         self.children = [None for _ in range(26)]
