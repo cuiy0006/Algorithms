@@ -1,25 +1,22 @@
 class Solution:
-    def maximumInvitations(self, grid: List[List[int]]) -> int:
-        m = len(grid)
-        n = len(grid[0])
-        
-        matches = {}
-        
-        def helper(boy, seen):
-            for girl in range(n):
-                if grid[boy][girl] == 0:
-                    continue
-                
-                if girl in seen:
-                    continue
-                seen.add(girl)
-                
-                if girl not in matches or helper(matches[girl], seen):
-                    matches[girl] = boy
-                    return True
-            return False
-        
-        for boy in range(m):
-            helper(boy, set())
-        
-        return len(matches)
+    def maxEnvelopes(self, envelopes: List[List[int]]) -> int:
+        envelopes.sort(key=lambda x: (x[0], -x[1]))
+
+        res = []
+        for i in range(len(envelopes)):
+            if len(res) == 0 or envelopes[i][1] > res[-1]:
+                res.append(envelopes[i][1])
+                continue
+            elif envelopes[i][1] == res[-1]:
+                continue
+            target = envelopes[i][1]
+            l = 0
+            r = len(res)
+            while l < r:
+                mid = (l+r)//2
+                if res[mid] < target:
+                    l = mid+1
+                else:
+                    r = mid
+            res[l] = target
+        return len(res)
